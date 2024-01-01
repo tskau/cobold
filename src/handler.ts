@@ -42,7 +42,7 @@ export const handleMediaRequest = async (
     return ok({
         id,
         image: env.SELECT_TYPE_PHOTO_URL,
-        caption: "select download type",
+        caption: "select download type (｡ · ᎑ ·｡)",
         replyMarkup: {
             inline_keyboard: [
                 mediaOutputTypes.map(type => (
