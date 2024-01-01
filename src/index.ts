@@ -53,7 +53,6 @@ bot.on("inline_query", async (ctx) => {
         photo_url: env.SELECT_TYPE_PHOTO_URL,
         thumbnail_url: env.SELECT_TYPE_PHOTO_URL,
         title: "download from provided url",
-
         reply_markup: result.result.replyMarkup,
         caption: result.result.caption,
     }], {
@@ -62,6 +61,11 @@ bot.on("inline_query", async (ctx) => {
 })
 
 bot.on("callback_query", async (ctx) => {
+    // TODO Remove when inlines are fixed
+    if (ctx.inlineMessageId) return await ctx.answerCallbackQuery({
+        text: formatError("inline queries are broken, download via bot dms for now"),
+    })
+
     const [outputType, requestId] = (ctx.callbackQuery.data ?? "").split(":")
     if (!outputType || !requestId || !canInteract(requestId, ctx.callbackQuery.from.id))
         return await ctx.answerCallbackQuery({
