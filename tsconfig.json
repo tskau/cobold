@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node16",
+    "module": "CommonJS",
+    "target": "esnext",
+    "strict": true,
+    "outDir": "build",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "incremental": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "**/*.ts"
+  ]
+}
