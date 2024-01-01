@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "moduleResolution": "node16",
-    "module": "CommonJS",
+    "module": "node16",
     "target": "esnext",
     "strict": true,
     "outDir": "build",
