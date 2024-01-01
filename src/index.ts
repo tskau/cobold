@@ -1,6 +1,6 @@
-import { env } from "@/env"
+import { env } from "#env"
 import { Bot } from "grammy"
-import { canInteract, handleMediaDownload, handleMediaRequest } from "@/handler"
+import { canInteract, handleMediaDownload, handleMediaRequest } from "#handler"
 import { randomUUID } from "node:crypto"
 
 const errorEmoticons = ["( • ᴖ • ｡)", "(ᴗ_ ᴗ。)", "(,,>﹏<,,)"]

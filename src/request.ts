@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { env } from "@/env"
+import { env } from "#env"
 
 const genericErrorSchema = z.object({
     status: z.literal("error"),
