@@ -9,6 +9,7 @@
     "start": "node .",
     "lint": "eslint src/** .eslintrc.cjs"
   },
+  "type": "module",
   "engines": {
     "node": ">=16"
   },

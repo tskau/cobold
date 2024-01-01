@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node16",
-    "module": "node16",
+    "moduleResolution": "bundler",
+    "module": "esnext",
     "target": "esnext",
     "strict": true,
     "outDir": "build",
