@@ -9,6 +9,9 @@ const formatError = (message: string) => {
     return `error: ${message} ${emoticon}`
 }
 
+const capitalize = <S extends string>(str: S): Capitalize<S> =>
+    str.charAt(0).toUpperCase() + str.slice(1) as Capitalize<S>
+
 const bot = new Bot(env.BOT_TOKEN)
 
 bot.catch((err) => {
@@ -61,11 +64,6 @@ bot.on("inline_query", async (ctx) => {
 })
 
 bot.on("callback_query", async (ctx) => {
-    // TODO Remove when inlines are fixed
-    if (ctx.inlineMessageId) return await ctx.answerCallbackQuery({
-        text: formatError("inline queries are broken, download via bot dms for now"),
-    })
-
     const [outputType, requestId] = (ctx.callbackQuery.data ?? "").split(":")
     if (!outputType || !requestId || !canInteract(requestId, ctx.callbackQuery.from.id))
         return await ctx.answerCallbackQuery({
@@ -83,6 +81,29 @@ bot.on("callback_query", async (ctx) => {
         return await ctx.editMessageCaption({
             caption: formatError(result.error),
         })
+
+    // Weird fix for inline messages
+    if (ctx.inlineMessageId) {
+        const msg = await ctx.api[`send${capitalize(result.result.type)}`](env.INLINE_FIX_CHAT_ID, result.result.media)
+        const fileId
+            = "photo" in msg ? msg.photo[0].file_id
+                : "video" in msg ? msg.video.file_id
+                    : "document" in msg ? msg.document.file_id
+                        : "audio" in msg ? msg.audio.file_id
+                            : ""
+
+        await ctx.editMessageMedia({
+            ...result.result,
+            media: fileId,
+        })
+
+        await ctx.api.deleteMessage(
+            msg.chat.id,
+            msg.message_id,
+        )
+
+        return
+    }
 
     await ctx.editMessageMedia(result.result)
 })
