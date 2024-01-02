@@ -72,7 +72,7 @@ bot.on("callback_query", async (ctx) => {
 
     await ctx.editMessageReplyMarkup(undefined)
     await ctx.editMessageCaption({
-        caption: "loading... (˶ᵔ ᵕ ᵔ˶)",
+        caption: "downloading... (˶ᵔ ᵕ ᵔ˶)",
     })
 
     const result = await handleMediaDownload(outputType, requestId)
@@ -81,6 +81,10 @@ bot.on("callback_query", async (ctx) => {
         return await ctx.editMessageCaption({
             caption: formatError(result.error),
         })
+
+    await ctx.editMessageCaption({
+        caption: "uploading... (˶ᵔ ᵕ ᵔ˶)",
+    })
 
     // Weird fix for inline messages
     if (ctx.inlineMessageId) {
