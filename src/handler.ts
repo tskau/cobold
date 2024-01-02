@@ -73,7 +73,7 @@ export const handleMediaDownload = async (outputType: string, requestId: string)
 
         return ok({
             type: outputType,
-            media: new InputFile(data.buffer),
+            media: new InputFile(data.buffer, data.filename),
         })
     }
 

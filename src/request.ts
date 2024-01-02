@@ -53,8 +53,13 @@ export const fetchStream = async (url: string) => {
         return genericErrorSchema.parse(error)
     }
 
+    const contentDisposition = data.headers.get("Content-Disposition")
+    const match = contentDisposition && /.*filename="([^"]+)".*/.exec(contentDisposition)
+    const filename = (match && match[1]) ?? undefined
+
     return {
         status: "success" as const,
         buffer: Buffer.from(await data.arrayBuffer()),
+        filename,
     }
 }
