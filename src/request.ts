@@ -30,12 +30,15 @@ const mediaResponseSchema = z.discriminatedUnion("status", [
     genericErrorSchema,
 ])
 
-export const fetchMedia = async (url: string, isAudioOnly: boolean = false) => {
+export const fetchMedia = async (
+    { url, lang, isAudioOnly = false }: { url: string, lang?: string, isAudioOnly?: boolean },
+) => {
     const res = await fetch(`${env.API_BASE_URL}/json`, {
         method: "POST",
         headers: [
             ["Accept", "application/json"],
             ["Content-Type", "application/json"],
+            ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
         body: JSON.stringify({ url, isAudioOnly }),
     }).then(r => r.json() as unknown)

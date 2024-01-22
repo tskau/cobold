@@ -1,25 +1,43 @@
 import { env } from "#env"
-import { Bot } from "grammy"
+import { Bot, Context } from "grammy"
+import { I18n, I18nFlavor } from "@grammyjs/i18n"
 import { canInteract, handleMediaDownload, handleMediaRequest } from "#handler"
 import { randomUUID } from "node:crypto"
-
-const errorEmoticons = ["( • ᴖ • ｡)", "(ᴗ_ ᴗ。)", "(,,>﹏<,,)"]
-const formatError = (message: string) => {
-    const emoticon = errorEmoticons[Math.floor(Math.random() * errorEmoticons.length)]
-    return `error: ${message} ${emoticon}`
-}
+import { Text } from "#text"
 
 const capitalize = <S extends string>(str: S): Capitalize<S> =>
     str.charAt(0).toUpperCase() + str.slice(1) as Capitalize<S>
 
-const bot = new Bot(env.BOT_TOKEN)
+type CoboldContext = Context & I18nFlavor & {
+    evaluateText: (text: Text) => string,
+}
+const bot = new Bot<CoboldContext>(env.BOT_TOKEN)
+
+const errorEmoticons = ["( • ᴖ • ｡)", "(ᴗ_ ᴗ。)", "(,,>﹏<,,)"]
+const i18n = new I18n<CoboldContext>({
+    defaultLocale: "en",
+    directory: "locales",
+    globalTranslationContext() {
+        const errorEmoticon = errorEmoticons[Math.floor(Math.random() * errorEmoticons.length)]
+        return { "error-emoticon": errorEmoticon }
+    },
+})
+
+bot.use(i18n, async (ctx, next) => {
+    ctx.evaluateText = (text: Text): string => {
+        if (text.type === "literal") return text.text
+        if (text.type === "translatable") return ctx.t(text.key)
+        return ""
+    }
+    await next()
+})
 
 bot.catch((err) => {
     console.error("Unhandled Error:", err)
 })
 
 bot.command("start", ctx =>
-    ctx.reply("hii! just send me a link and i'll download it. (ᵔᵕᵔ)◜"),
+    ctx.reply(ctx.t("start")),
 )
 
 bot.on("message", async (ctx) => {
@@ -28,11 +46,11 @@ bot.on("message", async (ctx) => {
     const result = await handleMediaRequest(ctx.message.text ?? "", ctx.message.from.id)
 
     if (!result.success)
-        return await ctx.reply(formatError(result.error))
+        return await ctx.reply(ctx.t("error", { message: ctx.evaluateText(result.error) }))
 
     await ctx.replyWithPhoto(result.result.image, {
         reply_markup: result.result.replyMarkup,
-        caption: result.result.caption,
+        caption: ctx.evaluateText(result.result.caption),
     })
 })
 
@@ -43,10 +61,10 @@ bot.on("inline_query", async (ctx) => {
         return await ctx.answerInlineQuery([{
             id: randomUUID(),
             type: "article",
-            title: "error",
-            description: result.error,
+            title: ctx.t("error-title"),
+            description: ctx.evaluateText(result.error),
             input_message_content: {
-                message_text: formatError(result.error),
+                message_text: ctx.t("error", { message: ctx.evaluateText(result.error) }),
             },
         }])
 
@@ -55,9 +73,9 @@ bot.on("inline_query", async (ctx) => {
         type: "photo",
         photo_url: env.SELECT_TYPE_PHOTO_URL,
         thumbnail_url: env.SELECT_TYPE_PHOTO_URL,
-        title: "download from provided url",
+        title: ctx.t("download-title"),
         reply_markup: result.result.replyMarkup,
-        caption: result.result.caption,
+        caption: ctx.evaluateText(result.result.caption),
     }], {
         cache_time: 0,
     })
@@ -67,23 +85,23 @@ bot.on("callback_query", async (ctx) => {
     const [outputType, requestId] = (ctx.callbackQuery.data ?? "").split(":")
     if (!outputType || !requestId || !canInteract(requestId, ctx.callbackQuery.from.id))
         return await ctx.answerCallbackQuery({
-            text: "looks like this button is not yours (¬_¬\")",
+            text: ctx.t("error-not-button-owner"),
         })
 
     await ctx.editMessageReplyMarkup(undefined)
     await ctx.editMessageCaption({
-        caption: "downloading... (˶ᵔ ᵕ ᵔ˶)",
+        caption: ctx.t("downloading-title"),
     })
 
-    const result = await handleMediaDownload(outputType, requestId)
+    const result = await handleMediaDownload(outputType, requestId, ctx.from.language_code)
 
     if (!result.success)
         return await ctx.editMessageCaption({
-            caption: formatError(result.error),
+            caption: ctx.t("error", { message: ctx.evaluateText(result.error) }),
         })
 
     await ctx.editMessageCaption({
-        caption: "uploading... (˶ᵔ ᵕ ᵔ˶)",
+        caption: ctx.t("uploading-title"),
     })
 
     // Weird fix for inline messages

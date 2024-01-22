@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { fetchMedia, fetchStream } from "#request"
 import { ok, error, Result } from "#result"
+import { literal, Text, translatable } from "#text"
 import { env } from "#env"
 import { randomUUID } from "node:crypto"
 import { InlineKeyboardMarkup, InputMedia } from "grammy/types"
@@ -21,16 +22,16 @@ const validMediaOutputType = (input: string): input is typeof mediaOutputTypes[n
 type HandleMediaRequestReturn = {
     id: string,
     image: string,
-    caption: string,
+    caption: Text,
     replyMarkup: InlineKeyboardMarkup,
 }
 
 export const handleMediaRequest = async (
     userInput: string,
     author: number,
-): Promise<Result<HandleMediaRequestReturn>> => {
+): Promise<Result<HandleMediaRequestReturn, Text>> => {
     const url = mediaUrlSchema.safeParse(userInput)
-    if (!url.success) return error("doesn't look like a url to me")
+    if (!url.success) return error(translatable("error-not-url"))
 
     const id = randomUUID()
     mediaRequests.push({
@@ -42,7 +43,7 @@ export const handleMediaRequest = async (
     return ok({
         id,
         image: env.SELECT_TYPE_PHOTO_URL,
-        caption: "select download type (｡ · ᎑ ·｡)",
+        caption: translatable("type-select-title"),
         replyMarkup: {
             inline_keyboard: [
                 mediaOutputTypes.map(type => (
@@ -58,18 +59,26 @@ export const canInteract = (requestId: string, author: number) => {
     return !req || req.author === author
 }
 
-export const handleMediaDownload = async (outputType: string, requestId: string): Promise<Result<InputMedia>> => {
-    if (!validMediaOutputType(outputType)) return error("invalid output format selected")
+export const handleMediaDownload = async (
+    outputType: string,
+    requestId: string,
+    lang?: string,
+): Promise<Result<InputMedia, Text>> => {
+    if (!validMediaOutputType(outputType)) return error(translatable("error-unknown-type"))
 
     const url = mediaRequests.find(r => r.id === requestId)
-    if (!url) return error("looks like i forgot your link, try sending it again")
+    if (!url) return error(translatable("error-request-not-found"))
 
-    const res = await fetchMedia(url.url, outputType === "audio")
-    if (res.status === "error") return error(res.text)
+    const res = await fetchMedia({
+        url: url.url,
+        isAudioOnly: outputType === "audio",
+        lang,
+    })
+    if (res.status === "error") return error(literal(res.text))
 
     if (res.status === "stream") {
         const data = await fetchStream(res.url)
-        if (data.status === "error") return error(data.text)
+        if (data.status === "error") return error(literal(data.text))
 
         return ok({
             type: outputType,
