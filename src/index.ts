@@ -5,9 +5,6 @@ import { canInteract, handleMediaDownload, handleMediaRequest } from "#handler"
 import { randomUUID } from "node:crypto"
 import { Text } from "#text"
 
-const capitalize = <S extends string>(str: S): Capitalize<S> =>
-    str.charAt(0).toUpperCase() + str.slice(1) as Capitalize<S>
-
 type CoboldContext = Context & I18nFlavor & {
     evaluateText: (text: Text) => string,
 }
@@ -49,7 +46,13 @@ bot.on("message", async (ctx) => {
         return await ctx.reply(ctx.t("error", { message: ctx.evaluateText(result.error) }))
 
     await ctx.replyWithPhoto(result.result.image, {
-        reply_markup: result.result.replyMarkup,
+        reply_markup: {
+            inline_keyboard: [
+                result.result.options.map(option => (
+                    { text: ctx.evaluateText(option.name), callback_data: option.key }
+                )),
+            ],
+        },
         caption: ctx.evaluateText(result.result.caption),
     })
 })
@@ -74,7 +77,13 @@ bot.on("inline_query", async (ctx) => {
         photo_url: env.SELECT_TYPE_PHOTO_URL,
         thumbnail_url: env.SELECT_TYPE_PHOTO_URL,
         title: ctx.t("download-title"),
-        reply_markup: result.result.replyMarkup,
+        reply_markup: {
+            inline_keyboard: [
+                result.result.options.map(option => (
+                    { text: ctx.evaluateText(option.name), callback_data: option.key }
+                )),
+            ],
+        },
         caption: ctx.evaluateText(result.result.caption),
     }], {
         cache_time: 0,
@@ -106,13 +115,8 @@ bot.on("callback_query", async (ctx) => {
 
     // Weird fix for inline messages
     if (ctx.inlineMessageId) {
-        const msg = await ctx.api[`send${capitalize(result.result.type)}`](env.INLINE_FIX_CHAT_ID, result.result.media)
-        const fileId
-            = "photo" in msg ? msg.photo[0].file_id
-                : "video" in msg ? msg.video.file_id
-                    : "document" in msg ? msg.document.file_id
-                        : "audio" in msg ? msg.audio.file_id
-                            : ""
+        const msg = await ctx.api.sendDocument(env.INLINE_FIX_CHAT_ID, result.result.media)
+        const fileId = msg.document.file_id
 
         await ctx.editMessageMedia({
             ...result.result,
