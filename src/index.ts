@@ -4,6 +4,7 @@ import { I18n, I18nFlavor } from "@grammyjs/i18n"
 import { canInteract, handleMediaDownload, handleMediaRequest } from "#handler"
 import { randomUUID } from "node:crypto"
 import { Text } from "#text"
+import { Message } from "grammy/types"
 
 type CoboldContext = Context & I18nFlavor & {
     evaluateText: (text: Text) => string,
@@ -115,8 +116,15 @@ bot.on("callback_query", async (ctx) => {
 
     // Weird fix for inline messages
     if (ctx.inlineMessageId) {
-        const msg = await ctx.api.sendDocument(env.INLINE_FIX_CHAT_ID, result.result.media)
-        const fileId = msg.document.file_id
+        // GrammY has an inaccurate return type, which breaks the bot.
+        // for example, if you send a video using sendDocument, it will return VideoMessage response,
+        // but GrammY thinks that it returns DocumentMessage, which is not the case.
+        type SendDocumentResponse = Message.DocumentMessage | Message.AudioMessage | Message.VideoMessage
+        const msg = await ctx.api.sendDocument(env.INLINE_FIX_CHAT_ID, result.result.media) as SendDocumentResponse
+        const fileId
+            = "audio" in msg ? msg.audio.file_id
+                : "video" in msg ? msg.video.file_id
+                    : msg.document.file_id
 
         await ctx.editMessageMedia({
             ...result.result,
