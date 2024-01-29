@@ -6,6 +6,7 @@ import { env } from "#env"
 import { randomUUID } from "node:crypto"
 import { InputMedia } from "grammy/types"
 import { InputFile } from "grammy"
+import mime from "mime-types"
 
 type MediaRequest = {
     id: string,
@@ -53,6 +54,17 @@ export const canInteract = (requestId: string, author: number) => {
     return !req || req.author === author
 }
 
+const getFileType = (filename?: string) => {
+    if (!filename) return "document"
+
+    const mimeType = mime.lookup(filename)
+    if (!mimeType) return "document"
+
+    if (mimeType.startsWith("video/")) return "video"
+    if (mimeType.startsWith("audio/")) return "audio"
+    return "document"
+}
+
 export const handleMediaDownload = async (
     outputType: string,
     requestId: string,
@@ -73,14 +85,14 @@ export const handleMediaDownload = async (
         if (data.status === "error") return error(literal(data.text))
 
         return ok({
-            type: "document",
+            type: getFileType(data.filename),
             media: new InputFile(data.buffer, data.filename),
         })
     }
 
     const source = new URL(res.url)
     return ok({
-        type: "document",
+        type: getFileType(source.pathname.split("/").at(-1)),
         media: new InputFile(source),
     })
 }
