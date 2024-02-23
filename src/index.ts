@@ -1,34 +1,16 @@
 import { env } from "#env"
 import { Bot, Context } from "grammy"
-import { I18n, I18nFlavor } from "@grammyjs/i18n"
+import { I18nFlavor } from "@grammyjs/i18n"
 import { getRequest, handleMediaDownload, handleMediaRequest } from "#handler"
 import { randomUUID } from "node:crypto"
-import { Text } from "#text"
+import { TextFlavor, textMiddleware } from "#text"
 import { Message } from "grammy/types"
+import { i18n } from "#i18n"
 
-type CoboldContext = Context & I18nFlavor & {
-    evaluateText: (text: Text) => string,
-}
+type CoboldContext = Context & I18nFlavor & TextFlavor
 const bot = new Bot<CoboldContext>(env.BOT_TOKEN)
 
-const errorEmoticons = ["( • ᴖ • ｡)", "(ᴗ_ ᴗ。)", "(,,>﹏<,,)"]
-const i18n = new I18n<CoboldContext>({
-    defaultLocale: "en",
-    directory: "locales",
-    globalTranslationContext() {
-        const errorEmoticon = errorEmoticons[Math.floor(Math.random() * errorEmoticons.length)]
-        return { "error-emoticon": errorEmoticon }
-    },
-})
-
-bot.use(i18n, async (ctx, next) => {
-    ctx.evaluateText = (text: Text): string => {
-        if (text.type === "literal") return text.text
-        if (text.type === "translatable") return ctx.t(text.key)
-        return ""
-    }
-    await next()
-})
+bot.use(i18n, textMiddleware)
 
 bot.catch((err) => {
     console.error("Unhandled Error:", err)
