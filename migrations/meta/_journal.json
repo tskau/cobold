@@ -8,6 +8,13 @@
       "when": 1706452128457,
       "tag": "0000_slim_maestro",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708695593228,
+      "tag": "0001_giant_vin_gonzales",
+      "breakpoints": true
     }
   ]
 }

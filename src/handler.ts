@@ -12,43 +12,40 @@ import { requests } from "#db/schema"
 import { eq, InferSelectModel } from "drizzle-orm"
 
 const mediaUrlSchema = z.string().url()
-export const outputOptions = ["auto", "audio"]
 
-type HandleMediaRequestReturn = {
-    id: string,
-    image: string,
-    caption: Text,
-    options: { name: Text, key: string }[],
-}
-
-export const handleMediaRequest = async (
+export type MediaRequest = InferSelectModel<typeof requests>
+export const createRequest = async (
     userInput: string,
     authorId: number,
-): Promise<Result<HandleMediaRequestReturn, Text>> => {
+): Promise<Result<MediaRequest, Text>> => {
     const url = mediaUrlSchema.safeParse(userInput)
     if (!url.success) return error(translatable("error-not-url"))
 
     const id = randomUUID()
+    const req = {
+        id,
+        authorId,
+        url: url.data,
+    }
     await db
         .insert(requests)
-        .values({
-            id,
-            authorId,
-            url: url.data,
-        })
+        .values(req)
 
-    return ok({
-        id,
-        image: env.SELECT_TYPE_PHOTO_URL,
-        caption: translatable("type-select-title"),
-        options: outputOptions.map(option => ({
-            key: `${option}:${id}`,
-            name: translatable(`output-${option}`),
-        })),
-    })
+    return ok(req)
 }
 
 export const getRequest = (requestId: string) => db.query.requests.findFirst({ where: eq(requests.id, requestId) })
+
+export const outputOptions = ["auto", "audio"]
+
+export const getOutputSelectionMessage = (requestId: string) => ({
+    image: env.SELECT_TYPE_PHOTO_URL,
+    caption: translatable("type-select-title"),
+    options: outputOptions.map(option => ({
+        key: `${option}:${requestId}`,
+        name: translatable(`setting-output-${option}`),
+    })),
+})
 
 const getFileType = (filename?: string) => {
     if (!filename) return "document"
@@ -63,7 +60,7 @@ const getFileType = (filename?: string) => {
 
 export const handleMediaDownload = async (
     outputType: string,
-    request: InferSelectModel<typeof requests> | undefined,
+    request: MediaRequest | undefined,
     lang?: string,
 ): Promise<Result<InputMedia, Text>> => {
     if (!request) return error(translatable("error-request-not-found"))

@@ -5,3 +5,10 @@ export const requests = sqliteTable("requests", {
     authorId: int("author_id").notNull(),
     url: text("url").notNull(),
 })
+
+export const users = sqliteTable("users", {
+    id: int("id").notNull().primaryKey().unique(),
+    preferredOutput: text("output"),
+    preferredAttribution: int("attribution").notNull().default(0),
+    languageOverride: text("language"),
+})
