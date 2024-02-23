@@ -7,7 +7,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node .",
-    "lint": "eslint src/** .eslintrc.cjs"
+    "lint": "eslint src/** .eslintrc.cjs",
+    "generate": "drizzle-kit generate:sqlite"
   },
   "type": "module",
   "engines": {
@@ -15,10 +16,12 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^1.5.1",
+    "@types/better-sqlite3": "^7.6.8",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
     "@typescript-eslint/parser": "^6.16.0",
+    "drizzle-kit": "^0.20.13",
     "eslint": "^8.56.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
@@ -26,7 +29,9 @@
   "dependencies": {
     "@grammyjs/i18n": "^1.0.1",
     "@t3-oss/env-core": "^0.7.1",
+    "better-sqlite3": "^9.3.0",
     "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.29.3",
     "grammy": "^1.20.1",
     "mime-types": "^2.1.35",
     "zod": "^3.22.4"

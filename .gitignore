@@ -31,3 +31,6 @@ yarn-error.log*
 .idea
 .fleet
 .vscode
+
+# SQLite DB
+sqlite.db

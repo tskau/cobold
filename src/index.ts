@@ -1,7 +1,7 @@
 import { env } from "#env"
 import { Bot, Context } from "grammy"
 import { I18n, I18nFlavor } from "@grammyjs/i18n"
-import { canInteract, handleMediaDownload, handleMediaRequest } from "#handler"
+import { getRequest, handleMediaDownload, handleMediaRequest } from "#handler"
 import { randomUUID } from "node:crypto"
 import { Text } from "#text"
 import { Message } from "grammy/types"
@@ -93,7 +93,8 @@ bot.on("inline_query", async (ctx) => {
 
 bot.on("callback_query", async (ctx) => {
     const [outputType, requestId] = (ctx.callbackQuery.data ?? "").split(":")
-    if (!outputType || !requestId || !canInteract(requestId, ctx.callbackQuery.from.id))
+    const request = await getRequest(requestId)
+    if (!outputType || !requestId || (request && request.authorId !== ctx.callbackQuery.from.id))
         return await ctx.answerCallbackQuery({
             text: ctx.t("error-not-button-owner"),
         })
@@ -103,7 +104,7 @@ bot.on("callback_query", async (ctx) => {
         caption: ctx.t("downloading-title"),
     })
 
-    const result = await handleMediaDownload(outputType, requestId, ctx.from.language_code)
+    const result = await handleMediaDownload(outputType, request, ctx.from.language_code)
 
     if (!result.success)
         return await ctx.editMessageCaption({

@@ -7,14 +7,10 @@ import { randomUUID } from "node:crypto"
 import { InputMedia } from "grammy/types"
 import { InputFile } from "grammy"
 import mime from "mime-types"
+import { db } from "#db"
+import { requests } from "#db/schema"
+import { eq, InferSelectModel } from "drizzle-orm"
 
-type MediaRequest = {
-    id: string,
-    author: number,
-    url: string,
-}
-
-const mediaRequests: MediaRequest[] = []
 const mediaUrlSchema = z.string().url()
 
 type HandleMediaRequestReturn = {
@@ -26,17 +22,19 @@ type HandleMediaRequestReturn = {
 
 export const handleMediaRequest = async (
     userInput: string,
-    author: number,
+    authorId: number,
 ): Promise<Result<HandleMediaRequestReturn, Text>> => {
     const url = mediaUrlSchema.safeParse(userInput)
     if (!url.success) return error(translatable("error-not-url"))
 
     const id = randomUUID()
-    mediaRequests.push({
-        id,
-        author,
-        url: url.data,
-    })
+    await db
+        .insert(requests)
+        .values({
+            id,
+            authorId,
+            url: url.data,
+        })
 
     return ok({
         id,
@@ -49,10 +47,7 @@ export const handleMediaRequest = async (
     })
 }
 
-export const canInteract = (requestId: string, author: number) => {
-    const req = mediaRequests.find(r => r.id === requestId)
-    return !req || req.author === author
-}
+export const getRequest = (requestId: string) => db.query.requests.findFirst({ where: eq(requests.id, requestId) })
 
 const getFileType = (filename?: string) => {
     if (!filename) return "document"
@@ -67,14 +62,14 @@ const getFileType = (filename?: string) => {
 
 export const handleMediaDownload = async (
     outputType: string,
-    requestId: string,
+    request: InferSelectModel<typeof requests> | undefined,
     lang?: string,
 ): Promise<Result<InputMedia, Text>> => {
-    const url = mediaRequests.find(r => r.id === requestId)
-    if (!url) return error(translatable("error-request-not-found"))
+    if (!request) return error(translatable("error-request-not-found"))
+    await db.delete(requests).where(eq(requests.id, request.id))
 
     const res = await fetchMedia({
-        url: url.url,
+        url: request.url,
         isAudioOnly: outputType === "audio",
         lang,
     })
