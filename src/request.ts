@@ -40,7 +40,7 @@ export const fetchMedia = async (
             ["Content-Type", "application/json"],
             ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
-        body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic" }),
+        body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic", isNoTTWatermark: true }),
     }).then(r => r.json() as unknown)
 
     return mediaResponseSchema.parse(res)
