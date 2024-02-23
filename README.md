@@ -20,6 +20,8 @@ powered by [cobalt](https://github.com/wukko/cobalt).
   pnpm start
   ```
   
+> note: if you're using docker, don't forget to mount sqlite.db database file! 
+  
 ## license
 
 this project is licensed under the [mit license](LICENSE)
