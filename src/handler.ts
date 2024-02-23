@@ -12,6 +12,7 @@ import { requests } from "#db/schema"
 import { eq, InferSelectModel } from "drizzle-orm"
 
 const mediaUrlSchema = z.string().url()
+export const outputOptions = ["auto", "audio"]
 
 type HandleMediaRequestReturn = {
     id: string,
@@ -40,7 +41,7 @@ export const handleMediaRequest = async (
         id,
         image: env.SELECT_TYPE_PHOTO_URL,
         caption: translatable("type-select-title"),
-        options: ["auto", "audio"].map(option => ({
+        options: outputOptions.map(option => ({
             key: `${option}:${id}`,
             name: translatable(`output-${option}`),
         })),
