@@ -7,7 +7,7 @@ import { randomUUID } from "node:crypto"
 import { InputMedia } from "grammy/types"
 import { InputFile } from "grammy"
 import mime from "mime-types"
-import { db } from "#db"
+import { db } from "#db/database"
 import { requests } from "#db/schema"
 import { eq, InferSelectModel } from "drizzle-orm"
 
