@@ -20,8 +20,15 @@ const bot = new Bot<CoboldContext>(env.BOT_TOKEN)
 
 bot.use(i18n, textMiddleware, settingsMiddleware)
 
+const report = async (msg: string) => {
+    if (env.ERROR_CHAT_ID)
+        await bot.api.sendMessage(env.ERROR_CHAT_ID, msg)
+}
+
 bot.catch((err) => {
     console.error("Unhandled Error:", err)
+    report(`${err.name}: ${err.message}\n${err.stack}\nIn ${err.ctx.chat?.id}`)
+        .catch(() => console.error("Additionally, failed to report error to Telegram"))
 })
 
 bot.command("start", ctx =>
@@ -185,4 +192,5 @@ bot.on("chosen_inline_result", async (ctx) => {
         return await onOutputSelected(ctx, ctx.userSettings.preferredOutput, request)
 })
 
-bot.start().then()
+bot.start().then(() => report("Bot going down"))
+report("Started bot").then()
