@@ -6,6 +6,7 @@ error-not-url = doesn't look like a url to me
 error-request-not-found = looks like i forgot your link, try sending it again
 error-not-button-owner = looks like this button is not yours (¬_¬")
 error-too-large = sorry, but this file is too big - telegram doesn't allow me to upload it
+error-unknown = oops, an internal error happened. i reported it to my develeoper, so they'll fix it!
 
 download-title = download from provided url
 type-select-title = select download type (｡ · ᎑ ·｡)

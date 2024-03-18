@@ -30,6 +30,11 @@ bot.catch((err) => {
         return err.ctx.editMessageCaption({
             caption: err.ctx.t("error", { message: err.ctx.t("error-too-large") }),
         })
+    if (err.ctx.inlineMessageId !== undefined || err.ctx.msg?.from?.id === err.ctx.me.id) {
+        void err.ctx.editMessageCaption({
+            caption: err.ctx.t("error", { message: err.ctx.t("error-unknown") }),
+        })
+    }
     console.error("Unhandled Error:", err)
     report(`${err.name}: ${err.message}\n${err.stack}\nIn ${err.ctx.chat?.id}`)
         .catch(() => console.error("Additionally, failed to report error to Telegram"))
