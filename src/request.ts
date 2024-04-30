@@ -31,9 +31,17 @@ const mediaResponseSchema = z.discriminatedUnion("status", [
 ])
 
 export const fetchMedia = async (
-    { url, lang, isAudioOnly = false }: { url: string, lang?: string, isAudioOnly?: boolean },
-) => {
-    const res = await fetch(`${env.API_BASE_URL}/json`, {
+    { url, lang, isAudioOnly = false, fails = [] }: {
+        url: string,
+        lang?: string,
+        isAudioOnly?: boolean,
+        fails?: number[],
+    },
+): Promise<z.infer<typeof mediaResponseSchema>> => {
+    if (fails.length >= env.API_BASE_URL.length)
+        throw new Error(`fetch failed with ${fails}`)
+    
+    const res = await fetch(`${env.API_BASE_URL[fails.length]}/json`, {
         method: "POST",
         headers: [
             ["Accept", "application/json"],
@@ -41,9 +49,16 @@ export const fetchMedia = async (
             ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
         body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic", isNoTTWatermark: true }),
-    }).then(r => r.json() as unknown)
+    })
+    if (res.status >= 500) {
+        return await fetchMedia(
+            { url, lang, isAudioOnly, fails: [...fails, res.status] },
+        )
+    }
+    
+    const body = await res.json()
 
-    return mediaResponseSchema.parse(res)
+    return mediaResponseSchema.parse(body)
 }
 
 // Stream
