@@ -1,4 +1,4 @@
-FROM gplane/pnpm AS base
+FROM gplane/pnpm:8-node20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
