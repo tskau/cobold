@@ -35,13 +35,18 @@ export const fetchMedia = async (
         url: string,
         lang?: string,
         isAudioOnly?: boolean,
-        fails?: number[],
+        fails?: string[],
     },
 ): Promise<z.infer<typeof mediaResponseSchema>> => {
     if (fails.length >= env.API_BASE_URL.length)
         throw new Error(`fetch failed with ${fails}`)
-    
-    const res = await fetch(`${env.API_BASE_URL[fails.length]}/json`, {
+
+    const currentBaseUrl = env.API_BASE_URL[fails.length]
+    const next = async (reason: string) => await fetchMedia(
+        { url, lang, isAudioOnly, fails: [...fails, `${currentBaseUrl} - ${reason}`] },
+    )
+
+    const res = await fetch(`${currentBaseUrl}/json`, {
         method: "POST",
         headers: [
             ["Accept", "application/json"],
@@ -50,15 +55,13 @@ export const fetchMedia = async (
         ],
         body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic", isNoTTWatermark: true }),
     })
-    if (res.status >= 500) {
-        return await fetchMedia(
-            { url, lang, isAudioOnly, fails: [...fails, res.status] },
-        )
-    }
-    
-    const body = await res.json()
+    if (!res.ok) return next(`not ok (${res.status})`)
 
-    return mediaResponseSchema.parse(body)
+    const body = await res.json().catch(() => null)
+    const data = mediaResponseSchema.safeParse(body)
+    if (!data.success) return next("invalid response body")
+
+    return data.data
 }
 
 // Stream
