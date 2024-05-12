@@ -70,8 +70,12 @@ export const fetchStream = async (url: string) => {
     const data = await fetch(url)
 
     if (!data.ok) {
-        const error = await data.json() as unknown
-        return genericErrorSchema.parse(error)
+        const error = await data.json().catch(() => null) as unknown
+        const body = genericErrorSchema.safeParse(error)
+        if (!body.success) {
+            throw new Error(`streaming from ${new URL(url).host} failed`)
+        }
+        return body.data
     }
 
     const contentDisposition = data.headers.get("Content-Disposition")
