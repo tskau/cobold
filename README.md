@@ -1,8 +1,8 @@
 # cobold
 
 telegram bot for downloading video & audio files from 
-[many services](https://github.com/wukko/cobalt#supported-services), 
-powered by [cobalt](https://github.com/wukko/cobalt).
+[many services](https://github.com/imputnet/cobalt#supported-services), 
+powered by [cobalt](https://github.com/imputnet/cobalt).
 
 ## running
 
