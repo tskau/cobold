@@ -71,7 +71,7 @@ export const handleMediaDownload = async (
         isAudioOnly: outputType === "audio",
         lang,
     })
-    if (res.status === "error") return error(literal(res.text))
+    if (res.status === "fail") return error(res.fails)
 
     if (res.status === "stream") {
         const data = await fetchStream(res.url)

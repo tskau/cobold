@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { env } from "#env"
+import { Text, literal, translatable, compound } from "#text"
 
 const genericErrorSchema = z.object({
     status: z.literal("error"),
@@ -30,20 +31,30 @@ const mediaResponseSchema = z.discriminatedUnion("status", [
     genericErrorSchema,
 ])
 
+type FailResponse = {
+    status: "fail",
+    fails: Text,
+}
+
+type FetchMediaResponse =
+    Exclude<z.infer<typeof mediaResponseSchema>, z.infer<typeof genericErrorSchema>> | FailResponse
 export const fetchMedia = async (
     { url, lang, isAudioOnly = false, fails = [] }: {
         url: string,
         lang?: string,
         isAudioOnly?: boolean,
-        fails?: string[],
+        fails?: Text[],
     },
-): Promise<z.infer<typeof mediaResponseSchema>> => {
+): Promise<FetchMediaResponse> => {
     if (fails.length >= env.API_BASE_URL.length)
-        throw new Error(`fetch failed with ${fails}`)
+        return {
+            status: "fail",
+            fails: compound(...fails),
+        }
 
     const currentBaseUrl = env.API_BASE_URL[fails.length]
-    const next = async (reason: string) => await fetchMedia(
-        { url, lang, isAudioOnly, fails: [...fails, `${currentBaseUrl} - ${reason}`] },
+    const next = async (reason: Text) => await fetchMedia(
+        { url, lang, isAudioOnly, fails: [...fails, compound(literal(`\n${currentBaseUrl} - `), reason)] },
     )
 
     const res = await fetch(`${currentBaseUrl}/json`, {
@@ -55,11 +66,11 @@ export const fetchMedia = async (
         ],
         body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic", isNoTTWatermark: true }),
     })
-    if (!res.ok) return next(`not ok (${res.status})`)
 
     const body = await res.json().catch(() => null)
     const data = mediaResponseSchema.safeParse(body)
-    if (!data.success) return next("invalid response body")
+    if (!data.success) return next(translatable("error-invalid-response"))
+    if (data.data.status === "error") return next(literal(data.data.text))
 
     return data.data
 }
