@@ -57,9 +57,9 @@ export const getSettingsMenu = (settings: Settings) => {
 
 const getSettings = async (id?: number | null) => {
     if (id === null || id === undefined) return defaultSettings
-    const { id: _, ...settings } = await db.query.users.findFirst({
+    const { id: _, downloadCount: __, ...settings } = await db.query.users.findFirst({
         where: eq(users.id, id),
-    }) || { id, ...defaultSettings }
+    }) || { id, downloadCount: 0, ...defaultSettings }
     return settings
 }
 
@@ -78,7 +78,7 @@ export const updateSetting = async (key: string, current: Settings, user: number
         .onConflictDoUpdate({ target: users.id, set: { [validKey]: newOption } })
         .returning()
 
-    const { id: _, ...newSettings } = newData[0]
+    const { id: _, downloadCount: __, ...newSettings } = newData[0]
     return newSettings
 }
 
