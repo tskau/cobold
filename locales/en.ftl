@@ -27,3 +27,6 @@ setting-attribution-1 = sure
 
 setting-lang = language
 setting-lang-unset = same as telegram
+
+stats-personal = i helped you with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
+stats-global = i helped with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)

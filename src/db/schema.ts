@@ -11,4 +11,5 @@ export const users = sqliteTable("users", {
     preferredOutput: text("output"),
     preferredAttribution: int("attribution").notNull().default(0),
     languageOverride: text("language"),
+    downloadCount: int("downloads"),
 })

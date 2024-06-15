@@ -8,7 +8,7 @@ import { literal, translatable } from "#text"
 import { I18nFlavor } from "@grammyjs/i18n"
 
 export const settingCallbackPrefix = "setting"
-export type Settings = Omit<InferSelectModel<typeof users>, "id">
+export type Settings = Omit<InferSelectModel<typeof users>, "id" | "downloadCount">
 export type SettingsFlavor = {
     userSettings: Settings,
 }

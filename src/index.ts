@@ -14,6 +14,7 @@ import {
     settingsMiddleware,
     updateSetting,
 } from "#settings"
+import { getDownloadStats, incrementDownloadCount } from "#stats"
 
 type CoboldContext = Context & I18nFlavor & TextFlavor & SettingsFlavor
 const bot = new Bot<CoboldContext>(env.BOT_TOKEN)
@@ -51,6 +52,18 @@ const settingsReplyMarkup = (ctx: CoboldContext, settingsOverride?: Settings): I
             callback_data: d.key,
         },
     ])),
+})
+
+bot.command("stats", async (ctx) => {
+    const count = await getDownloadStats()
+    await ctx.reply(ctx.t("stats-global", { count }))
+})
+
+bot.command("mystats", async (ctx) => {
+    const id = ctx.from?.id
+    if (!id) return
+    const count = await getDownloadStats(id)
+    await ctx.reply(ctx.t("stats-personal", { count }))
 })
 
 bot.command("settings", async (ctx) => {
@@ -144,6 +157,9 @@ const onOutputSelected = async (
         return await ctx.editMessageCaption({
             caption: ctx.t("error", { message: ctx.evaluateText(result.error) }),
         })
+
+    const fromId = ctx.from?.id
+    if (fromId) incrementDownloadCount(fromId).catch(() => { /* noop */ })
 
     await ctx.editMessageCaption({
         caption: ctx.t("uploading-title"),
