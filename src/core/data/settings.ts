@@ -1,10 +1,10 @@
 import { eq, InferSelectModel } from "drizzle-orm"
-import { users } from "#core/data/db/schema"
+import { settings as settingsTable } from "#core/data/db/schema"
 import { locales } from "#core/utils/i18n"
 import { outputOptions } from "#core/data/request"
 import { db } from "#core/data/db/database"
 
-export type Settings = Omit<InferSelectModel<typeof users>, "id" | "downloadCount">
+export type Settings = Omit<InferSelectModel<typeof settingsTable>, "id">
 
 export const defaultSettings: Settings = {
     preferredOutput: null,
@@ -29,9 +29,9 @@ export const settingI18n: {
 }
 
 export const getSettings = async (id: number): Promise<Settings> => {
-    const { id: _, downloadCount: __, ...settings } = await db.query.users.findFirst({
-        where: eq(users.id, id),
-    }) || { id, downloadCount: 0, ...defaultSettings }
+    const { id: _, ...settings } = await db.query.settings.findFirst({
+        where: eq(settingsTable.id, id),
+    }) || { id, ...defaultSettings }
     return settings
 }
 
@@ -45,11 +45,11 @@ export const updateSetting = async (key: string, current: Settings, user: number
     const newIndex = (currentIndex + 1) % thisSettingOptions.length
     const newOption = thisSettingOptions[newIndex]
 
-    const newData = await db.insert(users)
+    const newData = await db.insert(settingsTable)
         .values({ id: user, [validKey]: newOption })
-        .onConflictDoUpdate({ target: users.id, set: { [validKey]: newOption } })
+        .onConflictDoUpdate({ target: settingsTable.id, set: { [validKey]: newOption } })
         .returning()
 
-    const { id: _, downloadCount: __, ...newSettings } = newData[0]
+    const { id: _, ...newSettings } = newData[0]
     return newSettings
 }

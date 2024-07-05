@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1706452128457,
-      "tag": "0000_slim_maestro",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1708695593228,
-      "tag": "0001_giant_vin_gonzales",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1718465870677,
-      "tag": "0002_dry_screwball",
+      "when": 1720203773408,
+      "tag": "0000_supreme_ben_urich",
       "breakpoints": true
     }
   ]
