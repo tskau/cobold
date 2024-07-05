@@ -6,8 +6,9 @@ config()
 
 export const env = createEnv({
     server: {
+        API_ID: z.coerce.number(),
+        API_HASH: z.string(),
         BOT_TOKEN: z.string(),
-        INLINE_FIX_CHAT_ID: z.coerce.number().int(),
         API_BASE_URL: z.string()
             .default("https://api.cobalt.tools/api")
             .transform(s => s.split(";"))

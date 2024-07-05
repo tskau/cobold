@@ -32,5 +32,5 @@ yarn-error.log*
 .fleet
 .vscode
 
-# SQLite DB
-sqlite.db
+# Runtime Persistence
+/data
