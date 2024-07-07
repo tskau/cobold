@@ -8,4 +8,4 @@ build
 .git
 .idea
 .vscode
-sqlite.db
+data

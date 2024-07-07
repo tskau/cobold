@@ -20,7 +20,7 @@ powered by [cobalt](https://github.com/imputnet/cobalt).
   pnpm start
   ```
   
-> note: if you're using docker, don't forget to mount sqlite.db database file! 
+> note: if you're using docker, don't forget to create a volume for /app/data! 
   
 ## license
 

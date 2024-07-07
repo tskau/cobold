@@ -8,8 +8,12 @@ export const requests = sqliteTable("requests", {
 
 export const users = sqliteTable("users", {
     id: int("id").notNull().primaryKey().unique(),
+    downloadCount: int("downloads").default(0),
+})
+
+export const settings = sqliteTable("settings", {
+    id: int("id").notNull().primaryKey().unique(),
     preferredOutput: text("output"),
     preferredAttribution: int("attribution").notNull().default(0),
     languageOverride: text("language"),
-    downloadCount: int("downloads"),
 })

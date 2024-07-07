@@ -1,11 +1,12 @@
 import { z } from "zod"
-import { env } from "#env"
-import { Text, literal, translatable, compound } from "#text"
+import { Text, literal, translatable } from "#core/utils/text"
+import { error, ok, Result } from "#core/utils/result"
 
 const genericErrorSchema = z.object({
     status: z.literal("error"),
     text: z.string(),
 })
+export type GenericCobaltError = z.infer<typeof genericErrorSchema>
 
 // Main
 
@@ -31,33 +32,18 @@ const mediaResponseSchema = z.discriminatedUnion("status", [
     genericErrorSchema,
 ])
 
-type FailResponse = {
-    status: "fail",
-    fails: Text,
-}
+export type CobaltMediaResponse = z.infer<typeof mediaResponseSchema>
+export type SuccessfulCobaltMediaResponse = Exclude<CobaltMediaResponse, GenericCobaltError>
 
-type FetchMediaResponse =
-    Exclude<z.infer<typeof mediaResponseSchema>, z.infer<typeof genericErrorSchema>> | FailResponse
 export const fetchMedia = async (
-    { url, lang, isAudioOnly = false, fails = [] }: {
+    { url, lang, apiBaseUrl, isAudioOnly = false }: {
         url: string,
         lang?: string,
         isAudioOnly?: boolean,
-        fails?: Text[],
+        apiBaseUrl: string,
     },
-): Promise<FetchMediaResponse> => {
-    if (fails.length >= env.API_BASE_URL.length)
-        return {
-            status: "fail",
-            fails: compound(...fails),
-        }
-
-    const currentBaseUrl = env.API_BASE_URL[fails.length]
-    const next = async (reason: Text) => await fetchMedia(
-        { url, lang, isAudioOnly, fails: [...fails, compound(literal(`\n${currentBaseUrl} - `), reason)] },
-    )
-
-    const res = await fetch(`${currentBaseUrl}/json`, {
+): Promise<Result<SuccessfulCobaltMediaResponse, Text>> => {
+    const res = await fetch(`${apiBaseUrl}/json`, {
         method: "POST",
         headers: [
             ["Accept", "application/json"],
@@ -69,10 +55,10 @@ export const fetchMedia = async (
 
     const body = await res.json().catch(() => null)
     const data = mediaResponseSchema.safeParse(body)
-    if (!data.success) return next(translatable("error-invalid-response"))
-    if (data.data.status === "error") return next(literal(data.data.text))
+    if (!data.success) return error(translatable("error-invalid-response"))
+    if (data.data.status === "error") return error(literal(data.data.text))
 
-    return data.data
+    return ok(data.data)
 }
 
 // Stream
