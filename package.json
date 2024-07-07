@@ -28,8 +28,9 @@
   },
   "dependencies": {
     "@fluent/bundle": "^0.18.0",
-    "@mtcute/dispatcher": "^0.13.4",
-    "@mtcute/node": "^0.13.0",
+    "@mtcute/crypto-node": "^0.15.0",
+    "@mtcute/dispatcher": "^0.15.2",
+    "@mtcute/node": "^0.15.1",
     "@t3-oss/env-core": "^0.7.1",
     "better-sqlite3": "^9.3.0",
     "dotenv": "^16.3.1",

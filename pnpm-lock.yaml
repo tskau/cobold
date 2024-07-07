@@ -11,12 +11,15 @@ importers:
       '@fluent/bundle':
         specifier: ^0.18.0
         version: 0.18.0
+      '@mtcute/crypto-node':
+        specifier: ^0.15.0
+        version: 0.15.0
       '@mtcute/dispatcher':
-        specifier: ^0.13.4
-        version: 0.13.4
+        specifier: ^0.15.2
+        version: 0.15.2
       '@mtcute/node':
-        specifier: ^0.13.0
-        version: 0.13.0
+        specifier: ^0.15.1
+        version: 0.15.1
       '@t3-oss/env-core':
         specifier: ^0.7.1
         version: 0.7.1(typescript@5.3.3)(zod@3.22.4)
@@ -385,32 +388,35 @@ packages:
   '@humanwhocodes/object-schema@2.0.1':
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
 
-  '@mtcute/core@0.13.3':
-    resolution: {integrity: sha512-oShADWtmkTxITyYeinJpNNxXYPziOVhhc+DARMkUbHSC9Xko5UzyxjD5NOTLankf3mYgOe7ve76bdgA2SvWPAw==}
+  '@mtcute/core@0.15.3':
+    resolution: {integrity: sha512-+DGDTlcmAcXwg9kELxpQwSaBoR5pDDfYAa2qdvBq40LhglOt9awhI2CtWfIeaM4Sre4XCba/91a+0uDNG4F0UA==}
 
-  '@mtcute/dispatcher@0.13.4':
-    resolution: {integrity: sha512-tZEUZNYMb9iY4JgTLbqdSuzO3L2Lk8hYcwDd/GAmzqOFhaj8SIN5PKjT8fdCzq/LXk9Z6l73GlyXf7NX8kpOkg==}
+  '@mtcute/crypto-node@0.15.0':
+    resolution: {integrity: sha512-Bw38NNIuGLdxHBMC5w5jqVajo8M9ePOerzAwf04DZVGoFCnELd5FiqlstBuc2vV4IFpEvf5dsXsza/tZnTQPcw==}
 
-  '@mtcute/file-id@0.13.0':
-    resolution: {integrity: sha512-2LUWNK7Y9xyQUusq1CE/qqQ+jX2yTO3ODwHh5iZmgIq6IUQVE3F16NQUVe1/62rKU/WPd8lhcPY3Y7b6w1o8tQ==}
+  '@mtcute/dispatcher@0.15.2':
+    resolution: {integrity: sha512-W7l33NoCoxK2eDhSBWi3EylIaEP3BaJ3eFY8H+qyEhX/FnJmBTxmVKyPlIFVdb1LmKXxRPW+Keo0aOiknDFqZQ==}
 
-  '@mtcute/html-parser@0.13.0':
-    resolution: {integrity: sha512-n7H8gFjN30V8XaUJBJsiNTlj6K8owEKIwyasVcPyPMLHqbmXshy447v6H1VIBwtgO4XtEaSOTiRX8jCbzP1hIA==}
+  '@mtcute/file-id@0.15.0':
+    resolution: {integrity: sha512-5roqboDrBePPWXk8KamZNxnuwv/sJKo/BYJBWLhaki9F7bH74OCct8UrO62mv0aMeZH10hg6FcT9frKjLWclNw==}
 
-  '@mtcute/markdown-parser@0.13.0':
-    resolution: {integrity: sha512-yMtwXSRfWWw1mXZQtOOb/LlnwNxpZfvpzm6PvOIiyeR90euTHhdB1v+UfcITpU19yid0g2k88lWX2I5JyjVWow==}
+  '@mtcute/html-parser@0.15.0':
+    resolution: {integrity: sha512-hmqI0xbtmbYWNEXUmfbSJVP1tzRjQ5BHufLR6LbslL3DRiRTwMGhQQkx/HT/SHzZ8/KQFK8GjcD2/07eGuauwg==}
 
-  '@mtcute/node@0.13.0':
-    resolution: {integrity: sha512-z4Pr8ihoulDY0htlFbQRpsxh3BXU934Hln4esTUMC28LzakICVZ9vUnmUGGI3/nvhLzbEd9U6ficocVNiSBkkw==}
+  '@mtcute/markdown-parser@0.15.0':
+    resolution: {integrity: sha512-tZpqPfhgPYGvT7XumqGrzmU4IoL0RtKQPVA2lQ03xQD5Geev2iGrC31yniBa9gC4o4B98EHTLsqPaVg5BvXfZA==}
 
-  '@mtcute/tl-runtime@0.13.0':
-    resolution: {integrity: sha512-OhlfvNdulTEQcWYMYXUpbh2sRwb7oG5xa6bVGX5npncU4M+DI6S5H7Jsi3k1J4ZkFjBM/Pltg66w7iAKYkBIKg==}
+  '@mtcute/node@0.15.1':
+    resolution: {integrity: sha512-o3JdpE74bF3O8G/cpHuHS7RWs+gPfr2HTXtNgoIcxA9gOkmPeEnJInRFtvBQlhtOXgElU1wvzJ+4h7DzfmDWaw==}
 
-  '@mtcute/tl@181.0.0':
-    resolution: {integrity: sha512-50Kb+IwN9jKko7aJs8w+5X4BAaUtG4ByTei1JWSpebPDh5LvzGdhn87qEZ9gN0KHuLsaB7EIXL5HQlg1EqKD0g==}
+  '@mtcute/tl-runtime@0.15.0':
+    resolution: {integrity: sha512-lUlSFaa6cJYl+kW/6YGgCDZDkI/NtH9phkwN7cNdmS0PmuG/sqrO7tJHDkU9ItxECOYeIZghN/sK/30L49o4ig==}
 
-  '@mtcute/wasm@0.13.0':
-    resolution: {integrity: sha512-c1CHn4J0JP+nglT+x+JDfsc7l7svjr/OkJrrI1nqDymxiP1EgTv4ZN9UDLwqQk+m/hhg591EpZ/++myM/8aZVA==}
+  '@mtcute/tl@183.0.0':
+    resolution: {integrity: sha512-j4pTEdv1Hq7N9P+q3H++xVp0Zvd41+iv1v05+lwUu5fFgA0Fs/DdrXBzyjZ3ypZCj6+ltK058ArdQsp3V2prtw==}
+
+  '@mtcute/wasm@0.15.0':
+    resolution: {integrity: sha512-pxKeB0Fn/4pzKFKQEBWupxHOMhZSgJ2rR4RcEG0mrMnfr2J2jyenw9vjqt0yaXfZM8zsGx2XsmSrQGaoB50Tkg==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1119,6 +1125,10 @@ packages:
     resolution: {integrity: sha512-ThjYBfoDNr08AWx6hGaRbfPwxKV9kVzAzOzlLKbk2CuqXE2xnCh+cbAGnwM3t8Lq4v9rUB7VfondlkBckcJrVA==}
     engines: {node: '>=10'}
 
+  node-gyp-build@4.8.1:
+    resolution: {integrity: sha512-OSs33Z9yWr148JZcbZd5WiAXhh/n9z8TxQcdMhIOlpN9AhWpLfvVFO73+m77bBABQMaY9XSvIa+qk0jlI7Gcaw==}
+    hasBin: true
+
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
@@ -1542,53 +1552,58 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.1': {}
 
-  '@mtcute/core@0.13.3':
+  '@mtcute/core@0.15.3':
     dependencies:
-      '@mtcute/file-id': 0.13.0
-      '@mtcute/tl': 181.0.0
-      '@mtcute/tl-runtime': 0.13.0
+      '@mtcute/file-id': 0.15.0
+      '@mtcute/tl': 183.0.0
+      '@mtcute/tl-runtime': 0.15.0
       '@types/events': 3.0.0
       events: 3.2.0
       long: 5.2.3
 
-  '@mtcute/dispatcher@0.13.4':
+  '@mtcute/crypto-node@0.15.0':
     dependencies:
-      '@mtcute/core': 0.13.3
+      '@mtcute/node': 0.15.1
+      node-gyp-build: 4.8.1
+
+  '@mtcute/dispatcher@0.15.2':
+    dependencies:
+      '@mtcute/core': 0.15.3
       events: 3.2.0
 
-  '@mtcute/file-id@0.13.0':
+  '@mtcute/file-id@0.15.0':
     dependencies:
-      '@mtcute/tl-runtime': 0.13.0
+      '@mtcute/tl-runtime': 0.15.0
       long: 5.2.3
 
-  '@mtcute/html-parser@0.13.0':
+  '@mtcute/html-parser@0.15.0':
     dependencies:
-      '@mtcute/core': 0.13.3
+      '@mtcute/core': 0.15.3
       htmlparser2: 6.1.0
       long: 5.2.3
 
-  '@mtcute/markdown-parser@0.13.0':
+  '@mtcute/markdown-parser@0.15.0':
     dependencies:
-      '@mtcute/core': 0.13.3
+      '@mtcute/core': 0.15.3
       long: 5.2.3
 
-  '@mtcute/node@0.13.0':
+  '@mtcute/node@0.15.1':
     dependencies:
-      '@mtcute/core': 0.13.3
-      '@mtcute/html-parser': 0.13.0
-      '@mtcute/markdown-parser': 0.13.0
-      '@mtcute/wasm': 0.13.0
+      '@mtcute/core': 0.15.3
+      '@mtcute/html-parser': 0.15.0
+      '@mtcute/markdown-parser': 0.15.0
+      '@mtcute/wasm': 0.15.0
       better-sqlite3: 9.5.0
 
-  '@mtcute/tl-runtime@0.13.0':
+  '@mtcute/tl-runtime@0.15.0':
     dependencies:
       long: 5.2.3
 
-  '@mtcute/tl@181.0.0':
+  '@mtcute/tl@183.0.0':
     dependencies:
       long: 5.2.3
 
-  '@mtcute/wasm@0.13.0': {}
+  '@mtcute/wasm@0.15.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -1742,7 +1757,7 @@ snapshots:
       '@typescript-eslint/types': 6.16.0
       '@typescript-eslint/typescript-estree': 6.16.0(typescript@5.3.3)
       eslint: 8.56.0
-      semver: 7.5.4
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -2360,6 +2375,8 @@ snapshots:
   node-abi@3.65.0:
     dependencies:
       semver: 7.6.2
+
+  node-gyp-build@4.8.1: {}
 
   once@1.4.0:
     dependencies:
