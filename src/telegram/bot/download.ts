@@ -11,7 +11,6 @@ import { Evaluators, evaluatorsFor } from "#telegram/helpers/text"
 import { createRequest, getRequest, MediaRequest } from "#core/data/request"
 import { incrementDownloadCount } from "#core/data/stats"
 import { getPeerSettings } from "#telegram/helpers/settings"
-import { bot, report } from "#telegram/bot/bot"
 
 export const downloadDp = Dispatcher.child()
 
@@ -40,7 +39,7 @@ downloadDp.onNewMessage(filters.chat("private"), async (msg) => {
         await onOutputSelected(
             settings.preferredOutput,
             req.result,
-            args => bot.editMessage({ ...args, message: reply }),
+            args => msg.client.editMessage({ ...args, message: reply }),
             { e, t },
             msg.sender,
             !!settings.preferredAttribution,
@@ -138,6 +137,5 @@ const onOutputSelected = async (
     await editMessage({ text: (leaveSourceLink && request?.url) || "" })
 
     incrementDownloadCount(peer.id)
-        .catch(e => report(`Unable to update stats: ${e}`))
         .catch(() => { /* noop */ })
 }

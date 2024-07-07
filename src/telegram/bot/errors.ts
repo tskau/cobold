@@ -1,18 +1,22 @@
 import { randomUUID } from "node:crypto"
-import { ParsedUpdate } from "@mtcute/node"
-import { bot, report } from "#telegram/bot/bot"
+import { ParsedUpdate, TelegramClient } from "@mtcute/node"
 import { translatorFor } from "#telegram/helpers/i18n"
+import { env } from "#telegram/helpers/env"
 
-export const handleDispatcherError = async (err: Error, ctx: ParsedUpdate) => {
+export const createDispatcherErrorHandler = (client: TelegramClient) => async (err: Error, ctx: ParsedUpdate) => {
     console.error("Unhandled Error:", err)
-    await report(`${err.name}: ${err.message}\n${err.stack}\nIn ${ctx.name}`)
+    if (env.ERROR_CHAT_ID)
+        await client.sendText(
+            env.ERROR_CHAT_ID,
+            `unhandled error з:\n${err.name}: ${err.message}\n${err.stack}\nIn ${ctx.name}`,
+        )
 
     if (ctx.name === "new_message") {
         const t = await translatorFor(ctx.data.sender)
-        await bot.replyText(ctx.data, t("error-unknown"))
+        await client.replyText(ctx.data, t("error-unknown"))
     } else if (ctx.name === "callback_query") {
         const t = await translatorFor(ctx.data.user)
-        await bot.editMessage({
+        await client.editMessage({
             chatId: ctx.data.chat.id,
             message: ctx.data.messageId,
             text: t("error-unknown"),
@@ -20,13 +24,13 @@ export const handleDispatcherError = async (err: Error, ctx: ParsedUpdate) => {
     } else if (ctx.name === "chosen_inline_result") {
         const t = await translatorFor(ctx.data.user)
         if (ctx.data.messageId)
-            await bot.editInlineMessage({
+            await client.editInlineMessage({
                 messageId: ctx.data.messageId,
                 text: t("error-unknown"),
             })
     } else if (ctx.name === "inline_query") {
         const t = await translatorFor(ctx.data.user)
-        await bot.answerInlineQuery(ctx.data, [
+        await client.answerInlineQuery(ctx.data, [
             {
                 id: randomUUID(),
                 type: "article",
