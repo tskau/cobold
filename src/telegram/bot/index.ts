@@ -1,11 +1,11 @@
-import { Dispatcher, filters } from "@mtcute/dispatcher"
+import { Dispatcher } from "@mtcute/dispatcher"
 import { downloadDp } from "#telegram/bot/download"
 import { settingsDp } from "#telegram/bot/settings"
 import { statsDp } from "#telegram/bot/stats"
-import { translatorFor } from "#telegram/helpers/i18n"
 import { createDispatcherErrorHandler } from "#telegram/bot/errors"
 import { TelegramClient } from "@mtcute/node"
 import { env } from "#telegram/helpers/env"
+import { startDp } from "#telegram/bot/start"
 
 const bot = new TelegramClient({
     apiId: env.API_ID,
@@ -19,11 +19,7 @@ const bot = new TelegramClient({
 const dp = Dispatcher.for(bot)
 
 dp.onError(createDispatcherErrorHandler(bot))
-dp.onNewMessage(filters.command("start"), async (msg) => {
-    const t = await translatorFor(msg.sender)
-    await msg.replyText(t("start"))
-})
-
+dp.extend(startDp)
 dp.extend(settingsDp)
 dp.extend(statsDp)
 dp.extend(downloadDp)
