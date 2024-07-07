@@ -1,9 +1,13 @@
 import { randomUUID } from "node:crypto"
-import { ParsedUpdate, TelegramClient } from "@mtcute/node"
+import { ParsedUpdate, TelegramClient, tl } from "@mtcute/node"
 import { translatorFor } from "#telegram/helpers/i18n"
 import { env } from "#telegram/helpers/env"
 
 export const createDispatcherErrorHandler = (client: TelegramClient) => async (err: Error, ctx: ParsedUpdate) => {
+    // Ignoring errors when user deleted the message or blocked the bot
+    if (tl.RpcError.is(err, "MESSAGE_ID_INVALID") || tl.RpcError.is(err, "USER_IS_BLOCKED"))
+        return true
+
     console.error("Unhandled Error:", err)
     if (env.ERROR_CHAT_ID)
         await client.sendText(
