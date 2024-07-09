@@ -19,7 +19,7 @@ downloadDp.onNewMessage(filters.chat("private"), async (msg) => {
 
     const req = await createRequest(msg.text, msg.sender.id)
     if (!req.success) {
-        await msg.replyText(e(req.error))
+        await msg.replyText(t("error", { message: e(req.error) }))
         return
     }
 
