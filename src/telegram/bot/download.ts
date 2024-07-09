@@ -50,6 +50,11 @@ downloadDp.onNewMessage(filters.chat("private"), async (msg) => {
 downloadDp.onInlineQuery(async (ctx) => {
     const { t, e } = await evaluatorsFor(ctx.user)
 
+    if (!ctx.query.trim()) {
+        await ctx.answer([])
+        return
+    }
+
     const req = await createRequest(ctx.query, ctx.user.id)
     if (!req.success) {
         await ctx.answer([
