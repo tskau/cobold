@@ -8,6 +8,18 @@ import { db } from "#core/data/db/database"
 import { fetchMedia, fetchStream, SuccessfulCobaltMediaResponse } from "#core/data/cobalt"
 
 const mediaUrlSchema = z.string().url()
+const tryParseUrl = (url: string) => {
+    const originalParsed = mediaUrlSchema.safeParse(url)
+    if (originalParsed.success) return originalParsed.data
+
+    const domain = url.split("/")[0]
+    if (!domain.includes(".") || domain.includes(" ") || domain.includes(":")) return null
+
+    const withHttpsParsed = mediaUrlSchema.safeParse(`https://${url}`)
+    if (withHttpsParsed.success) return withHttpsParsed.data
+
+    return null
+}
 
 export type MediaRequest = InferSelectModel<typeof requests>
 
@@ -15,14 +27,14 @@ export const createRequest = async (
     userInput: string,
     authorId: number,
 ): Promise<Result<MediaRequest, Text>> => {
-    const url = mediaUrlSchema.safeParse(userInput)
-    if (!url.success) return error(translatable("error-not-url"))
+    const url = tryParseUrl(userInput)
+    if (!url) return error(translatable("error-not-url"))
 
     const id = randomUUID()
     const req = {
         id,
         authorId,
-        url: url.data,
+        url,
     }
     await db
         .insert(requests)

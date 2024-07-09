@@ -17,7 +17,10 @@ export const downloadDp = Dispatcher.child()
 downloadDp.onNewMessage(filters.chat("private"), async (msg) => {
     const { e, t } = await evaluatorsFor(msg.sender)
 
-    const req = await createRequest(msg.text, msg.sender.id)
+    const urlEntity = msg.entities.find(e => e.is("text_link") || e.is("url"))
+    const extractedUrl = urlEntity && (urlEntity.is("text_link") ? urlEntity.params.url : urlEntity.text)
+    const req = await createRequest(extractedUrl || msg.text, msg.sender.id)
+
     if (!req.success) {
         await msg.replyText(t("error", { message: e(req.error) }))
         return
@@ -55,7 +58,7 @@ downloadDp.onInlineQuery(async (ctx) => {
         return
     }
 
-    const req = await createRequest(ctx.query, ctx.user.id)
+    const req = await createRequest(ctx.query.trim(), ctx.user.id)
     if (!req.success) {
         await ctx.answer([
             BotInline.article(randomUUID(), {
