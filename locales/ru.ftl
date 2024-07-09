@@ -14,6 +14,7 @@ type-select-title = выбери тип загрузки (｡ · ᎑ ·｡)
 downloading-title = скачиваю... (˶ᵔ ᵕ ᵔ˶)
 uploading-title = загружаю... (˶ᵔ ᵕ ᵔ˶)
 
+settings-open = открыть настройки
 settings-title = настройки
 
 setting-output = формат

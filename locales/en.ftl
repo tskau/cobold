@@ -14,6 +14,7 @@ type-select-title = select download type (｡ · ᎑ ·｡)
 downloading-title = downloading... (˶ᵔ ᵕ ᵔ˶)
 uploading-title = uploading... (˶ᵔ ᵕ ᵔ˶)
 
+settings-open = open settings
 settings-title = settings
 
 setting-output = output

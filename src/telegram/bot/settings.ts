@@ -13,13 +13,16 @@ const settingsReplyMarkup = (e: TextEvaluator, settings: Settings): InlineKeyboa
         ])),
     )
 
-settingsDp.onNewMessage(filters.command("settings"), async (msg) => {
-    const { t, e } = await evaluatorsFor(msg.sender)
-    const settings = await getPeerSettings(msg.sender)
-    await msg.replyText(t("settings-title"), {
-        replyMarkup: settingsReplyMarkup(e, settings),
-    })
-})
+settingsDp.onNewMessage(
+    filters.or(filters.command("settings"), filters.deeplink(["settings"])),
+    async (msg) => {
+        const { t, e } = await evaluatorsFor(msg.sender)
+        const settings = await getPeerSettings(msg.sender)
+        await msg.replyText(t("settings-title"), {
+            replyMarkup: settingsReplyMarkup(e, settings),
+        })
+    },
+)
 
 settingsDp.onAnyCallbackQuery(SettingButton.filter(), async (upd) => {
     const settings = await getPeerSettings(upd.user)

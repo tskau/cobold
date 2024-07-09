@@ -19,8 +19,8 @@ const bot = new TelegramClient({
 const dp = Dispatcher.for(bot)
 
 dp.onError(createDispatcherErrorHandler(bot))
-dp.extend(startDp)
 dp.extend(settingsDp)
+dp.extend(startDp)
 dp.extend(statsDp)
 dp.extend(downloadDp)
 

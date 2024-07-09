@@ -53,8 +53,13 @@ downloadDp.onNewMessage(filters.chat("private"), async (msg) => {
 downloadDp.onInlineQuery(async (ctx) => {
     const { t, e } = await evaluatorsFor(ctx.user)
 
+    const settingsSwitchPm = {
+        text: t("settings-open"),
+        parameter: "settings",
+    }
+
     if (!ctx.query.trim()) {
-        await ctx.answer([])
+        await ctx.answer([], { switchPm: settingsSwitchPm })
         return
     }
 
@@ -65,7 +70,7 @@ downloadDp.onInlineQuery(async (ctx) => {
                 title: t("error-title"),
                 description: e(req.error),
             }),
-        ], { cacheTime: 0 })
+        ], { cacheTime: 0, switchPm: settingsSwitchPm })
         return
     }
 
@@ -83,7 +88,7 @@ downloadDp.onInlineQuery(async (ctx) => {
                 text: e(selectMsg.caption),
             },
         }),
-    ], { cacheTime: 0 })
+    ], { cacheTime: 0, switchPm: settingsSwitchPm })
 })
 
 downloadDp.onAnyCallbackQuery(OutputButton.filter(), async (upd) => {
