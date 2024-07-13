@@ -48,6 +48,7 @@ export const fetchMedia = async (
         headers: [
             ["Accept", "application/json"],
             ["Content-Type", "application/json"],
+            ["User-Agent", "cobold (+https://github.com/tskau/cobold)"],
             ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
         body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic", isNoTTWatermark: true }),
@@ -64,7 +65,11 @@ export const fetchMedia = async (
 // Stream
 
 export const fetchStream = async (url: string) => {
-    const data = await fetch(url)
+    const data = await fetch(url, {
+        headers: [
+            ["User-Agent", "cobold (+https://github.com/tskau/cobold)"],
+        ],
+    })
 
     if (!data.ok) {
         const error = await data.json().catch(() => null) as unknown
