@@ -57,7 +57,7 @@ export const fetchMedia = async (
             ["User-Agent", "cobold (+https://github.com/tskau/cobold)"],
             ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
-        body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic", isNoTTWatermark: true }),
+        body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic" }),
     })
 
     const body = await res.json().catch(() => null)
