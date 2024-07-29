@@ -6,7 +6,7 @@ config()
 
 export const env = createEnv({
     server: {
-        API_ID: z.coerce.number(),
+        API_ID: z.coerce.number().int(),
         API_HASH: z.string(),
         BOT_TOKEN: z.string(),
         API_BASE_URL: z.string()
