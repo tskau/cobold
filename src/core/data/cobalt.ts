@@ -84,9 +84,13 @@ export const fetchStream = async (url: string) => {
     const match = contentDisposition && /.*filename="([^"]+)".*/.exec(contentDisposition)
     const filename = (match && match[1]) ?? undefined
 
+    const buffer = Buffer.from(await data.arrayBuffer())
+    if (!buffer.length)
+        throw new Error(`empty body from ${new URL(url).host}`)
+
     return {
         status: "success" as const,
-        buffer: Buffer.from(await data.arrayBuffer()),
+        buffer,
         filename,
     }
 }
