@@ -25,10 +25,16 @@ const mediaRedirectSchema = z.object({
     url: z.string().url(),
 })
 
+const mediaPickerSchema = z.object({
+    status: z.literal("picker"),
+    audio: z.string().url(),
+})
+
 const mediaResponseSchema = z.discriminatedUnion("status", [
     mediaSuccessSchema,
     mediaStreamSchema,
     mediaRedirectSchema,
+    mediaPickerSchema,
     genericErrorSchema,
 ])
 

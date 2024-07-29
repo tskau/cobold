@@ -68,6 +68,16 @@ export const finishRequest = async (
         })
     }
 
+    if (res.result.status === "picker") {
+        if (outputType !== "audio")
+            return error(translatable("error-picker"))
+        const source = new URL(res.result.audio)
+        return ok({
+            fileName: source.pathname.split("/").at(-1),
+            file: source,
+        })
+    }
+
     const source = new URL(res.result.url)
     return ok({
         fileName: source.pathname.split("/").at(-1),

@@ -7,6 +7,7 @@ error-request-not-found = looks like i forgot your link, try sending it again
 error-not-button-owner = looks like this button is not yours (¬_¬")
 error-too-large = sorry, but this file is too big - telegram doesn't allow me to upload it
 error-invalid-response = server response is invalid, maybe it's down or encountered an internal error
+error-picker = sorry, i cant download slideshows yet
 error-unknown = oops, an internal error happened. i reported it to my develeoper, so they'll fix it!
 
 download-title = download from provided url
