@@ -26,6 +26,9 @@ importers:
       better-sqlite3:
         specifier: ^9.3.0
         version: 9.3.0
+      content-disposition:
+        specifier: ^0.5.4
+        version: 0.5.4
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1
@@ -45,6 +48,9 @@ importers:
       '@types/better-sqlite3':
         specifier: ^7.6.8
         version: 7.6.8
+      '@types/content-disposition':
+        specifier: ^0.5.8
+        version: 0.5.8
       '@types/mime-types':
         specifier: ^2.1.4
         version: 2.1.4
@@ -471,6 +477,9 @@ packages:
   '@types/better-sqlite3@7.6.8':
     resolution: {integrity: sha512-ASndM4rdGrzk7iXXqyNC4fbwt4UEjpK0i3j4q4FyeQrLAthfB6s7EF135ZJE0qQxtKIMFwmyT6x0switET7uIw==}
 
+  '@types/content-disposition@0.5.8':
+    resolution: {integrity: sha512-QVSSvno3dE0MgO76pJhmv4Qyi/j0Yk9pBp0Y7TJ2Tlj+KCgJWY6qX7nnxCOLkZ3VYRSIk1WTxCvwUSdx6CCLdg==}
+
   '@types/events@3.0.0':
     resolution: {integrity: sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==}
 
@@ -645,6 +654,10 @@ packages:
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+
+  content-disposition@0.5.4:
+    resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
+    engines: {node: '>= 0.6'}
 
   copy-anything@3.0.5:
     resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
@@ -1669,6 +1682,8 @@ snapshots:
     dependencies:
       '@types/node': 20.10.5
 
+  '@types/content-disposition@0.5.8': {}
+
   '@types/events@3.0.0': {}
 
   '@types/json-schema@7.0.15': {}
@@ -1866,6 +1881,10 @@ snapshots:
   commander@9.5.0: {}
 
   concat-map@0.0.1: {}
+
+  content-disposition@0.5.4:
+    dependencies:
+      safe-buffer: 5.2.1
 
   copy-anything@3.0.5:
     dependencies:

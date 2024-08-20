@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { Text, literal, translatable } from "#core/utils/text"
 import { error, ok, Result } from "#core/utils/result"
+import { parse as parseContentDisposition } from "content-disposition"
 
 const genericErrorSchema = z.object({
     status: z.literal("error"),
@@ -70,6 +71,14 @@ export const fetchMedia = async (
 
 // Stream
 
+const fileName = (header: string): string | undefined => {
+    try {
+        const contentDisposition = parseContentDisposition(header)
+        return contentDisposition.parameters.filename
+    } catch {
+        return undefined
+    }
+}
 export const fetchStream = async (url: string) => {
     const data = await fetch(url, {
         headers: [
@@ -87,8 +96,7 @@ export const fetchStream = async (url: string) => {
     }
 
     const contentDisposition = data.headers.get("Content-Disposition")
-    const match = contentDisposition && /.*filename="([^"]+)".*/.exec(contentDisposition)
-    const filename = (match && match[1]) ?? undefined
+    const filename = contentDisposition ? fileName(contentDisposition) : undefined
 
     const buffer = Buffer.from(await data.arrayBuffer())
     if (!buffer.length)
