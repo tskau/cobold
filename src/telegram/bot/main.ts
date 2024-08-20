@@ -11,9 +11,6 @@ const bot = new TelegramClient({
     apiId: env.API_ID,
     apiHash: env.API_HASH,
     storage: "data/session",
-    updates: {
-        catchUp: true,
-    },
 })
 
 const dp = Dispatcher.for(bot)
