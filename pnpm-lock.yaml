@@ -11,6 +11,9 @@ importers:
       '@fluent/bundle':
         specifier: ^0.18.0
         version: 0.18.0
+      '@fluent/langneg':
+        specifier: ^0.7.0
+        version: 0.7.0
       '@mtcute/crypto-node':
         specifier: ^0.15.0
         version: 0.15.0
@@ -381,6 +384,10 @@ packages:
 
   '@fluent/bundle@0.18.0':
     resolution: {integrity: sha512-8Wfwu9q8F9g2FNnv82g6Ch/E1AW1wwljsUOolH5NEtdJdv0sZTuWvfCM7c3teB9dzNaJA8rn4khpidpozHWYEA==}
+    engines: {node: '>=14.0.0', npm: '>=7.0.0'}
+
+  '@fluent/langneg@0.7.0':
+    resolution: {integrity: sha512-StAM0vgsD1QK+nFikaKs9Rxe3JGNipiXrpmemNGwM4gWERBXPe9gjzsBoKjgBgq1Vyiy+xy/C652QIWY+MPyYw==}
     engines: {node: '>=14.0.0', npm: '>=7.0.0'}
 
   '@humanwhocodes/config-array@0.11.13':
@@ -1552,6 +1559,8 @@ snapshots:
   '@eslint/js@8.56.0': {}
 
   '@fluent/bundle@0.18.0': {}
+
+  '@fluent/langneg@0.7.0': {}
 
   '@humanwhocodes/config-array@0.11.13':
     dependencies:

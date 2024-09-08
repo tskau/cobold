@@ -1,4 +1,5 @@
 import { FluentBundle, FluentResource, FluentVariable } from "@fluent/bundle"
+import { negotiateLanguages } from "@fluent/langneg"
 import { readdirSync, readFileSync } from "fs"
 import path from "node:path"
 
@@ -28,12 +29,13 @@ const bundles = setupI18n()
 export const locales = bundles.flatMap(b => b.locales)
 
 export function translate(locale: string, key: string, params?: TranslationParams) {
+    const [bestLocale] = negotiateLanguages([locale], locales, { defaultLocale: fallbackLocale })
     const bundle
-        = bundles.find(bundle => bundle.locales.includes(locale))
+        = bundles.find(bundle => bundle.locales.includes(bestLocale))
         ?? bundles.find(bundle => bundle.locales.includes(fallbackLocale))
 
     if (!bundle)
-        throw new Error(`Could not find bundle for language ${navigator.language} or fallback locale ${fallbackLocale}`)
+        throw new Error(`Could not find bundle for negotiated (${bestLocale}) or fallback (${fallbackLocale}) locale`)
 
     const message = bundle.getMessage(key)
     if (!message?.value) return key

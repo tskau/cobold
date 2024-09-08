@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@fluent/bundle": "^0.18.0",
+    "@fluent/langneg": "^0.7.0",
     "@mtcute/crypto-node": "^0.15.0",
     "@mtcute/dispatcher": "^0.15.2",
     "@mtcute/node": "^0.15.1",
