@@ -17,7 +17,6 @@
   "devDependencies": {
     "@stylistic/eslint-plugin": "^1.5.1",
     "@types/better-sqlite3": "^7.6.8",
-    "@types/content-disposition": "^0.5.8",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
@@ -35,7 +34,6 @@
     "@mtcute/node": "^0.15.1",
     "@t3-oss/env-core": "^0.7.1",
     "better-sqlite3": "^9.3.0",
-    "content-disposition": "^0.5.4",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.3",
     "mime-types": "^2.1.35",
