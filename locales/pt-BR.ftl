@@ -27,6 +27,7 @@ setting-attribution-0 = não
 setting-attribution-1 = claro
 
 setting-lang = idioma
+setting-lang-pt-BR = português brasileiro
 setting-lang-unset = mesmo que o telegram.
 
 stats-personal = eu te ajudei com o download { $count } vezes! (˶ᵔ ᵕ ᵔ˶)

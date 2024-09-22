@@ -25,7 +25,7 @@ export const settingI18n: {
 } = {
     preferredOutput: { key: "output", mode: "translatable" },
     preferredAttribution: { key: "attribution", mode: "translatable" },
-    languageOverride: { key: "lang", mode: "literal" },
+    languageOverride: { key: "lang", mode: "translatable" },
 }
 
 export const getSettings = async (id: number): Promise<Settings> => {

@@ -29,6 +29,7 @@ setting-attribution-1 = давай
 
 setting-lang = язык
 setting-lang-unset = как в тг
+setting-lang-ru = русский
 
 stats-personal = я помог тебе с загрузкой { $count } раз! (˶ᵔ ᵕ ᵔ˶)
 stats-global = я помог с загрузкой { $count } раз! (˶ᵔ ᵕ ᵔ˶)
