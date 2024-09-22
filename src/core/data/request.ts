@@ -58,13 +58,13 @@ export const finishRequest = async (
     const res = await tryDownload(outputType, request, baseApiUrlPool, lang)
     if (!res.success) return res
 
-    if (res.result.status === "stream") {
+    if (res.result.status === "tunnel") {
         const data = await fetchStream(res.result.url)
-        if (data.status === "error") return error(literal(data.text))
+        if (data.status === "error") return error(translatable(data.error.code))
 
         return ok({
             file: data.buffer,
-            fileName: data.filename,
+            fileName: res.result.filename,
         })
     }
 
@@ -78,10 +78,9 @@ export const finishRequest = async (
         })
     }
 
-    const source = new URL(res.result.url)
     return ok({
-        fileName: source.pathname.split("/").at(-1),
-        file: source,
+        fileName: res.result.filename,
+        file: new URL(res.result.url),
     })
 }
 
@@ -98,7 +97,7 @@ const tryDownload = async (
 
     const res = await fetchMedia({
         url: request.url,
-        isAudioOnly: outputType === "audio",
+        downloadMode: outputType,
         lang,
         apiBaseUrl: baseApiUrlPool[0],
     })

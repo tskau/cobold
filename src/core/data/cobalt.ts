@@ -1,29 +1,27 @@
 import { z } from "zod"
-import { Text, literal, translatable } from "#core/utils/text"
+import { Text, translatable } from "#core/utils/text"
 import { error, ok, Result } from "#core/utils/result"
-import { parse as parseContentDisposition } from "content-disposition"
 
 const genericErrorSchema = z.object({
     status: z.literal("error"),
-    text: z.string(),
+    error: z.object({
+        code: z.string(),
+    }),
 })
 export type GenericCobaltError = z.infer<typeof genericErrorSchema>
 
 // Main
 
-const mediaSuccessSchema = z.object({
-    status: z.literal("success"),
-    url: z.string().url(),
-})
-
 const mediaStreamSchema = z.object({
-    status: z.literal("stream"),
+    status: z.literal("tunnel"),
     url: z.string().url(),
+    filename: z.string(),
 })
 
 const mediaRedirectSchema = z.object({
     status: z.literal("redirect"),
     url: z.string().url(),
+    filename: z.string(),
 })
 
 const mediaPickerSchema = z.object({
@@ -32,7 +30,6 @@ const mediaPickerSchema = z.object({
 })
 
 const mediaResponseSchema = z.discriminatedUnion("status", [
-    mediaSuccessSchema,
     mediaStreamSchema,
     mediaRedirectSchema,
     mediaPickerSchema,
@@ -43,14 +40,14 @@ export type CobaltMediaResponse = z.infer<typeof mediaResponseSchema>
 export type SuccessfulCobaltMediaResponse = Exclude<CobaltMediaResponse, GenericCobaltError>
 
 export const fetchMedia = async (
-    { url, lang, apiBaseUrl, isAudioOnly = false }: {
+    { url, lang, apiBaseUrl, downloadMode = "auto" }: {
         url: string,
         lang?: string,
-        isAudioOnly?: boolean,
+        downloadMode?: string,
         apiBaseUrl: string,
     },
 ): Promise<Result<SuccessfulCobaltMediaResponse, Text>> => {
-    const res = await fetch(`${apiBaseUrl}/json`, {
+    const res = await fetch(`${apiBaseUrl}`, {
         method: "POST",
         headers: [
             ["Accept", "application/json"],
@@ -58,27 +55,23 @@ export const fetchMedia = async (
             ["User-Agent", "cobold (+https://github.com/tskau/cobold)"],
             ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
-        body: JSON.stringify({ url, isAudioOnly, filenamePattern: "basic" }),
+        body: JSON.stringify({ url, downloadMode, filenameStyle: "basic" }),
     })
 
     const body = await res.json().catch(() => null)
+
     const data = mediaResponseSchema.safeParse(body)
-    if (!data.success) return error(translatable("error-invalid-response"))
-    if (data.data.status === "error") return error(literal(data.data.text))
+    if (!data.success)
+        return error(translatable("error-invalid-response"))
+
+    if (data.data.status === "error")
+        return error(translatable(data.data.error.code))
 
     return ok(data.data)
 }
 
 // Stream
 
-const fileName = (header: string): string | undefined => {
-    try {
-        const contentDisposition = parseContentDisposition(header)
-        return contentDisposition.parameters.filename
-    } catch {
-        return undefined
-    }
-}
 export const fetchStream = async (url: string) => {
     const data = await fetch(url, {
         headers: [
@@ -95,9 +88,6 @@ export const fetchStream = async (url: string) => {
         return body.data
     }
 
-    const contentDisposition = data.headers.get("Content-Disposition")
-    const filename = contentDisposition ? fileName(contentDisposition) : undefined
-
     const buffer = Buffer.from(await data.arrayBuffer())
     if (!buffer.length)
         throw new Error(`empty body from ${new URL(url).host}`)
@@ -105,6 +95,5 @@ export const fetchStream = async (url: string) => {
     return {
         status: "success" as const,
         buffer,
-        filename,
     }
 }
