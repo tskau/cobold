@@ -10,10 +10,12 @@ import { fetchMedia, fetchStream, SuccessfulCobaltMediaResponse } from "#core/da
 export const apiServerSchema = z.object({
     name: z.string().optional(),
     url: z.string().url(),
+    auth: z.string().optional(),
 }).or(
     z.string().url().transform(data => ({
         name: undefined,
         url: data,
+        auth: undefined,
     })),
 ).transform(data => ({
     ...data,
@@ -115,6 +117,7 @@ const tryDownload = async (
         downloadMode: outputType,
         lang,
         apiBaseUrl: currentApi.url,
+        auth: currentApi.auth,
     })
 
     if (!res.success)
