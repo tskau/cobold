@@ -5,10 +5,20 @@
   "main": "build/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsup",
     "start": "node .",
     "lint": "eslint src/** .eslintrc.cjs",
     "generate": "drizzle-kit generate:sqlite"
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true,
+    "format": "esm",
+    "outDir": "build"
   },
   "type": "module",
   "engines": {
@@ -22,6 +32,7 @@
     "@typescript-eslint/parser": "^6.16.0",
     "drizzle-kit": "^0.20.13",
     "eslint": "^8.56.0",
+    "tsup": "^8.3.5",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },
@@ -37,8 +48,5 @@
     "drizzle-orm": "^0.29.3",
     "mediainfo.js": "^0.3.2",
     "zod": "^3.22.4"
-  },
-  "imports": {
-    "#*": "./build/*.js"
   }
 }
