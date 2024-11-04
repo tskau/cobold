@@ -58,11 +58,12 @@ const cobaltErrors = new Map([
 ].map(([k, v]) => [`error.api.${k}`, v]))
 
 export const fetchMedia = async (
-    { url, lang, apiBaseUrl, downloadMode = "auto" }: {
+    { url, lang, apiBaseUrl, downloadMode = "auto", auth }: {
         url: string,
         lang?: string,
         downloadMode?: string,
         apiBaseUrl: string,
+        auth?: string,
     },
 ): Promise<Result<SuccessfulCobaltMediaResponse, Text>> => {
     const res = await fetch(`${apiBaseUrl}`, {
@@ -71,6 +72,7 @@ export const fetchMedia = async (
             ["Accept", "application/json"],
             ["Content-Type", "application/json"],
             ["User-Agent", "cobold (+https://github.com/tskau/cobold)"],
+            ...auth ? [["Authorization", auth] satisfies [string, string]] : [],
             ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
         body: JSON.stringify({ url, downloadMode, filenameStyle: "basic" }),
