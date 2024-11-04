@@ -79,7 +79,7 @@ export const fetchMedia = async (
     }).catch(() => null)
 
     if (!res)
-        return error(translatable("error-invalid-response"))
+        return error(translatable("error-unresponsive"))
     const body = await res.json().catch(() => null)
 
     const data = mediaResponseSchema.safeParse(body)
