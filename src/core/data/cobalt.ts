@@ -115,8 +115,8 @@ export const fetchStream = async (url: string) => {
         return body.data
     }
 
-    const buffer = Buffer.from(await data.arrayBuffer())
-    if (!buffer.length)
+    const buffer = await data.arrayBuffer()
+    if (!buffer.byteLength)
         throw new Error(`empty body from ${new URL(url).host}`)
 
     return {
