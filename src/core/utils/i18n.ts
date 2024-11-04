@@ -1,7 +1,9 @@
-import { FluentBundle, FluentResource, FluentVariable } from "@fluent/bundle"
-import { negotiateLanguages } from "@fluent/langneg"
-import { readdirSync, readFileSync } from "fs"
+import type { FluentVariable } from "@fluent/bundle"
+
+import { readdirSync, readFileSync } from "node:fs"
 import path from "node:path"
+import { FluentBundle, FluentResource } from "@fluent/bundle"
+import { negotiateLanguages } from "@fluent/langneg"
 
 const errorEmoticons = ["( • ᴖ • ｡)", "(ᴗ_ ᴗ。)", "(,,>﹏<,,)"]
 export const fallbackLocale = "en"
@@ -38,6 +40,7 @@ export function translate(locale: string, key: string, params?: TranslationParam
         throw new Error(`Could not find bundle for negotiated (${bestLocale}) or fallback (${fallbackLocale}) locale`)
 
     const message = bundle.getMessage(key)
-    if (!message?.value) return key
+    if (!message?.value)
+        return key
     return bundle.formatPattern(message.value, { ...params, ...getErrorEmoticonContext() })
 }

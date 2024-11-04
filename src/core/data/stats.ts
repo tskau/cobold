@@ -1,6 +1,7 @@
+import { eq, sql, sum } from "drizzle-orm"
+
 import { db } from "@/core/data/db/database"
 import { users } from "@/core/data/db/schema"
-import { eq, sql, sum } from "drizzle-orm"
 
 export async function incrementDownloadCount(user: number) {
     await db.insert(users)

@@ -1,12 +1,17 @@
-import { Peer } from "@mtcute/node"
-import { Text } from "@/core/utils/text"
-import { Translator, translatorFor } from "@/telegram/helpers/i18n"
+import type { Peer } from "@mtcute/node"
+
+import type { Text } from "@/core/utils/text"
+import type { Translator } from "@/telegram/helpers/i18n"
+import { translatorFor } from "@/telegram/helpers/i18n"
 
 export type TextEvaluator = (text: Text) => string
 export function evaluateText(translator: Translator, text: Text): string {
-    if (text.type === "literal") return text.text
-    if (text.type === "translatable") return translator(text.key, text.params)
-    if (text.type === "compound") return text.content.map(t => evaluateText(translator, t)).join("")
+    if (text.type === "literal")
+        return text.text
+    if (text.type === "translatable")
+        return translator(text.key, text.params)
+    if (text.type === "compound")
+        return text.content.map(t => evaluateText(translator, t)).join("")
     return ""
 }
 
