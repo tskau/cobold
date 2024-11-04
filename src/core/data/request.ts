@@ -7,6 +7,21 @@ import { randomUUID } from "node:crypto"
 import { db } from "#core/data/db/database"
 import { fetchMedia, fetchStream, SuccessfulCobaltMediaResponse } from "#core/data/cobalt"
 
+export const apiServerSchema = z.object({
+    name: z.string().optional(),
+    url: z.string().url(),
+}).or(
+    z.string().url().transform(data => ({
+        name: undefined,
+        url: data,
+    })),
+).transform(data => ({
+    ...data,
+    name: data.name ?? data.url,
+}))
+
+export type ApiServer = z.infer<typeof apiServerSchema>
+
 const mediaUrlSchema = z.string().url()
 const tryParseUrl = (url: string) => {
     const originalParsed = mediaUrlSchema.safeParse(url)
@@ -50,12 +65,12 @@ export const outputOptions = ["auto", "audio"]
 export const finishRequest = async (
     outputType: string,
     request: MediaRequest,
-    baseApiUrlPool: string[],
+    apiPool: ApiServer[],
     lang?: string,
 ): Promise<Result<OutputMedia, Text>> => {
     await db.delete(requests).where(eq(requests.id, request.id))
 
-    const res = await tryDownload(outputType, request, baseApiUrlPool, lang)
+    const res = await tryDownload(outputType, request, apiPool, lang)
     if (!res.success) return res
 
     if (res.result.status === "tunnel") {
@@ -87,28 +102,28 @@ export const finishRequest = async (
 const tryDownload = async (
     outputType: string,
     request: MediaRequest,
-    baseApiUrlPool: string[],
+    apiPool: ApiServer[],
     lang?: string,
     fails: Text[] = [],
 ): Promise<Result<SuccessfulCobaltMediaResponse, CompoundText>> => {
-    const currentBaseApiUrl = baseApiUrlPool.at(0)
-    if (!currentBaseApiUrl)
+    const currentApi = apiPool.at(0)
+    if (!currentApi)
         return error(compound(...fails))
 
     const res = await fetchMedia({
         url: request.url,
         downloadMode: outputType,
         lang,
-        apiBaseUrl: baseApiUrlPool[0],
+        apiBaseUrl: currentApi.url,
     })
 
     if (!res.success)
         return tryDownload(
             outputType,
             request,
-            baseApiUrlPool.slice(1),
+            apiPool.slice(1),
             lang,
-            [...fails, compound(literal(`\n${currentBaseApiUrl}: `), res.error)],
+            [...fails, compound(literal(`\n${currentApi.name}: `), res.error)],
         )
 
     return res
