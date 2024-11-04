@@ -1,11 +1,11 @@
 import { Dispatcher } from "@mtcute/dispatcher"
-import { downloadDp } from "#telegram/bot/download"
-import { settingsDp } from "#telegram/bot/settings"
-import { statsDp } from "#telegram/bot/stats"
-import { createDispatcherErrorHandler } from "#telegram/bot/errors"
+import { downloadDp } from "@/telegram/bot/download"
+import { settingsDp } from "@/telegram/bot/settings"
+import { statsDp } from "@/telegram/bot/stats"
+import { createDispatcherErrorHandler } from "@/telegram/bot/errors"
 import { TelegramClient } from "@mtcute/node"
-import { env } from "#telegram/helpers/env"
-import { startDp } from "#telegram/bot/start"
+import { env } from "@/telegram/helpers/env"
+import { startDp } from "@/telegram/bot/start"
 
 const bot = new TelegramClient({
     apiId: env.API_ID,

@@ -3,14 +3,14 @@ import {
     getOutputSelectionMessage,
     handleMediaDownload,
     OutputButton,
-} from "#telegram/helpers/handler"
+} from "@/telegram/helpers/handler"
 import { BotInline, BotKeyboard, InputMedia, InputMediaLike, Peer } from "@mtcute/node"
 import { randomUUID } from "node:crypto"
-import { env } from "#telegram/helpers/env"
-import { Evaluators, evaluatorsFor } from "#telegram/helpers/text"
-import { createRequest, getRequest, MediaRequest } from "#core/data/request"
-import { incrementDownloadCount } from "#core/data/stats"
-import { getPeerSettings } from "#telegram/helpers/settings"
+import { env } from "@/telegram/helpers/env"
+import { Evaluators, evaluatorsFor } from "@/telegram/helpers/text"
+import { createRequest, getRequest, MediaRequest } from "@/core/data/request"
+import { incrementDownloadCount } from "@/core/data/stats"
+import { getPeerSettings } from "@/telegram/helpers/settings"
 
 export const downloadDp = Dispatcher.child()
 

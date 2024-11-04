@@ -1,8 +1,8 @@
 import { Dispatcher, filters } from "@mtcute/dispatcher"
 import { BotKeyboard, InlineKeyboardMarkup } from "@mtcute/node"
-import { Settings, updateSetting } from "#core/data/settings"
-import { evaluatorsFor, TextEvaluator } from "#telegram/helpers/text"
-import { getPeerSettings, getSettingsMenu, SettingButton } from "#telegram/helpers/settings"
+import { Settings, updateSetting } from "@/core/data/settings"
+import { evaluatorsFor, TextEvaluator } from "@/telegram/helpers/text"
+import { getPeerSettings, getSettingsMenu, SettingButton } from "@/telegram/helpers/settings"
 
 export const settingsDp = Dispatcher.child()
 

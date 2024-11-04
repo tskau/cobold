@@ -1,11 +1,11 @@
 import { z } from "zod"
 import { eq, InferSelectModel } from "drizzle-orm"
-import { requests } from "#core/data/db/schema"
-import { error, ok, Result } from "#core/utils/result"
-import { compound, CompoundText, literal, Text, translatable } from "#core/utils/text"
+import { requests } from "@/core/data/db/schema"
+import { error, ok, Result } from "@/core/utils/result"
+import { compound, CompoundText, literal, Text, translatable } from "@/core/utils/text"
 import { randomUUID } from "node:crypto"
-import { db } from "#core/data/db/database"
-import { fetchMedia, fetchStream, SuccessfulCobaltMediaResponse } from "#core/data/cobalt"
+import { db } from "@/core/data/db/database"
+import { fetchMedia, fetchStream, SuccessfulCobaltMediaResponse } from "@/core/data/cobalt"
 
 export const apiServerSchema = z.object({
     name: z.string().optional(),

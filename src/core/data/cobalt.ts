@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { compound, literal, Text, translatable } from "#core/utils/text"
-import { error, ok, Result } from "#core/utils/result"
+import { compound, literal, Text, translatable } from "@/core/utils/text"
+import { error, ok, Result } from "@/core/utils/result"
 
 const genericErrorSchema = z.object({
     status: z.literal("error"),

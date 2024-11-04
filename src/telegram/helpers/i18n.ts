@@ -1,6 +1,6 @@
 import type { Peer } from "@mtcute/node"
-import { fallbackLocale, translate, TranslationParams } from "#core/utils/i18n"
-import { getPeerSettings } from "#telegram/helpers/settings"
+import { fallbackLocale, translate, TranslationParams } from "@/core/utils/i18n"
+import { getPeerSettings } from "@/telegram/helpers/settings"
 
 export async function getPeerLocale(peer: Peer) {
     const { languageOverride } = await getPeerSettings(peer)

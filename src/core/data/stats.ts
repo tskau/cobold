@@ -1,5 +1,5 @@
-import { db } from "#core/data/db/database"
-import { users } from "#core/data/db/schema"
+import { db } from "@/core/data/db/database"
+import { users } from "@/core/data/db/schema"
 import { eq, sql, sum } from "drizzle-orm"
 
 export async function incrementDownloadCount(user: number) {
