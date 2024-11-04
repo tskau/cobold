@@ -1,16 +1,21 @@
+import type { InputMediaLike, Peer } from "@mtcute/node"
+
+import { randomUUID } from "node:crypto"
 import { Dispatcher, filters } from "@mtcute/dispatcher"
+import { BotInline, BotKeyboard, InputMedia } from "@mtcute/node"
+
+import type { MediaRequest } from "@/core/data/request"
+import { createRequest, getRequest } from "@/core/data/request"
+import { incrementDownloadCount } from "@/core/data/stats"
+import { env } from "@/telegram/helpers/env"
 import {
     getOutputSelectionMessage,
     handleMediaDownload,
     OutputButton,
 } from "@/telegram/helpers/handler"
-import { BotInline, BotKeyboard, InputMedia, InputMediaLike, Peer } from "@mtcute/node"
-import { randomUUID } from "node:crypto"
-import { env } from "@/telegram/helpers/env"
-import { Evaluators, evaluatorsFor } from "@/telegram/helpers/text"
-import { createRequest, getRequest, MediaRequest } from "@/core/data/request"
-import { incrementDownloadCount } from "@/core/data/stats"
 import { getPeerSettings } from "@/telegram/helpers/settings"
+import type { Evaluators } from "@/telegram/helpers/text"
+import { evaluatorsFor } from "@/telegram/helpers/text"
 
 export const downloadDp = Dispatcher.child()
 
@@ -97,10 +102,11 @@ downloadDp.onAnyCallbackQuery(OutputButton.filter(), async (upd) => {
     const { output: outputType, request: requestId } = upd.match
 
     const request = await getRequest(requestId)
-    if (request && request.authorId !== upd.user.id)
+    if (request && request.authorId !== upd.user.id) {
         return await upd.answer({
             text: t("error-not-button-owner"),
         })
+    }
 
     await onOutputSelected(
         outputType,
@@ -130,14 +136,7 @@ downloadDp.onChosenInlineResult(async (upd) => {
     }
 })
 
-const onOutputSelected = async (
-    outputType: string,
-    request: MediaRequest | undefined,
-    editMessage: (edit: { text?: string, media?: InputMediaLike }) => Promise<unknown>,
-    { t, e }: Evaluators,
-    peer: Peer,
-    leaveSourceLink: boolean,
-) => {
+async function onOutputSelected(outputType: string, request: MediaRequest | undefined, editMessage: (edit: { text?: string, media?: InputMediaLike }) => Promise<unknown>, { t, e }: Evaluators, peer: Peer, leaveSourceLink: boolean) {
     await editMessage({ text: t("downloading-title") })
     const res = await handleMediaDownload(outputType, request, peer)
     if (!res.success) {

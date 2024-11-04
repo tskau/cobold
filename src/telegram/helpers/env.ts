@@ -1,5 +1,7 @@
-import { config } from "dotenv"
+import process from "node:process"
+
 import { createEnv } from "@t3-oss/env-core"
+import { config } from "dotenv"
 import { z } from "zod"
 
 import { apiServerSchema } from "@/core/data/request"

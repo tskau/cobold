@@ -1,6 +1,9 @@
 import { z } from "zod"
-import { compound, literal, Text, translatable } from "@/core/utils/text"
-import { error, ok, Result } from "@/core/utils/result"
+
+import type { Result } from "@/core/utils/result"
+import { error, ok } from "@/core/utils/result"
+import type { Text } from "@/core/utils/text"
+import { compound, literal, translatable } from "@/core/utils/text"
 
 const genericErrorSchema = z.object({
     status: z.literal("error"),
@@ -57,15 +60,13 @@ const cobaltErrors = new Map([
     ["content.post.age", "error-media-unavailable"],
 ].map(([k, v]) => [`error.api.${k}`, v]))
 
-export const fetchMedia = async (
-    { url, lang, apiBaseUrl, downloadMode = "auto", auth }: {
-        url: string,
-        lang?: string,
-        downloadMode?: string,
-        apiBaseUrl: string,
-        auth?: string,
-    },
-): Promise<Result<SuccessfulCobaltMediaResponse, Text>> => {
+export async function fetchMedia({ url, lang, apiBaseUrl, downloadMode = "auto", auth }: {
+    url: string,
+    lang?: string,
+    downloadMode?: string,
+    apiBaseUrl: string,
+    auth?: string,
+}): Promise<Result<SuccessfulCobaltMediaResponse, Text>> {
     const res = await fetch(`${apiBaseUrl}`, {
         method: "POST",
         headers: [
@@ -99,7 +100,7 @@ export const fetchMedia = async (
 
 // Stream
 
-export const fetchStream = async (url: string) => {
+export async function fetchStream(url: string) {
     const data = await fetch(url, {
         headers: [
             ["User-Agent", "cobold (+https://github.com/tskau/cobold)"],

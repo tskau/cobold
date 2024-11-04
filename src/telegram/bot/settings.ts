@@ -1,17 +1,22 @@
+import type { InlineKeyboardMarkup } from "@mtcute/node"
 import { Dispatcher, filters } from "@mtcute/dispatcher"
-import { BotKeyboard, InlineKeyboardMarkup } from "@mtcute/node"
-import { Settings, updateSetting } from "@/core/data/settings"
-import { evaluatorsFor, TextEvaluator } from "@/telegram/helpers/text"
+import { BotKeyboard } from "@mtcute/node"
+
+import type { Settings } from "@/core/data/settings"
+import { updateSetting } from "@/core/data/settings"
 import { getPeerSettings, getSettingsMenu, SettingButton } from "@/telegram/helpers/settings"
+import type { TextEvaluator } from "@/telegram/helpers/text"
+import { evaluatorsFor } from "@/telegram/helpers/text"
 
 export const settingsDp = Dispatcher.child()
 
-const settingsReplyMarkup = (e: TextEvaluator, settings: Settings): InlineKeyboardMarkup =>
-    BotKeyboard.inline(
+function settingsReplyMarkup(e: TextEvaluator, settings: Settings): InlineKeyboardMarkup {
+    return BotKeyboard.inline(
         getSettingsMenu(settings).map(d => ([
             BotKeyboard.callback(`${e(d.title)}: ${e(d.value)}`, d.key),
         ])),
     )
+}
 
 settingsDp.onNewMessage(
     filters.or(filters.command("settings"), filters.deeplink(["settings"])),

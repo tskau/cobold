@@ -1,11 +1,17 @@
-import { z } from "zod"
-import { eq, InferSelectModel } from "drizzle-orm"
-import { requests } from "@/core/data/db/schema"
-import { error, ok, Result } from "@/core/utils/result"
-import { compound, CompoundText, literal, Text, translatable } from "@/core/utils/text"
+import type { InferSelectModel } from "drizzle-orm"
+
 import { randomUUID } from "node:crypto"
+import { eq } from "drizzle-orm"
+import { z } from "zod"
+
+import type { SuccessfulCobaltMediaResponse } from "@/core/data/cobalt"
+import { fetchMedia, fetchStream } from "@/core/data/cobalt"
 import { db } from "@/core/data/db/database"
-import { fetchMedia, fetchStream, SuccessfulCobaltMediaResponse } from "@/core/data/cobalt"
+import { requests } from "@/core/data/db/schema"
+import type { Result } from "@/core/utils/result"
+import { error, ok } from "@/core/utils/result"
+import type { CompoundText, Text } from "@/core/utils/text"
+import { compound, literal, translatable } from "@/core/utils/text"
 
 export const apiServerSchema = z.object({
     name: z.string().optional(),
@@ -25,27 +31,28 @@ export const apiServerSchema = z.object({
 export type ApiServer = z.infer<typeof apiServerSchema>
 
 const mediaUrlSchema = z.string().url()
-const tryParseUrl = (url: string) => {
+function tryParseUrl(url: string) {
     const originalParsed = mediaUrlSchema.safeParse(url)
-    if (originalParsed.success) return originalParsed.data
+    if (originalParsed.success)
+        return originalParsed.data
 
     const domain = url.split("/")[0]
-    if (!domain.includes(".") || domain.includes(" ") || domain.includes(":")) return null
+    if (!domain.includes(".") || domain.includes(" ") || domain.includes(":"))
+        return null
 
     const withHttpsParsed = mediaUrlSchema.safeParse(`https://${url}`)
-    if (withHttpsParsed.success) return withHttpsParsed.data
+    if (withHttpsParsed.success)
+        return withHttpsParsed.data
 
     return null
 }
 
 export type MediaRequest = InferSelectModel<typeof requests>
 
-export const createRequest = async (
-    userInput: string,
-    authorId: number,
-): Promise<Result<MediaRequest, Text>> => {
+export async function createRequest(userInput: string, authorId: number): Promise<Result<MediaRequest, Text>> {
     const url = tryParseUrl(userInput)
-    if (!url) return error(translatable("error-not-url"))
+    if (!url)
+        return error(translatable("error-not-url"))
 
     const id = randomUUID()
     const req = {
@@ -66,20 +73,17 @@ const retrieveMedia = async (url: string) => fetch(url).then(r => r.arrayBuffer(
 
 export type OutputMedia = { fileName?: string, file: ArrayBuffer }
 export const outputOptions = ["auto", "audio"]
-export const finishRequest = async (
-    outputType: string,
-    request: MediaRequest,
-    apiPool: ApiServer[],
-    lang?: string,
-): Promise<Result<OutputMedia, Text>> => {
+export async function finishRequest(outputType: string, request: MediaRequest, apiPool: ApiServer[], lang?: string): Promise<Result<OutputMedia, Text>> {
     await db.delete(requests).where(eq(requests.id, request.id))
 
     const res = await tryDownload(outputType, request, apiPool, lang)
-    if (!res.success) return res
+    if (!res.success)
+        return res
 
     if (res.result.status === "tunnel") {
         const data = await fetchStream(res.result.url)
-        if (data.status === "error") return error(translatable(data.error.code))
+        if (data.status === "error")
+            return error(translatable(data.error.code))
 
         return ok({
             file: data.buffer,
@@ -105,13 +109,7 @@ export const finishRequest = async (
     })
 }
 
-const tryDownload = async (
-    outputType: string,
-    request: MediaRequest,
-    apiPool: ApiServer[],
-    lang?: string,
-    fails: Text[] = [],
-): Promise<Result<SuccessfulCobaltMediaResponse, CompoundText>> => {
+async function tryDownload(outputType: string, request: MediaRequest, apiPool: ApiServer[], lang?: string, fails: Text[] = []): Promise<Result<SuccessfulCobaltMediaResponse, CompoundText>> {
     const currentApi = apiPool.at(0)
     if (!currentApi)
         return error(compound(...fails))
@@ -124,7 +122,7 @@ const tryDownload = async (
         auth: currentApi.auth,
     })
 
-    if (!res.success)
+    if (!res.success) {
         return tryDownload(
             outputType,
             request,
@@ -132,6 +130,7 @@ const tryDownload = async (
             lang,
             [...fails, compound(literal(`\n${currentApi.name}: `), res.error)],
         )
+    }
 
     return res
 }

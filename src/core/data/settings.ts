@@ -1,8 +1,10 @@
-import { eq, InferSelectModel } from "drizzle-orm"
-import { settings as settingsTable } from "@/core/data/db/schema"
-import { locales } from "@/core/utils/i18n"
-import { outputOptions } from "@/core/data/request"
+import type { InferSelectModel } from "drizzle-orm"
+import { eq } from "drizzle-orm"
+
 import { db } from "@/core/data/db/database"
+import { settings as settingsTable } from "@/core/data/db/schema"
+import { outputOptions } from "@/core/data/request"
+import { locales } from "@/core/utils/i18n"
 
 export type Settings = Omit<InferSelectModel<typeof settingsTable>, "id">
 
@@ -28,18 +30,19 @@ export const settingI18n: {
     languageOverride: { key: "lang", mode: "translatable" },
 }
 
-export const getSettings = async (id: number): Promise<Settings> => {
+export async function getSettings(id: number): Promise<Settings> {
     const { id: _, ...settings } = await db.query.settings.findFirst({
         where: eq(settingsTable.id, id),
     }) || { id, ...defaultSettings }
     return settings
 }
 
-export const updateSetting = async (key: string, current: Settings, user: number) => {
+export async function updateSetting(key: string, current: Settings, user: number) {
     const validKey = key as keyof Settings
 
     const thisSettingOptions = settingOptions[validKey] as (typeof settingOptions[typeof validKey][number])[] | null
-    if (!thisSettingOptions) return // Invalid key
+    if (!thisSettingOptions)
+        return // Invalid key
 
     const currentIndex = thisSettingOptions.indexOf(current[validKey])
     const newIndex = (currentIndex + 1) % thisSettingOptions.length
