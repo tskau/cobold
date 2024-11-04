@@ -62,7 +62,9 @@ export const createRequest = async (
 
 export const getRequest = (requestId: string) => db.query.requests.findFirst({ where: eq(requests.id, requestId) })
 
-export type OutputMedia = { fileName?: string, file: Buffer | URL }
+const retrieveMedia = async (url: string) => fetch(url).then(r => r.arrayBuffer())
+
+export type OutputMedia = { fileName?: string, file: ArrayBuffer }
 export const outputOptions = ["auto", "audio"]
 export const finishRequest = async (
     outputType: string,
@@ -89,15 +91,17 @@ export const finishRequest = async (
         if (outputType !== "audio")
             return error(translatable("error-picker"))
         const source = new URL(res.result.audio)
+        const buffer = await retrieveMedia(source.href)
         return ok({
             fileName: source.pathname.split("/").at(-1),
-            file: source,
+            file: buffer,
         })
     }
 
+    const buffer = await retrieveMedia(res.result.url)
     return ok({
         fileName: res.result.filename,
-        file: new URL(res.result.url),
+        file: buffer,
     })
 }
 

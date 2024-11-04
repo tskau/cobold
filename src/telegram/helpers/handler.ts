@@ -2,10 +2,12 @@ import { ok, error, Result } from "#core/utils/result"
 import { Text, translatable } from "#core/utils/text"
 import { env } from "#telegram/helpers/env"
 import type { InputMediaLike, Peer } from "@mtcute/node"
-import mime from "mime-types"
 import { CallbackDataBuilder } from "@mtcute/dispatcher"
 import { finishRequest, MediaRequest, outputOptions } from "#core/data/request"
 import { getPeerLocale } from "#telegram/helpers/i18n"
+import mediaInfoFactory, { GeneralTrack, ImageTrack, VideoTrack } from "mediainfo.js"
+
+const mediainfo = await mediaInfoFactory()
 
 export const OutputButton = new CallbackDataBuilder("dl", "output", "request")
 export const getOutputSelectionMessage = (requestId: string) => ({
@@ -17,15 +19,52 @@ export const getOutputSelectionMessage = (requestId: string) => ({
     })),
 })
 
-const getTelegramFileType = (filename?: string) => {
-    if (!filename) return "document"
+type AnalysisResult = {
+    duration?: number,
+    width?: number,
+    height?: number,
+    type: "video" | "audio" | "document",
+}
+const analyze = async (buffer: ArrayBuffer): Promise<AnalysisResult> => {
+    const res = await mediainfo.analyzeData(
+        buffer.byteLength,
+        (size, offset) => new Uint8Array(buffer.slice(offset, offset + size)),
+    )
+    if (!res.media) return { type: "document" }
+    const generalData = res.media.track.find((t): t is GeneralTrack => t["@type"] === "General")
+    if (!generalData) return { type: "document" }
 
-    const mimeType = mime.lookup(filename)
-    if (!mimeType) return "document"
+    if (generalData.VideoCount) {
+        const videoData = res.media.track.find((t): t is VideoTrack => t["@type"] === "Video")!
+        if (!videoData)
+            return { type: "document" }
+        return {
+            type: "video",
+            duration: generalData.Duration,
+            width: videoData.Width,
+            height: videoData.Height,
+        }
+    }
 
-    if (mimeType.startsWith("video/")) return "video"
-    if (mimeType.startsWith("audio/")) return "audio"
-    return "document"
+    if (generalData.AudioCount) {
+        return {
+            type: "audio",
+            duration: generalData.Duration,
+        }
+    }
+
+    if (generalData.ImageCount) {
+        const imageData = res.media.track.find((t): t is ImageTrack => t["@type"] === "Image")
+        if (!imageData)
+            return { type: "document" }
+        return {
+            type: "document",
+            width: imageData.Width,
+            height: imageData.Height,
+        }
+    }
+
+    return { type: "document" }
 }
 
 export const handleMediaDownload = async (
@@ -37,8 +76,10 @@ export const handleMediaDownload = async (
     const res = await finishRequest(outputType, request, env.API_ENDPOINTS, await getPeerLocale(peer))
     if (!res.success) return res
 
+    const analyzedData = await analyze(res.result.file)
     return ok({
-        ...res.result,
-        type: getTelegramFileType(res.result.fileName),
+        ...analyzedData,
+        fileName: res.result.fileName,
+        file: new Uint8Array(res.result.file),
     })
 }
