@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { Text, translatable } from "#core/utils/text"
+import { compound, literal, Text, translatable } from "#core/utils/text"
 import { error, ok, Result } from "#core/utils/result"
 
 const genericErrorSchema = z.object({
@@ -39,6 +39,24 @@ const mediaResponseSchema = z.discriminatedUnion("status", [
 export type CobaltMediaResponse = z.infer<typeof mediaResponseSchema>
 export type SuccessfulCobaltMediaResponse = Exclude<CobaltMediaResponse, GenericCobaltError>
 
+const cobaltErrors = new Map([
+    ["service.unsupported", "error-invalid-url"],
+    ["service.disabled", "error-invalid-url"],
+    ["link.invalid", "error-invalid-url"],
+    ["link.unsupported", "error-invalid-url"],
+
+    ["content.too_long", "error-too-large"],
+
+    ["content.video.unavailable", "error-media-unavailable"],
+    ["content.video.live", "error-media-unavailable"],
+    ["content.video.private", "error-media-unavailable"],
+    ["content.video.age", "error-media-unavailable"],
+    ["content.video.region", "error-media-unavailable"],
+    ["content.post.unavailable", "error-media-unavailable"],
+    ["content.post.private", "error-media-unavailable"],
+    ["content.post.age", "error-media-unavailable"],
+].map(([k, v]) => [`error.api.${k}`, v]))
+
 export const fetchMedia = async (
     { url, lang, apiBaseUrl, downloadMode = "auto" }: {
         url: string,
@@ -56,16 +74,23 @@ export const fetchMedia = async (
             ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
         body: JSON.stringify({ url, downloadMode, filenameStyle: "basic" }),
-    })
+    }).catch(() => null)
 
+    if (!res)
+        return error(translatable("error-invalid-response"))
     const body = await res.json().catch(() => null)
 
     const data = mediaResponseSchema.safeParse(body)
     if (!data.success)
         return error(translatable("error-invalid-response"))
 
-    if (data.data.status === "error")
-        return error(translatable(data.data.error.code))
+    if (data.data.status === "error") {
+        const code = data.data.error.code
+        const errorKey = cobaltErrors.get(code)
+        if (errorKey)
+            return error(translatable(errorKey))
+        return error(compound(translatable("error-invalid-response"), literal(` [${code}]`)))
+    }
 
     return ok(data.data)
 }
