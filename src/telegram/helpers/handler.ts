@@ -34,7 +34,7 @@ export const handleMediaDownload = async (
     peer: Peer,
 ): Promise<Result<InputMediaLike, Text>> => {
     if (!request) return error(translatable("error-request-not-found"))
-    const res = await finishRequest(outputType, request, env.API_BASE_URL, await getPeerLocale(peer))
+    const res = await finishRequest(outputType, request, env.API_ENDPOINTS, await getPeerLocale(peer))
     if (!res.success) return res
 
     return ok({
