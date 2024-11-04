@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto"
 import { ParsedUpdate, TelegramClient, tl } from "@mtcute/node"
-import { translatorFor } from "#telegram/helpers/i18n"
-import { env } from "#telegram/helpers/env"
+import { translatorFor } from "@/telegram/helpers/i18n"
+import { env } from "@/telegram/helpers/env"
 
 export const createDispatcherErrorHandler = (client: TelegramClient) => async (err: Error, ctx: ParsedUpdate) => {
     // Ignoring errors when user deleted the message or blocked the bot

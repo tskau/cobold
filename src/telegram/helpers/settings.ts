@@ -1,6 +1,6 @@
 import { CallbackDataBuilder } from "@mtcute/dispatcher"
-import { literal, translatable } from "#core/utils/text"
-import { getSettings, settingI18n, Settings } from "#core/data/settings"
+import { literal, translatable } from "@/core/utils/text"
+import { getSettings, settingI18n, Settings } from "@/core/data/settings"
 import { Peer } from "@mtcute/node"
 
 type SettingsEntries = [keyof Settings, Settings[keyof Settings]][]

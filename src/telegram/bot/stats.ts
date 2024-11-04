@@ -1,6 +1,6 @@
 import { Dispatcher, filters } from "@mtcute/dispatcher"
-import { evaluatorsFor } from "#telegram/helpers/text"
-import { getDownloadStats } from "#core/data/stats"
+import { evaluatorsFor } from "@/telegram/helpers/text"
+import { getDownloadStats } from "@/core/data/stats"
 
 export const statsDp = Dispatcher.child()
 

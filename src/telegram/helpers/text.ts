@@ -1,6 +1,6 @@
 import { Peer } from "@mtcute/node"
-import { Text } from "#core/utils/text"
-import { Translator, translatorFor } from "#telegram/helpers/i18n"
+import { Text } from "@/core/utils/text"
+import { Translator, translatorFor } from "@/telegram/helpers/i18n"
 
 export type TextEvaluator = (text: Text) => string
 export function evaluateText(translator: Translator, text: Text): string {

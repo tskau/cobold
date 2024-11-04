@@ -1,4 +1,4 @@
-import { TranslationParams } from "#core/utils/i18n"
+import { TranslationParams } from "@/core/utils/i18n"
 
 export type LiteralText = {
     type: "literal",

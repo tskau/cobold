@@ -2,7 +2,7 @@ import { config } from "dotenv"
 import { createEnv } from "@t3-oss/env-core"
 import { z } from "zod"
 
-import { apiServerSchema } from "#core/data/request"
+import { apiServerSchema } from "@/core/data/request"
 
 config()
 

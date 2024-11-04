@@ -1,10 +1,10 @@
-import { ok, error, Result } from "#core/utils/result"
-import { Text, translatable } from "#core/utils/text"
-import { env } from "#telegram/helpers/env"
+import { ok, error, Result } from "@/core/utils/result"
+import { Text, translatable } from "@/core/utils/text"
+import { env } from "@/telegram/helpers/env"
 import type { InputMediaLike, Peer } from "@mtcute/node"
 import { CallbackDataBuilder } from "@mtcute/dispatcher"
-import { finishRequest, MediaRequest, outputOptions } from "#core/data/request"
-import { getPeerLocale } from "#telegram/helpers/i18n"
+import { finishRequest, MediaRequest, outputOptions } from "@/core/data/request"
+import { getPeerLocale } from "@/telegram/helpers/i18n"
 import mediaInfoFactory, { GeneralTrack, ImageTrack, VideoTrack } from "mediainfo.js"
 
 const mediainfo = await mediaInfoFactory()

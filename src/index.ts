@@ -1,3 +1,3 @@
-import { startBot } from "#telegram/bot/main"
+import { startBot } from "@/telegram/bot"
 
 void startBot()

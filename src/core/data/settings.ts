@@ -1,8 +1,8 @@
 import { eq, InferSelectModel } from "drizzle-orm"
-import { settings as settingsTable } from "#core/data/db/schema"
-import { locales } from "#core/utils/i18n"
-import { outputOptions } from "#core/data/request"
-import { db } from "#core/data/db/database"
+import { settings as settingsTable } from "@/core/data/db/schema"
+import { locales } from "@/core/utils/i18n"
+import { outputOptions } from "@/core/data/request"
+import { db } from "@/core/data/db/database"
 
 export type Settings = Omit<InferSelectModel<typeof settingsTable>, "id">
 
