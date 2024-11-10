@@ -1,10 +1,11 @@
-FROM gplane/pnpm:node20-alpine AS base
+FROM gplane/pnpm:node22-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
 WORKDIR /app
 
 # Install dependencies
+RUN apk add --no-cache python3 alpine-sdk
 COPY package.json pnpm-lock.yaml* ./
 RUN pnpm fetch
 
