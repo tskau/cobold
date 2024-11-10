@@ -76,7 +76,7 @@ export async function fetchMedia({ url, lang, apiBaseUrl, downloadMode = "auto",
             ...auth ? [["Authorization", auth] satisfies [string, string]] : [],
             ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
         ],
-        body: JSON.stringify({ url, downloadMode, filenameStyle: "basic" }),
+        body: JSON.stringify({ url, downloadMode, filenameStyle: "basic", youtubeHLS: true }),
     }).catch(() => null)
 
     if (!res)
