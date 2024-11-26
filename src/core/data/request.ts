@@ -17,11 +17,13 @@ export const apiServerSchema = z.object({
     name: z.string().optional(),
     url: z.string().url(),
     auth: z.string().optional(),
+    youtubeHls: z.boolean().optional(),
 }).or(
     z.string().url().transform(data => ({
         name: undefined,
         url: data,
         auth: undefined,
+        youtubeHls: undefined,
     })),
 ).transform(data => ({
     ...data,
@@ -120,6 +122,7 @@ async function tryDownload(outputType: string, request: MediaRequest, apiPool: A
         lang,
         apiBaseUrl: currentApi.url,
         auth: currentApi.auth,
+        youtubeHls: currentApi.youtubeHls,
     })
 
     if (!res.success) {

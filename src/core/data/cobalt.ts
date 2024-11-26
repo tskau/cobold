@@ -60,23 +60,34 @@ const cobaltErrors = new Map([
     ["content.post.age", "error-media-unavailable"],
 ].map(([k, v]) => [`error.api.${k}`, v]))
 
-export async function fetchMedia({ url, lang, apiBaseUrl, downloadMode = "auto", auth }: {
+const stackHeaders = (...headers: ([string, string] | null | false | undefined)[]) => headers.filter((h): h is [string, string] => !!h)
+
+const stackObjects = <T>(...objs: (T | null | false | undefined)[]) => objs.reduce(
+    (p, c) => c ? ({ ...p, ...c }) : p,
+    {},
+)
+
+export async function fetchMedia({ url, lang, apiBaseUrl, downloadMode = "auto", auth, youtubeHls }: {
     url: string,
     lang?: string,
     downloadMode?: string,
     apiBaseUrl: string,
     auth?: string,
+    youtubeHls?: boolean,
 }): Promise<Result<SuccessfulCobaltMediaResponse, Text>> {
     const res = await fetch(`${apiBaseUrl}`, {
         method: "POST",
-        headers: [
+        headers: stackHeaders(
             ["Accept", "application/json"],
             ["Content-Type", "application/json"],
             ["User-Agent", "cobold (+https://github.com/tskau/cobold)"],
-            ...auth ? [["Authorization", auth] satisfies [string, string]] : [],
-            ...lang ? [["Accept-Language", lang] satisfies [string, string]] : [],
-        ],
-        body: JSON.stringify({ url, downloadMode, filenameStyle: "basic", youtubeHLS: true }),
+            !!auth && ["Authorization", auth],
+            !!lang && ["Accept-Language", lang],
+        ),
+        body: JSON.stringify(stackObjects(
+            { url, downloadMode, filenameStyle: "basic" },
+            youtubeHls && { youtubeHLS: true },
+        )),
     }).catch(() => null)
 
     if (!res)
