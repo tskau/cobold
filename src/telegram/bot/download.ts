@@ -19,7 +19,7 @@ import { evaluatorsFor } from "@/telegram/helpers/text"
 
 export const downloadDp = Dispatcher.child()
 
-downloadDp.onNewMessage(filters.chat("private"), async (msg) => {
+downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
     const { e, t } = await evaluatorsFor(msg.sender)
 
     const urlEntity = msg.entities.find(e => e.is("text_link") || e.is("url"))
