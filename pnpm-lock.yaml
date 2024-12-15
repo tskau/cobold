@@ -15,14 +15,14 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       '@mtcute/crypto-node':
-        specifier: 0.18.0-rc.3
-        version: 0.18.0-rc.3
+        specifier: 0.18.0-rc.5
+        version: 0.18.0-rc.5
       '@mtcute/dispatcher':
-        specifier: 0.18.0-rc.3
-        version: 0.18.0-rc.3
+        specifier: 0.18.0-rc.5
+        version: 0.18.0-rc.5
       '@mtcute/node':
-        specifier: 0.18.0-rc.3
-        version: 0.18.0-rc.3
+        specifier: 0.18.0-rc.5
+        version: 0.18.0-rc.5
       '@t3-oss/env-core':
         specifier: ^0.7.1
         version: 0.7.1(typescript@5.3.3)(zod@3.22.4)
@@ -642,20 +642,17 @@ packages:
     resolution: {integrity: sha512-StAM0vgsD1QK+nFikaKs9Rxe3JGNipiXrpmemNGwM4gWERBXPe9gjzsBoKjgBgq1Vyiy+xy/C652QIWY+MPyYw==}
     engines: {node: '>=14.0.0', npm: '>=7.0.0'}
 
-  '@fuman/io@0.0.2':
-    resolution: {integrity: sha512-bgEbGatqT4xvPJzbDuwGdxR28t/Z4wRWmoiJR3viCnMTvY0mzJuhozhafM3AGmOhlBP5m9ivIc9CRxP5AQEl3w==}
+  '@fuman/io@0.0.3':
+    resolution: {integrity: sha512-RK7lu1PsYHuteaBPDlomCjinMrX8CmbF/cv4KYqJrXWtprmBHMIJhpAg517WhMICeYEiWyfLLUWAzV6L/diLdg==}
 
-  '@fuman/net@0.0.2':
-    resolution: {integrity: sha512-rMSufjrNRljxbcUcRok8rK5Ji3X6//F9egtWMthyPFl/gj1rtcBGi0bvLA7MJ34xURT09qMUQkmj/sZr6wwEnA==}
+  '@fuman/net@0.0.3':
+    resolution: {integrity: sha512-gvpes8JLN0yVpJIGzzCQNleELKMNnkTbwP+BZMRS4O+i1Ap6K5c5WyDTMXUSkTIIjVtpssD40rxjVu8beWb5lA==}
 
-  '@fuman/node@0.0.2':
-    resolution: {integrity: sha512-9N4EDG1M2stHbT2ivoO2ekhtcdXUu+tFWDyQH/l4UNhFH69qzl1/F5xQk3aviGhTkfGV/LsIoUOvXGwnqavwtQ==}
+  '@fuman/node@0.0.3':
+    resolution: {integrity: sha512-mFZWoWiZEyk9kkrSwR2066AMJu7TLxoaOKnBtlVJsywSl65BsWj52rWqu4bfTzV1CSM2KvWFDltLRAXJb/uCmA==}
 
-  '@fuman/utils@0.0.1':
-    resolution: {integrity: sha512-9zT7TiQEm2leoXVoN1Fs7m0d6bZcJXWDWQl9MhoySb+z0+iXb05PcDuTxTfCAvpGK1XVFf3n+MyN0w1yCKHc7Q==}
-
-  '@fuman/utils@0.0.2':
-    resolution: {integrity: sha512-Qok+uJM1gfYdIa4vIrvFl40IVsKmPINy7giXhfH25Bm2bQHAPGaMiTmy8aj8wz/jGZgzh3ga9mhVBFzD38E/Fw==}
+  '@fuman/utils@0.0.3':
+    resolution: {integrity: sha512-EhWPFvVHqFSWVi9VMTutvUQ/btDVIz0dKJV90oOPzl4wMCB0WDrIYlGnt698tqbxWHLUCEos1FomSe1McVklyQ==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -699,35 +696,35 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@mtcute/core@0.18.0-rc.3':
-    resolution: {integrity: sha512-NJsKukJfxtGnNcq2P57GrSM5/QGORKyXvANQqL8ZK23FytseNNjVixq4Rsidxc8vkBSmygehtUUySBqz/bH1Jg==}
+  '@mtcute/core@0.18.0-rc.5':
+    resolution: {integrity: sha512-gMDWUpjTNEgDXe745aIans4lGPsVE4PseLTbI2KRadIyl6xDTDMAcDxAOGCqDx3Uk++OvRPmMBVJu8oRrZP6YA==}
 
-  '@mtcute/crypto-node@0.18.0-rc.3':
-    resolution: {integrity: sha512-WIrmApsp1tsoB/8WfaEpnoxWUJY0IuXWs7SmAionosSAl02Xe6jqy8kMUtzUiKJkDiW3esBXkMV+VgsWJG6GaA==}
+  '@mtcute/crypto-node@0.18.0-rc.5':
+    resolution: {integrity: sha512-M+lWv16K725eBdHILpVOfJ0G+ADFt3FCeKrEzPv+OQ050x/V7p87SNWTaUI20Vfk0sRNBhojFF1QmlmFuEczdw==}
 
-  '@mtcute/dispatcher@0.18.0-rc.3':
-    resolution: {integrity: sha512-bPTYnfUUb2JkBR6lSx26amHyo73HRkN8Rkpzlcgj+jWHOhHfjB1UwYEstMeX+CWwYjaImblgoJb9h1aVeKjRQg==}
+  '@mtcute/dispatcher@0.18.0-rc.5':
+    resolution: {integrity: sha512-Eg/79vqcSVBjin5B3klWFdH1Ej03SxV8FrKViM8D7kY01Vdvxb4NHYFiA3/xdd928fbyJkMzzSUTiK0QIdZZXA==}
 
-  '@mtcute/file-id@0.18.0-rc.3':
-    resolution: {integrity: sha512-Q4Mde8HsZYkT25v2AzOlImA7iB6EtO+Lg/7zWfctteolbRVMLA8PLRsoS6CGQ7JtFIAorwwZrTgXSYrWfd9aEA==}
+  '@mtcute/file-id@0.18.0-rc.5':
+    resolution: {integrity: sha512-R6yoMQ+RyRSJWFiCFojxblHoNyWUPCw47vak/fxKLELG8z9Oz9hoGpXIhNhxQTwTHPUJq2fLtF54PwGH8uKhYA==}
 
-  '@mtcute/html-parser@0.18.0-rc.3':
-    resolution: {integrity: sha512-E8HF24a35isWN+OASB7YWlnA/KwjO05keujcgtZ8Dlb4zSv1X+wErDRAdGRbv1zCII21/qFngb0KerlG2U3GYQ==}
+  '@mtcute/html-parser@0.18.0-rc.5':
+    resolution: {integrity: sha512-Gn5T+Rpahk8GfX8LsO3QBeFZkesh1E4dvzI+LGOkEn2IwTDmpOyILRdP1QacXJqyGOsGbaFGCJdTUuZXl4Bdaw==}
 
-  '@mtcute/markdown-parser@0.18.0-rc.3':
-    resolution: {integrity: sha512-dVjyOKIOzSIbb1EhXDpngpy5pYk6bkojnzs91me0x1eKH7eaCoiMdw/pF19aj7DxpdXBKGt/sh/cqYI+rB08aw==}
+  '@mtcute/markdown-parser@0.18.0-rc.5':
+    resolution: {integrity: sha512-9gombEyxdDK4CC2Yvecep+m6HW1JMB1/HYy41ozJB41+rjoC/J1F2UYV+nq7dC3+cKp+6cHd0DT88WCljzok+w==}
 
-  '@mtcute/node@0.18.0-rc.3':
-    resolution: {integrity: sha512-BNqKu4PgmHvjbEm08EtCYGA65yglu1d4e4zt9G7h/WB1w5waQ10NSatnPm9O6Ij1MjDLE0YDraO3KtdpHFCSnQ==}
+  '@mtcute/node@0.18.0-rc.5':
+    resolution: {integrity: sha512-febu/n6da2XV9HIECwrIfyI98kkZBCkr8VNxJ8vofriHQWHDEje7ChiGaU4DwhrVl1Rqsdk2u/rB6jHE1rGuLQ==}
 
-  '@mtcute/tl-runtime@0.18.0-rc.3':
-    resolution: {integrity: sha512-MBXSR46uvfEXRVFAydLKKIE9Hhtkl6vrZA5wijMTyCsz5hn+PkC7lwZFZekROL3Vo0lGDt3Dd9cO/cG3BvdzOg==}
+  '@mtcute/tl-runtime@0.18.0-rc.5':
+    resolution: {integrity: sha512-MBnBJ7r2MWf5fjbTo6cVhq/YbfKmxyGGvKGiE9VVw4bwU7yPar6DkxXUpnanlgkXYrl9OQCy0DUG1l3Tj3eH/w==}
 
-  '@mtcute/tl@0.18.0-rc.3':
-    resolution: {integrity: sha512-hk8xFko0VNGuGcNEqtHEGkZhoTI69wCIKIewHfGYI90QKUThMYNffL7DGBHv0paQqwS7xeP5Tq2kT0y+1AQfhA==}
+  '@mtcute/tl@0.18.0-rc.5':
+    resolution: {integrity: sha512-ENL70qfiJqvjlDC7BGqVNRa3/8iBrbfh7kdeylFo9RQo1l1f+tx770TZ87DMHwNhJJdXGIUkDtdYKTyB7dii6w==}
 
-  '@mtcute/wasm@0.18.0-rc.3':
-    resolution: {integrity: sha512-BVoIsq6cNiOsXpGqsK1YTWyGdbBXQCcJnEO9JKq+GEYWGQDQsQKVEz8Tu/wp+iGEPPVhEDQHmiruyn98RttaKg==}
+  '@mtcute/wasm@0.18.0-rc.5':
+    resolution: {integrity: sha512-RnK6b4fIffuOZ9UgTOcA4VtzNqOnWRGWMMPV/h/dskqaPfuDyGVMPzb0v4+HGWyn5LkKY1g9FWJWF9GlJS1OQg==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1905,8 +1902,8 @@ packages:
   lru-queue@0.1.0:
     resolution: {integrity: sha512-BpdYkt9EvGl8OfWHDQPISVpcl5xZthb+XPsbELj5AQXxIC8IriDZIQYjBJPEm5rS420sjZ0TLEzRcq5KdBhYrQ==}
 
-  magic-string@0.30.14:
-    resolution: {integrity: sha512-5c99P1WKTed11ZC0HMJOj6CDIue6F8ySu+bJL+85q1zBEIY8IklrJ1eiKC2NDRh3Ct3FcvmJPyQHb9erXMTJNw==}
+  magic-string@0.30.15:
+    resolution: {integrity: sha512-zXeaYRgZ6ldS1RJJUrMrYgNJ4fdwnyI6tVqoiIhyCyv5IVTK9BU8Ic2l253GGETQHxI4HNUwhJ3fjDhKqEoaAw==}
 
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
@@ -3060,24 +3057,22 @@ snapshots:
 
   '@fluent/langneg@0.7.0': {}
 
-  '@fuman/io@0.0.2':
+  '@fuman/io@0.0.3':
     dependencies:
-      '@fuman/utils': 0.0.1
+      '@fuman/utils': 0.0.3
 
-  '@fuman/net@0.0.2':
+  '@fuman/net@0.0.3':
     dependencies:
-      '@fuman/io': 0.0.2
-      '@fuman/utils': 0.0.1
+      '@fuman/io': 0.0.3
+      '@fuman/utils': 0.0.3
 
-  '@fuman/node@0.0.2':
+  '@fuman/node@0.0.3':
     dependencies:
-      '@fuman/io': 0.0.2
-      '@fuman/net': 0.0.2
-      '@fuman/utils': 0.0.1
+      '@fuman/io': 0.0.3
+      '@fuman/net': 0.0.3
+      '@fuman/utils': 0.0.3
 
-  '@fuman/utils@0.0.1': {}
-
-  '@fuman/utils@0.0.2': {}
+  '@fuman/utils@0.0.3': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -3118,67 +3113,67 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@mtcute/core@0.18.0-rc.3':
+  '@mtcute/core@0.18.0-rc.5':
     dependencies:
-      '@fuman/io': 0.0.2
-      '@fuman/net': 0.0.2
-      '@fuman/utils': 0.0.2
-      '@mtcute/file-id': 0.18.0-rc.3
-      '@mtcute/tl': 0.18.0-rc.3
-      '@mtcute/tl-runtime': 0.18.0-rc.3
+      '@fuman/io': 0.0.3
+      '@fuman/net': 0.0.3
+      '@fuman/utils': 0.0.3
+      '@mtcute/file-id': 0.18.0-rc.5
+      '@mtcute/tl': 0.18.0-rc.5
+      '@mtcute/tl-runtime': 0.18.0-rc.5
       '@types/events': 3.0.0
       events: 3.2.0
       long: 5.2.3
 
-  '@mtcute/crypto-node@0.18.0-rc.3':
+  '@mtcute/crypto-node@0.18.0-rc.5':
     dependencies:
-      '@mtcute/node': 0.18.0-rc.3
+      '@mtcute/node': 0.18.0-rc.5
       node-gyp-build: 4.8.1
 
-  '@mtcute/dispatcher@0.18.0-rc.3':
+  '@mtcute/dispatcher@0.18.0-rc.5':
     dependencies:
-      '@fuman/utils': 0.0.2
-      '@mtcute/core': 0.18.0-rc.3
+      '@fuman/utils': 0.0.3
+      '@mtcute/core': 0.18.0-rc.5
       events: 3.2.0
 
-  '@mtcute/file-id@0.18.0-rc.3':
+  '@mtcute/file-id@0.18.0-rc.5':
     dependencies:
-      '@fuman/utils': 0.0.2
-      '@mtcute/tl-runtime': 0.18.0-rc.3
+      '@fuman/utils': 0.0.3
+      '@mtcute/tl-runtime': 0.18.0-rc.5
       long: 5.2.3
 
-  '@mtcute/html-parser@0.18.0-rc.3':
+  '@mtcute/html-parser@0.18.0-rc.5':
     dependencies:
-      '@mtcute/core': 0.18.0-rc.3
+      '@mtcute/core': 0.18.0-rc.5
       htmlparser2: 6.1.0
       long: 5.2.3
 
-  '@mtcute/markdown-parser@0.18.0-rc.3':
+  '@mtcute/markdown-parser@0.18.0-rc.5':
     dependencies:
-      '@mtcute/core': 0.18.0-rc.3
+      '@mtcute/core': 0.18.0-rc.5
       long: 5.2.3
 
-  '@mtcute/node@0.18.0-rc.3':
+  '@mtcute/node@0.18.0-rc.5':
     dependencies:
-      '@fuman/net': 0.0.2
-      '@fuman/node': 0.0.2
-      '@fuman/utils': 0.0.2
-      '@mtcute/core': 0.18.0-rc.3
-      '@mtcute/html-parser': 0.18.0-rc.3
-      '@mtcute/markdown-parser': 0.18.0-rc.3
-      '@mtcute/wasm': 0.18.0-rc.3
+      '@fuman/net': 0.0.3
+      '@fuman/node': 0.0.3
+      '@fuman/utils': 0.0.3
+      '@mtcute/core': 0.18.0-rc.5
+      '@mtcute/html-parser': 0.18.0-rc.5
+      '@mtcute/markdown-parser': 0.18.0-rc.5
+      '@mtcute/wasm': 0.18.0-rc.5
       better-sqlite3: 11.3.0
 
-  '@mtcute/tl-runtime@0.18.0-rc.3':
+  '@mtcute/tl-runtime@0.18.0-rc.5':
     dependencies:
-      '@fuman/utils': 0.0.2
+      '@fuman/utils': 0.0.3
       long: 5.2.3
 
-  '@mtcute/tl@0.18.0-rc.3':
+  '@mtcute/tl@0.18.0-rc.5':
     dependencies:
       long: 5.2.3
 
-  '@mtcute/wasm@0.18.0-rc.3': {}
+  '@mtcute/wasm@0.18.0-rc.5': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -3406,7 +3401,7 @@ snapshots:
       '@vue/compiler-ssr': 3.5.12
       '@vue/shared': 3.5.12
       estree-walker: 2.0.2
-      magic-string: 0.30.14
+      magic-string: 0.30.15
       postcss: 8.4.49
       source-map-js: 1.2.1
 
@@ -4385,7 +4380,7 @@ snapshots:
     dependencies:
       es5-ext: 0.10.62
 
-  magic-string@0.30.14:
+  magic-string@0.30.15:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
 

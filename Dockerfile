@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install dependencies
 RUN apk add --no-cache python3 alpine-sdk
-COPY package.json pnpm-lock.yaml* .npmrc ./
+COPY package.json pnpm-lock.yaml* ./
 RUN pnpm fetch
 
 
