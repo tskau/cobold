@@ -13,6 +13,7 @@ const bot = new TelegramClient({
     apiHash: env.API_HASH,
     storage: "data/session",
     logLevel: 5,
+    network: { usePfs: true },
 })
 
 const dp = Dispatcher.for(bot)
