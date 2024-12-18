@@ -15,14 +15,14 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       '@mtcute/crypto-node':
-        specifier: 0.18.0-rc.6
-        version: 0.18.0-rc.6
+        specifier: 0.18.0-rc.6-coboldfix.1
+        version: 0.18.0-rc.6-coboldfix.1
       '@mtcute/dispatcher':
-        specifier: 0.18.0-rc.6
-        version: 0.18.0-rc.6
+        specifier: 0.18.0-rc.6-coboldfix.1
+        version: 0.18.0-rc.6-coboldfix.1
       '@mtcute/node':
-        specifier: 0.18.0-rc.6
-        version: 0.18.0-rc.6
+        specifier: 0.18.0-rc.6-coboldfix.1
+        version: 0.18.0-rc.6-coboldfix.1
       '@t3-oss/env-core':
         specifier: ^0.7.1
         version: 0.7.1(typescript@5.3.3)(zod@3.22.4)
@@ -712,35 +712,35 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@mtcute/core@0.18.0-rc.6':
-    resolution: {integrity: sha512-5jY+FQHKMtBqNjZqp6g0ZASkoDpQYsDZGi7yCKK/mRj3fSL7YU8aKI3SA7YX3/HxOglRi2hH47EyNeOjHs6+Lw==}
+  '@mtcute/core@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-5m7dV7eGBo5QqPXuVSW0wiu65GsoYxIoea6T8Asv4dGFq+9CZlNm1zsxm40+qtDfQpK0EJp3kGVyUN9DT8r0hA==}
 
-  '@mtcute/crypto-node@0.18.0-rc.6':
-    resolution: {integrity: sha512-U4MMzDhpBoxwlRL0Gd1wi7oMGvMM9Fs7HCCLV1NghPyph+sFT+xPSfJYl3HzZW/jQBTTMBoFbdOGJ8dsMnHMLw==}
+  '@mtcute/crypto-node@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-NewNP4t2uW6SyUZcFdUd6ORjM+fN8N4huWZX4vHmQsMtp65o2y8Y1u1mqUqsWll3EJMjacFlEPczSeNWr1P1Gw==}
 
-  '@mtcute/dispatcher@0.18.0-rc.6':
-    resolution: {integrity: sha512-9ibpcEnMguEDkjUgKJtIHTTscgETFDOU8EmZihWsMmRQw7ZUnXGcLVhIFIKb5eWUrMo1hVQwjbfy/sH0heTU7A==}
+  '@mtcute/dispatcher@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-SVRafgJLJT7hMJJyR8+K/U6tQDJceTlhI2pw+Q/WO4emebrWlIoGV95D31WtRVZPsV0QifUN6hRkm+RhIbSjNw==}
 
-  '@mtcute/file-id@0.18.0-rc.6':
-    resolution: {integrity: sha512-4xLwLlEo4s/Zu3eaJQT6vhQXfkgQPueqtAoJJjMasaV/xmXKGGbNFCTMqGwOBY4aUaQpg1kUY8zkak5Cj/DIlQ==}
+  '@mtcute/file-id@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-vDc8l0OArtUTEgS1VwgoWZ3ZoAXCcsIdDL9QCJqt9A9O0n95MVlCm9B4jneuGoX+DEPaEao9BNxR8I9wL+2Z0w==}
 
-  '@mtcute/html-parser@0.18.0-rc.6':
-    resolution: {integrity: sha512-tqux5mg82ONpXL2hZFj/fR3OlQ1D+sSrPPbKwZ84qoboMm1R9r2oQjn4zslNEu0bitffDjov2rlBZ4bQAtqBQw==}
+  '@mtcute/html-parser@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-v+twqIrVjNBQFlqCTn0OPajwqFVzx+JPFnwqhBUeyEy2OhncxVAoDwtDyt6f9U6PMJjwxVOrRCVQzJF0OsvmDg==}
 
-  '@mtcute/markdown-parser@0.18.0-rc.6':
-    resolution: {integrity: sha512-dMbi7gDiepa8+NT0Lgn2FXbjWaoxIPjpOjg2CIlqRNVMKd5Xn+tWHi55BjqW7IYNfn8OaDCSNxlSBOW1H1jPAQ==}
+  '@mtcute/markdown-parser@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-A6ZUiaHnBop570CysLT80FiYePbXIU7QXTlnwpIYWnS4jV4KkXN3oSYlXHqf8MCp7/djWVZiM2Vs5W7qqxMvww==}
 
-  '@mtcute/node@0.18.0-rc.6':
-    resolution: {integrity: sha512-ILuonFHJvVSQcyAQZADRzK90/k0GSYD6tZNivcDHuR/sBmd+tac+W7w1iaM0s0CPjZYDotaOZJROYKdvTOhq0Q==}
+  '@mtcute/node@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-i9tYUle4NwT92dqxb1XeculgJLoBw0F0iEyzVxg69t3B2KzTwzl7WHnCUwRCOUX+AmFLHoT7MLCe7zuQkERNqA==}
 
-  '@mtcute/tl-runtime@0.18.0-rc.6':
-    resolution: {integrity: sha512-+x8WebvXtcjJS3FAQyMcfhzRDlgFaMl0ObYdwYFANmqF98Hu6c7XO4K+/VGoaatzzKVWWAgxkLfHGLH3p7YyRQ==}
+  '@mtcute/tl-runtime@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-KKblRiGgONsRW6gKoBO+7s15+pxVk8/dCypTCucsEFcIj8tNRC4RY6vs1uPSX1AjEJ22P1xJuVyVMOO2Xg+Xlg==}
 
-  '@mtcute/tl@0.18.0-rc.6':
-    resolution: {integrity: sha512-KgJjP4dI1q8W/aGrWWpiBjYmDno85fUe6XLhlfT/RBNH2M7RgfOTFkV38f1jG/hsdLQJI3pxeBT8r0NoiMe0AA==}
+  '@mtcute/tl@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-5Om6n4yHrFis/DhLV5abUszy4+0gQzvh2fUwJX+OBRuM7g3n2fOw/aNMYzR7s0pTiAAwPa5t0sZXUNyw8n/9tQ==}
 
-  '@mtcute/wasm@0.18.0-rc.6':
-    resolution: {integrity: sha512-BNP/7kJssdXrsQZCnmrtHGbLj9bJTTSalU0iUmXNwY6Susyt6LR8W8C6rEzdJXUYrTy+oOfjmlJXUV31VZkVYg==}
+  '@mtcute/wasm@0.18.0-rc.6-coboldfix.1':
+    resolution: {integrity: sha512-Q22Ee5Dki9dlzGFFcO2gpy78gKiTfbqG9soFqZOKK8uZOLcwCIGCfZwq63YCHyw5gZlFLkMhugfPJKG9k4JYEQ==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -3140,67 +3140,67 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@mtcute/core@0.18.0-rc.6':
+  '@mtcute/core@0.18.0-rc.6-coboldfix.1':
     dependencies:
       '@fuman/io': https://pkg.pr.new/teidesu/fuman/@fuman/io@4a9dd5b
       '@fuman/net': https://pkg.pr.new/teidesu/fuman/@fuman/net@4a9dd5b
       '@fuman/utils': https://pkg.pr.new/teidesu/fuman/@fuman/utils@4a9dd5b
-      '@mtcute/file-id': 0.18.0-rc.6
-      '@mtcute/tl': 0.18.0-rc.6
-      '@mtcute/tl-runtime': 0.18.0-rc.6
+      '@mtcute/file-id': 0.18.0-rc.6-coboldfix.1
+      '@mtcute/tl': 0.18.0-rc.6-coboldfix.1
+      '@mtcute/tl-runtime': 0.18.0-rc.6-coboldfix.1
       '@types/events': 3.0.0
       events: 3.2.0
       long: 5.2.3
 
-  '@mtcute/crypto-node@0.18.0-rc.6':
+  '@mtcute/crypto-node@0.18.0-rc.6-coboldfix.1':
     dependencies:
-      '@mtcute/node': 0.18.0-rc.6
+      '@mtcute/node': 0.18.0-rc.6-coboldfix.1
       node-gyp-build: 4.8.1
 
-  '@mtcute/dispatcher@0.18.0-rc.6':
+  '@mtcute/dispatcher@0.18.0-rc.6-coboldfix.1':
     dependencies:
       '@fuman/utils': https://pkg.pr.new/teidesu/fuman/@fuman/utils@4a9dd5b
-      '@mtcute/core': 0.18.0-rc.6
+      '@mtcute/core': 0.18.0-rc.6-coboldfix.1
       events: 3.2.0
 
-  '@mtcute/file-id@0.18.0-rc.6':
+  '@mtcute/file-id@0.18.0-rc.6-coboldfix.1':
     dependencies:
       '@fuman/utils': https://pkg.pr.new/teidesu/fuman/@fuman/utils@4a9dd5b
-      '@mtcute/tl-runtime': 0.18.0-rc.6
+      '@mtcute/tl-runtime': 0.18.0-rc.6-coboldfix.1
       long: 5.2.3
 
-  '@mtcute/html-parser@0.18.0-rc.6':
+  '@mtcute/html-parser@0.18.0-rc.6-coboldfix.1':
     dependencies:
-      '@mtcute/core': 0.18.0-rc.6
+      '@mtcute/core': 0.18.0-rc.6-coboldfix.1
       htmlparser2: 6.1.0
       long: 5.2.3
 
-  '@mtcute/markdown-parser@0.18.0-rc.6':
+  '@mtcute/markdown-parser@0.18.0-rc.6-coboldfix.1':
     dependencies:
-      '@mtcute/core': 0.18.0-rc.6
+      '@mtcute/core': 0.18.0-rc.6-coboldfix.1
       long: 5.2.3
 
-  '@mtcute/node@0.18.0-rc.6':
+  '@mtcute/node@0.18.0-rc.6-coboldfix.1':
     dependencies:
       '@fuman/net': https://pkg.pr.new/teidesu/fuman/@fuman/net@4a9dd5b
       '@fuman/node': https://pkg.pr.new/teidesu/fuman/@fuman/node@4a9dd5b
       '@fuman/utils': https://pkg.pr.new/teidesu/fuman/@fuman/utils@4a9dd5b
-      '@mtcute/core': 0.18.0-rc.6
-      '@mtcute/html-parser': 0.18.0-rc.6
-      '@mtcute/markdown-parser': 0.18.0-rc.6
-      '@mtcute/wasm': 0.18.0-rc.6
+      '@mtcute/core': 0.18.0-rc.6-coboldfix.1
+      '@mtcute/html-parser': 0.18.0-rc.6-coboldfix.1
+      '@mtcute/markdown-parser': 0.18.0-rc.6-coboldfix.1
+      '@mtcute/wasm': 0.18.0-rc.6-coboldfix.1
       better-sqlite3: 11.3.0
 
-  '@mtcute/tl-runtime@0.18.0-rc.6':
+  '@mtcute/tl-runtime@0.18.0-rc.6-coboldfix.1':
     dependencies:
       '@fuman/utils': https://pkg.pr.new/teidesu/fuman/@fuman/utils@4a9dd5b
       long: 5.2.3
 
-  '@mtcute/tl@0.18.0-rc.6':
+  '@mtcute/tl@0.18.0-rc.6-coboldfix.1':
     dependencies:
       long: 5.2.3
 
-  '@mtcute/wasm@0.18.0-rc.6': {}
+  '@mtcute/wasm@0.18.0-rc.6-coboldfix.1': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
