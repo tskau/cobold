@@ -16,4 +16,5 @@ export const settings = sqliteTable("settings", {
     preferredOutput: text("output"),
     preferredAttribution: int("attribution").notNull().default(0),
     languageOverride: text("language"),
+    instanceOverride: text("instance"),
 })
