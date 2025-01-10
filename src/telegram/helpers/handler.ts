@@ -4,7 +4,7 @@ import type { GeneralTrack, ImageTrack, VideoTrack } from "mediainfo.js"
 import { CallbackDataBuilder } from "@mtcute/dispatcher"
 import mediaInfoFactory from "mediainfo.js"
 
-import type { MediaRequest } from "@/core/data/request"
+import type { ApiServer, MediaRequest } from "@/core/data/request"
 import { finishRequest, outputOptions } from "@/core/data/request"
 import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
@@ -12,6 +12,7 @@ import type { Text } from "@/core/utils/text"
 import { translatable } from "@/core/utils/text"
 import { env } from "@/telegram/helpers/env"
 import { getPeerLocale } from "@/telegram/helpers/i18n"
+import { getPeerSettings } from "@/telegram/helpers/settings"
 
 export const OutputButton = new CallbackDataBuilder("dl", "output", "request")
 export const getOutputSelectionMessage = (requestId: string) => ({
@@ -86,7 +87,10 @@ async function fileToInputMedia(file: ArrayBuffer, fileName?: string): Promise<I
 export async function handleMediaDownload(outputType: string, request: MediaRequest | undefined, peer: Peer): Promise<Result<InputMediaLike | InputMediaLike[], Text>> {
     if (!request)
         return error(translatable("error-request-not-found"))
-    const res = await finishRequest(outputType, request, env.API_ENDPOINTS, await getPeerLocale(peer))
+    const settings = await getPeerSettings(peer)
+    const locale = settings.languageOverride ?? getPeerLocale(peer)
+    const endpoints: ApiServer[] = settings.instanceOverride ? [{ name: "custom", url: settings.instanceOverride, unsafe: true }] : env.API_ENDPOINTS
+    const res = await finishRequest(outputType, request, endpoints, locale)
     if (!res.success)
         return res
 

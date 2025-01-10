@@ -12,18 +12,21 @@ import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
 import type { CompoundText, Text } from "@/core/utils/text"
 import { compound, literal, translatable } from "@/core/utils/text"
+import { safeUrlSchema } from "@/core/utils/url"
 
 export const apiServerSchema = z.object({
     name: z.string().optional(),
     url: z.string().url(),
     auth: z.string().optional(),
     youtubeHls: z.boolean().optional(),
+    unsafe: z.boolean().optional(),
 }).or(
     z.string().url().transform(data => ({
         name: undefined,
         url: data,
         auth: undefined,
         youtubeHls: undefined,
+        unsafe: undefined,
     })),
 ).transform(data => ({
     ...data,
@@ -134,6 +137,16 @@ async function tryDownload(outputType: string, request: MediaRequest, apiPool: A
     if (!currentApi)
         return error(compound(...fails))
 
+    if (currentApi.unsafe && !(await safeUrlSchema.safeParseAsync(currentApi.url)).success) {
+        return tryDownload(
+            outputType,
+            request,
+            apiPool.slice(1),
+            lang,
+            [...fails, compound(literal(`\n${currentApi.name}: `), translatable("error-invalid-custom-instance"))],
+        )
+    }
+
     const res = await fetchMedia({
         url: request.url,
         downloadMode: outputType,
@@ -151,6 +164,22 @@ async function tryDownload(outputType: string, request: MediaRequest, apiPool: A
             lang,
             [...fails, compound(literal(`\n${currentApi.name}: `), res.error)],
         )
+    }
+
+    if (currentApi.unsafe) {
+        if (
+            (res.result.status === "picker" && !(await safeUrlSchema.safeParseAsync(res.result.audio)).success)
+            || (res.result.status === "tunnel" && !(await safeUrlSchema.safeParseAsync(res.result.url)).success)
+            || (res.result.status === "redirect" && !(await safeUrlSchema.safeParseAsync(res.result.url)).success)
+        ) {
+            return tryDownload(
+                outputType,
+                request,
+                apiPool.slice(1),
+                lang,
+                [...fails, literal(`\n${currentApi.name}: unsafe api response`)],
+            )
+        }
     }
 
     return res
