@@ -31,7 +31,11 @@ setting-attribution-0 = nah
 setting-attribution-1 = sure
 
 setting-lang = language
+setting-lang-ar = العربية
 setting-lang-en = english
+setting-lang-pt-BR = português brasileiro
+setting-lang-ru = русский
+setting-lang-uk-UA = українська
 setting-lang-unset = same as telegram
 
 stats-personal = i helped you with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)

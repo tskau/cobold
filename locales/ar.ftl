@@ -28,7 +28,6 @@ setting-attribution-0 = معطل
 setting-attribution-1 = مفعل
 
 setting-lang = اللغة
-setting-lang-ar = العربية
 setting-lang-unset = مطابق لتيليجرام
 
 stats-personal = لقد ساعدتك في التنزيل { $count } مرة/مرات!
