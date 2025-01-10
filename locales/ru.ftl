@@ -20,6 +20,9 @@ uploading-title = загружаю... (˶ᵔ ᵕ ᵔ˶)
 
 settings-open = открыть настройки
 settings-title = настройки
+setting-back = << назад
+setting-saved = сохранил!!
+setting-custom = введи собственное значение:
 
 setting-output = формат
 setting-output-unset = спросить

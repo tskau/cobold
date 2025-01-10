@@ -7,6 +7,7 @@ import { outputOptions } from "@/core/data/request"
 import { locales } from "@/core/utils/i18n"
 
 export type Settings = Omit<InferSelectModel<typeof settingsTable>, "id">
+export const customValue = Symbol("Custom value input prompt")
 
 export const defaultSettings: Settings = {
     preferredOutput: null,
@@ -15,7 +16,7 @@ export const defaultSettings: Settings = {
 }
 
 export const settingOptions: {
-    [K in keyof Settings]: Settings[K][]
+    [K in keyof Settings]: (Settings[K] | typeof customValue)[]
 } = {
     preferredOutput: [null, ...outputOptions],
     preferredAttribution: [0, 1],
@@ -37,20 +38,14 @@ export async function getSettings(id: number): Promise<Settings> {
     return settings
 }
 
-export async function updateSetting(key: string, current: Settings, user: number) {
-    const validKey = key as keyof Settings
+export function getSettingValues<K extends keyof Settings>(key: K) {
+    return settingOptions[key]
+}
 
-    const thisSettingOptions = settingOptions[validKey] as (typeof settingOptions[typeof validKey][number])[] | null
-    if (!thisSettingOptions)
-        return // Invalid key
-
-    const currentIndex = thisSettingOptions.indexOf(current[validKey])
-    const newIndex = (currentIndex + 1) % thisSettingOptions.length
-    const newOption = thisSettingOptions[newIndex]
-
+export async function updateSetting<K extends keyof Settings>(key: K, value: Settings[K], user: number) {
     const newData = await db.insert(settingsTable)
-        .values({ id: user, [validKey]: newOption })
-        .onConflictDoUpdate({ target: settingsTable.id, set: { [validKey]: newOption } })
+        .values({ id: user, [key]: value })
+        .onConflictDoUpdate({ target: settingsTable.id, set: { [key]: value } })
         .returning()
 
     const { id: _, ...newSettings } = newData[0]

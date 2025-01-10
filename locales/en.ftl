@@ -20,6 +20,9 @@ uploading-title = uploading... (˶ᵔ ᵕ ᵔ˶)
 
 settings-open = open settings
 settings-title = settings
+setting-back = << back
+setting-saved = saved!!
+setting-custom = enter custom value:
 
 setting-output = output
 setting-output-unset = ask me
