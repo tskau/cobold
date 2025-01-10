@@ -32,15 +32,21 @@ export const locales = bundles.flatMap(b => b.locales)
 
 export function translate(locale: string, key: string, params?: TranslationParams) {
     const [bestLocale] = negotiateLanguages([locale], locales, { defaultLocale: fallbackLocale })
+    const fallbackBundle = bundles.find(bundle => bundle.locales.includes(fallbackLocale))
     const bundle
         = bundles.find(bundle => bundle.locales.includes(bestLocale))
-        ?? bundles.find(bundle => bundle.locales.includes(fallbackLocale))
+        ?? fallbackBundle
 
     if (!bundle)
         throw new Error(`Could not find bundle for negotiated (${bestLocale}) or fallback (${fallbackLocale}) locale`)
 
     const message = bundle.getMessage(key)
-    if (!message?.value)
-        return key
+    if (!message?.value) {
+        const fallbackMessage = fallbackBundle?.getMessage(key)
+        if (!fallbackBundle || !fallbackMessage?.value) {
+            return key
+        }
+        return fallbackBundle.formatPattern(fallbackMessage.value, { ...params, ...getErrorEmoticonContext() })
+    }
     return bundle.formatPattern(message.value, { ...params, ...getErrorEmoticonContext() })
 }
