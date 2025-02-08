@@ -13,6 +13,7 @@ export const defaultSettings: Settings = {
     preferredOutput: null,
     preferredAttribution: 0,
     languageOverride: null,
+    instanceOverride: null,
 }
 
 export const settingOptions: {
@@ -21,6 +22,7 @@ export const settingOptions: {
     preferredOutput: [null, ...outputOptions],
     preferredAttribution: [0, 1],
     languageOverride: [null, ...locales],
+    instanceOverride: [null, customValue],
 }
 
 export const settingI18n: {
@@ -29,6 +31,7 @@ export const settingI18n: {
     preferredOutput: { key: "output", mode: "translatable" },
     preferredAttribution: { key: "attribution", mode: "translatable" },
     languageOverride: { key: "lang", mode: "translatable" },
+    instanceOverride: { key: "instance", mode: "literal" },
 }
 
 export async function getSettings(id: number): Promise<Settings> {
