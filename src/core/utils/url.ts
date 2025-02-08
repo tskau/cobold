@@ -18,3 +18,16 @@ export const safeUrlSchema = z
         return url.protocol === "https:"
     })
     .nullable()
+
+export const urlWithAuthSchema = z
+    .string()
+    .url()
+    .transform((u) => {
+        const url = new URL(u)
+        if (!url.username && !url.password)
+            return { url: u }
+        const auth = url.password ? `${url.username} ${url.password}` : url.username
+        url.username = ""
+        url.password = ""
+        return { url: url.href, auth }
+    })
