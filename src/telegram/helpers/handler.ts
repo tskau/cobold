@@ -10,6 +10,7 @@ import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
 import type { Text } from "@/core/utils/text"
 import { translatable } from "@/core/utils/text"
+import { urlWithAuthSchema } from "@/core/utils/url"
 import { env } from "@/telegram/helpers/env"
 import { getPeerLocale } from "@/telegram/helpers/i18n"
 import { getPeerSettings } from "@/telegram/helpers/settings"
@@ -89,7 +90,9 @@ export async function handleMediaDownload(outputType: string, request: MediaRequ
         return error(translatable("error-request-not-found"))
     const settings = await getPeerSettings(peer)
     const locale = settings.languageOverride ?? getPeerLocale(peer)
-    const endpoints: ApiServer[] = settings.instanceOverride ? [{ name: "custom", url: settings.instanceOverride, unsafe: true }] : env.API_ENDPOINTS
+    const endpoints: ApiServer[] = settings.instanceOverride
+        ? [{ name: "custom", ...urlWithAuthSchema.parse(settings.instanceOverride), unsafe: true }]
+        : env.API_ENDPOINTS
     const res = await finishRequest(outputType, request, endpoints, locale)
     if (!res.success)
         return res

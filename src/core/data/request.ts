@@ -12,7 +12,7 @@ import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
 import type { CompoundText, Text } from "@/core/utils/text"
 import { compound, literal, translatable } from "@/core/utils/text"
-import { safeUrlSchema } from "@/core/utils/url"
+import { safeUrlSchema, urlWithAuthSchema } from "@/core/utils/url"
 
 export const apiServerSchema = z.object({
     name: z.string().optional(),
@@ -21,10 +21,10 @@ export const apiServerSchema = z.object({
     youtubeHls: z.boolean().optional(),
     unsafe: z.boolean().optional(),
 }).or(
-    z.string().url().transform(data => ({
+    urlWithAuthSchema.transform(data => ({
         name: undefined,
-        url: data,
-        auth: undefined,
+        url: data.url,
+        auth: data.auth,
         youtubeHls: undefined,
         unsafe: undefined,
     })),
