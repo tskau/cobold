@@ -94,9 +94,18 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
     }
 
     if (res.result.status === "picker") {
-        if (outputType !== "audio")
+        if (outputType === "audio") {
+            const source = new URL(res.result.audio)
+            const buffer = await retrieveMedia(source.href)
+            return ok({
+                fileName: source.pathname.split("/").at(-1),
+                file: buffer,
+            })
+        }
+        if (res.result.picker.length !== 1)
             return error(translatable("error-picker"))
-        const source = new URL(res.result.audio)
+        const file = res.result.picker[0]
+        const source = new URL(file.url)
         const buffer = await retrieveMedia(source.href)
         return ok({
             fileName: source.pathname.split("/").at(-1),
