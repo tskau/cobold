@@ -4,36 +4,16 @@ import { randomUUID } from "node:crypto"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 
-import type { SuccessfulCobaltMediaResponse } from "@/core/data/cobalt"
-import { fetchMedia, fetchStream } from "@/core/data/cobalt"
+import type { ApiServer, SuccessfulCobaltMediaResponse } from "@/core/data/cobalt"
+import { retrieveExternalMedia, retrieveTunneledMedia, startDownload } from "@/core/data/cobalt"
+
 import { db } from "@/core/data/db/database"
 import { requests } from "@/core/data/db/schema"
 import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
 import type { CompoundText, Text } from "@/core/utils/text"
 import { compound, literal, translatable } from "@/core/utils/text"
-import { safeUrlSchema, urlWithAuthSchema } from "@/core/utils/url"
-
-export const apiServerSchema = z.object({
-    name: z.string().optional(),
-    url: z.string().url(),
-    auth: z.string().optional(),
-    youtubeHls: z.boolean().optional(),
-    unsafe: z.boolean().optional(),
-}).or(
-    urlWithAuthSchema.transform(data => ({
-        name: undefined,
-        url: data.url,
-        auth: data.auth,
-        youtubeHls: undefined,
-        unsafe: undefined,
-    })),
-).transform(data => ({
-    ...data,
-    name: data.name ?? data.url,
-}))
-
-export type ApiServer = z.infer<typeof apiServerSchema>
+import { safeUrlSchema } from "@/core/utils/url"
 
 const mediaUrlSchema = z.string().url()
 function tryParseUrl(url: string) {
@@ -74,8 +54,6 @@ export async function createRequest(userInput: string, authorId: number): Promis
 
 export const getRequest = (requestId: string) => db.query.requests.findFirst({ where: eq(requests.id, requestId) })
 
-const retrieveMedia = async (url: string) => fetch(url).then(r => r.arrayBuffer())
-
 export type OutputMedia = { type: "single", fileName?: string, file: ArrayBuffer } | { type: "multiple", files: ArrayBuffer[] }
 export const outputOptions = ["auto", "audio"]
 export async function finishRequest(outputType: string, request: MediaRequest, apiPool: ApiServer[], lang?: string): Promise<Result<OutputMedia, Text>> {
@@ -86,7 +64,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
         return res
 
     if (res.result.status === "tunnel") {
-        const data = await fetchStream(res.result.url)
+        const data = await retrieveTunneledMedia(res.result.url, res.result.api.proxy)
         if (data.status === "error")
             return error(translatable(data.error.code))
 
@@ -100,7 +78,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
     if (res.result.status === "picker") {
         if (outputType === "audio") {
             const source = new URL(res.result.audio)
-            const buffer = await retrieveMedia(source.href)
+            const buffer = await retrieveExternalMedia(source.href)
             return ok({
                 type: "single",
                 fileName: source.pathname.split("/").at(-1),
@@ -108,7 +86,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
             })
         }
         if (res.result.picker.length !== 1) {
-            const files = await Promise.all(res.result.picker.map(i => retrieveMedia(i.url)))
+            const files = await Promise.all(res.result.picker.map(i => retrieveExternalMedia(i.url)))
             return ok({
                 type: "multiple",
                 files,
@@ -116,7 +94,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
         }
         const file = res.result.picker[0]
         const source = new URL(file.url)
-        const buffer = await retrieveMedia(source.href)
+        const buffer = await retrieveExternalMedia(source.href, res.result.api.proxy)
         return ok({
             type: "single",
             fileName: source.pathname.split("/").at(-1),
@@ -124,7 +102,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
         })
     }
 
-    const buffer = await retrieveMedia(res.result.url)
+    const buffer = await retrieveExternalMedia(res.result.url, res.result.api.proxy)
     return ok({
         type: "single",
         fileName: res.result.filename,
@@ -132,7 +110,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
     })
 }
 
-async function tryDownload(outputType: string, request: MediaRequest, apiPool: ApiServer[], lang?: string, fails: Text[] = []): Promise<Result<SuccessfulCobaltMediaResponse, CompoundText>> {
+async function tryDownload(outputType: string, request: MediaRequest, apiPool: ApiServer[], lang?: string, fails: Text[] = []): Promise<Result<SuccessfulCobaltMediaResponse & { api: ApiServer }, CompoundText>> {
     const currentApi = apiPool.at(0)
     if (!currentApi)
         return error(compound(...fails))
@@ -147,13 +125,14 @@ async function tryDownload(outputType: string, request: MediaRequest, apiPool: A
         )
     }
 
-    const res = await fetchMedia({
+    const res = await startDownload({
         url: request.url,
         downloadMode: outputType,
         lang,
         apiBaseUrl: currentApi.url,
         auth: currentApi.auth,
         youtubeHls: currentApi.youtubeHls,
+        proxy: currentApi.proxy,
     })
 
     if (!res.success) {
@@ -182,5 +161,5 @@ async function tryDownload(outputType: string, request: MediaRequest, apiPool: A
         }
     }
 
-    return res
+    return { success: res.success, result: { ...res.result, api: currentApi } }
 }

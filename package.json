@@ -37,6 +37,7 @@
   "dependencies": {
     "@fluent/bundle": "^0.18.0",
     "@fluent/langneg": "^0.7.0",
+    "@fuman/fetch": "^0.0.12",
     "@mtcute/crypto-node": "^0.19.0",
     "@mtcute/dispatcher": "^0.19.1",
     "@mtcute/node": "^0.19.3",
@@ -46,9 +47,13 @@
     "drizzle-orm": "^0.29.3",
     "ipaddr.js": "^2.2.0",
     "mediainfo.js": "^0.3.2",
+    "undici": "^7.4.0",
     "zod": "^3.22.4"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["better-sqlite3", "esbuild"]
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild"
+    ]
   }
 }

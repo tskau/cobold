@@ -4,7 +4,7 @@ import { createEnv } from "@t3-oss/env-core"
 import { config } from "dotenv"
 import { z } from "zod"
 
-import { apiServerSchema } from "@/core/data/request"
+import { apiServerSchema } from "@/core/data/cobalt"
 
 config()
 
@@ -28,6 +28,7 @@ export const env = createEnv({
             .pipe(z.array(apiServerSchema)),
         SELECT_TYPE_PHOTO_URL: z.string().url().default("https://i.otomir23.me/buckets/cobold/download.png"),
         ERROR_CHAT_ID: z.coerce.number().int().optional(),
+        CUSTOM_INSTANCE_PROXY_URL: z.string().url().optional(),
     },
     emptyStringAsUndefined: true,
     runtimeEnv: process.env,

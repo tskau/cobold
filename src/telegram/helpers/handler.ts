@@ -4,7 +4,8 @@ import type { GeneralTrack, ImageTrack, VideoTrack } from "mediainfo.js"
 import { CallbackDataBuilder } from "@mtcute/dispatcher"
 import mediaInfoFactory from "mediainfo.js"
 
-import type { ApiServer, MediaRequest } from "@/core/data/request"
+import type { ApiServer } from "@/core/data/cobalt"
+import type { MediaRequest } from "@/core/data/request"
 import { finishRequest, outputOptions } from "@/core/data/request"
 import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
@@ -91,7 +92,7 @@ export async function handleMediaDownload(outputType: string, request: MediaRequ
     const settings = await getPeerSettings(peer)
     const locale = settings.languageOverride ?? getPeerLocale(peer)
     const endpoints: ApiServer[] = settings.instanceOverride
-        ? [{ name: "custom", ...urlWithAuthSchema.parse(settings.instanceOverride), unsafe: true }]
+        ? [{ name: "custom", ...urlWithAuthSchema.parse(settings.instanceOverride), unsafe: true, proxy: env.CUSTOM_INSTANCE_PROXY_URL }]
         : env.API_ENDPOINTS
     const res = await finishRequest(outputType, request, endpoints, locale)
     if (!res.success)
