@@ -27,7 +27,7 @@ type AnalysisResult = {
     duration?: number,
     width?: number,
     height?: number,
-    type: "video" | "audio" | "document",
+    type: "video" | "audio" | "photo" | "document",
 }
 async function analyze(buffer: ArrayBuffer): Promise<AnalysisResult> {
     const mediainfo = await mediaInfoFactory()
@@ -65,7 +65,7 @@ async function analyze(buffer: ArrayBuffer): Promise<AnalysisResult> {
         if (!imageData)
             return { type: "document" }
         return {
-            type: "document",
+            type: "photo",
             width: imageData.Width,
             height: imageData.Height,
         }
