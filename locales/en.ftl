@@ -42,5 +42,9 @@ setting-lang-ru = русский
 setting-lang-uk-UA = українська
 setting-lang-unset = same as telegram
 
+setting-instance = custom instance
+setting-instance-unset = disabled
+setting-instance-custom = override
+
 stats-personal = i helped you with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
 stats-global = i helped with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
