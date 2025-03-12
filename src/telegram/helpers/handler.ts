@@ -74,17 +74,27 @@ async function analyze(buffer: ArrayBuffer): Promise<AnalysisResult> {
     return { type: "document" }
 }
 
-export async function handleMediaDownload(outputType: string, request: MediaRequest | undefined, peer: Peer): Promise<Result<InputMediaLike, Text>> {
+async function fileToInputMedia(file: ArrayBuffer, fileName?: string): Promise<InputMediaLike> {
+    const analyzedData = await analyze(file)
+    return {
+        ...analyzedData,
+        fileName,
+        file: new Uint8Array(file),
+    }
+}
+
+export async function handleMediaDownload(outputType: string, request: MediaRequest | undefined, peer: Peer): Promise<Result<InputMediaLike | InputMediaLike[], Text>> {
     if (!request)
         return error(translatable("error-request-not-found"))
     const res = await finishRequest(outputType, request, env.API_ENDPOINTS, await getPeerLocale(peer))
     if (!res.success)
         return res
 
-    const analyzedData = await analyze(res.result.file)
-    return ok({
-        ...analyzedData,
-        fileName: res.result.fileName,
-        file: new Uint8Array(res.result.file),
-    })
+    if (res.result.type === "multiple") {
+        const attachments = await Promise.all(res.result.files.map(f => fileToInputMedia(f)))
+        return ok(attachments)
+    }
+
+    const media = await fileToInputMedia(res.result.file, res.result.fileName)
+    return ok(media)
 }

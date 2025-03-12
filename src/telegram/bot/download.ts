@@ -51,6 +51,7 @@ downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
             { e, t },
             msg.sender,
             !!settings.preferredAttribution,
+            ({ medias }) => msg.replyMediaGroup(medias),
         )
     }
 })
@@ -115,6 +116,7 @@ downloadDp.onAnyCallbackQuery(OutputButton.filter(), async (upd) => {
         { t, e },
         upd.user,
         !!settings.preferredAttribution,
+        ({ medias }) => upd.client.sendMediaGroup(upd.user.id, medias),
     )
 })
 
@@ -132,11 +134,20 @@ downloadDp.onChosenInlineResult(async (upd) => {
             await evaluatorsFor(upd.user),
             upd.user,
             !!settings.preferredAttribution,
+            ({ medias }) => upd.client.sendMediaGroup(upd.user.id, medias),
         )
     }
 })
 
-async function onOutputSelected(outputType: string, request: MediaRequest | undefined, editMessage: (edit: { text?: string, media?: InputMediaLike }) => Promise<unknown>, { t, e }: Evaluators, peer: Peer, leaveSourceLink: boolean) {
+async function onOutputSelected(
+    outputType: string,
+    request: MediaRequest | undefined,
+    editMessage: (edit: { text?: string, media?: InputMediaLike }) => Promise<unknown>,
+    { t, e }: Evaluators,
+    peer: Peer,
+    leaveSourceLink: boolean,
+    sendGroup: (send: { medias: InputMediaLike[] }) => Promise<unknown>,
+) {
     await editMessage({ text: t("downloading-title") })
     const res = await handleMediaDownload(outputType, request, peer)
     if (!res.success) {
@@ -145,8 +156,13 @@ async function onOutputSelected(outputType: string, request: MediaRequest | unde
     }
 
     await editMessage({ text: t("uploading-title") })
-    await editMessage({ media: res.result })
-    await editMessage({ text: (leaveSourceLink && request?.url) || "" })
+    if (Array.isArray(res.result)) {
+        await editMessage({ text: t("note-picker") })
+        await sendGroup({ medias: res.result })
+    } else {
+        await editMessage({ media: res.result })
+        await editMessage({ text: (leaveSourceLink && request?.url) || "" })
+    }
 
     incrementDownloadCount(peer.id)
         .catch(() => { /* noop */ })

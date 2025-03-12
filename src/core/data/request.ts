@@ -73,7 +73,7 @@ export const getRequest = (requestId: string) => db.query.requests.findFirst({ w
 
 const retrieveMedia = async (url: string) => fetch(url).then(r => r.arrayBuffer())
 
-export type OutputMedia = { fileName?: string, file: ArrayBuffer }
+export type OutputMedia = { type: "single", fileName?: string, file: ArrayBuffer } | { type: "multiple", files: ArrayBuffer[] }
 export const outputOptions = ["auto", "audio"]
 export async function finishRequest(outputType: string, request: MediaRequest, apiPool: ApiServer[], lang?: string): Promise<Result<OutputMedia, Text>> {
     await db.delete(requests).where(eq(requests.id, request.id))
@@ -88,6 +88,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
             return error(translatable(data.error.code))
 
         return ok({
+            type: "single",
             file: data.buffer,
             fileName: res.result.filename,
         })
@@ -98,16 +99,23 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
             const source = new URL(res.result.audio)
             const buffer = await retrieveMedia(source.href)
             return ok({
+                type: "single",
                 fileName: source.pathname.split("/").at(-1),
                 file: buffer,
             })
         }
-        if (res.result.picker.length !== 1)
-            return error(translatable("error-picker"))
+        if (res.result.picker.length !== 1) {
+            const files = await Promise.all(res.result.picker.map(i => retrieveMedia(i.url)))
+            return ok({
+                type: "multiple",
+                files,
+            })
+        }
         const file = res.result.picker[0]
         const source = new URL(file.url)
         const buffer = await retrieveMedia(source.href)
         return ok({
+            type: "single",
             fileName: source.pathname.split("/").at(-1),
             file: buffer,
         })
@@ -115,6 +123,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
 
     const buffer = await retrieveMedia(res.result.url)
     return ok({
+        type: "single",
         fileName: res.result.filename,
         file: buffer,
     })
