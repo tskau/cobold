@@ -6,7 +6,7 @@ import { translatorFor } from "@/telegram/helpers/i18n"
 
 export const createDispatcherErrorHandler = (client: TelegramClient) => async (err: Error, ctx: ParsedUpdate) => {
     // Ignoring errors when user deleted the message or blocked the bot
-    if (tl.RpcError.is(err, "MESSAGE_ID_INVALID") || tl.RpcError.is(err, "USER_IS_BLOCKED"))
+    if (tl.RpcError.is(err, "MESSAGE_ID_INVALID") || tl.RpcError.is(err, "USER_IS_BLOCKED") || tl.RpcError.is(err, "MESSAGE_NOT_MODIFIED"))
         return true
 
     console.error("Unhandled Error:", err)
