@@ -79,9 +79,11 @@ async function analyze(buffer: ArrayBuffer): Promise<AnalysisResult> {
 
 async function fileToInputMedia(file: ArrayBuffer, fileName?: string): Promise<InputMediaLike> {
     const analyzedData = await analyze(file)
+    // FIXME: hack around mtcute limitation, a better solution should be implemented
+    const fixedFilename = fileName?.endsWith(".jpeg") ? `${fileName.slice(0, -5)}.jpg` : fileName
     return {
         ...analyzedData,
-        fileName,
+        fileName: fixedFilename,
         file: new Uint8Array(file),
     }
 }
