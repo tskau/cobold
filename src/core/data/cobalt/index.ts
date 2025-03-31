@@ -28,8 +28,8 @@ export async function download(url: string, outputType: string, apiPool: ApiServ
         .map(m => m.error)
     if (successfulDownloads.length === 0) {
         if (failedDownloads.length === 1)
-            return error(failedDownloads[0])
-        return error(compound(...failedDownloads.map(m => compound(literal("\n"), m))))
+            return error(compound(literal(`${link.result.api.name}: `), failedDownloads[0]))
+        return error(compound(...failedDownloads.map(m => compound(literal(`\n${link.result.api.name}: `), m))))
     }
     return ok(successfulDownloads)
 }
