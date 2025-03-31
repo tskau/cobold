@@ -32,7 +32,7 @@
     "eslint": "^9.14.0",
     "tsup": "^8.3.5",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "@fluent/bundle": "^0.18.0",
