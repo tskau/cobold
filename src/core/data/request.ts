@@ -115,15 +115,17 @@ async function tryDownload(outputType: string, request: MediaRequest, apiPool: A
     if (!currentApi)
         return error(compound(...fails))
 
-    if (currentApi.unsafe && !(await safeUrlSchema.safeParseAsync(currentApi.url)).success) {
-        return tryDownload(
+    const next = (reason: Text) =>
+        tryDownload(
             outputType,
             request,
             apiPool.slice(1),
             lang,
-            [...fails, compound(literal(`\n${currentApi.name}: `), translatable("error-invalid-custom-instance"))],
+            [...fails, compound(literal(`\n${currentApi.name}: `), reason)],
         )
-    }
+
+    if (currentApi.unsafe && !(await safeUrlSchema.safeParseAsync(currentApi.url)).success)
+        return next(translatable("error-invalid-custom-instance"))
 
     const res = await startDownload({
         url: request.url,
@@ -135,15 +137,8 @@ async function tryDownload(outputType: string, request: MediaRequest, apiPool: A
         proxy: currentApi.proxy,
     })
 
-    if (!res.success) {
-        return tryDownload(
-            outputType,
-            request,
-            apiPool.slice(1),
-            lang,
-            [...fails, compound(literal(`\n${currentApi.name}: `), res.error)],
-        )
-    }
+    if (!res.success)
+        return next(res.error)
 
     if (currentApi.unsafe) {
         if (
@@ -151,13 +146,7 @@ async function tryDownload(outputType: string, request: MediaRequest, apiPool: A
             || (res.result.status === "tunnel" && !(await safeUrlSchema.safeParseAsync(res.result.url)).success)
             || (res.result.status === "redirect" && !(await safeUrlSchema.safeParseAsync(res.result.url)).success)
         ) {
-            return tryDownload(
-                outputType,
-                request,
-                apiPool.slice(1),
-                lang,
-                [...fails, literal(`\n${currentApi.name}: unsafe api response`)],
-            )
+            return next(literal("unsafe api response"))
         }
     }
 
