@@ -2,7 +2,7 @@ import { z } from "zod"
 
 import { baseFetch } from "@/core/data/cobalt/common"
 import type { GenericCobaltError } from "@/core/data/cobalt/error"
-import { cobaltErrors, genericErrorSchema } from "@/core/data/cobalt/error"
+import { genericErrorSchema, getErrorText } from "@/core/data/cobalt/error"
 
 import { merge, stack } from "@/core/utils/compose"
 
@@ -10,7 +10,7 @@ import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
 
 import type { Text } from "@/core/utils/text"
-import { compound, literal, translatable } from "@/core/utils/text"
+import { translatable } from "@/core/utils/text"
 
 const mediaStreamSchema = z.object({
     status: z.literal("tunnel"),
@@ -83,13 +83,8 @@ export async function startDownload({ url, lang, apiBaseUrl, downloadMode = "aut
     if (!res.success)
         return error(translatable("error-invalid-response"))
 
-    if (res.data.status === "error") {
-        const code = res.data.error.code
-        const errorKey = cobaltErrors.get(code)
-        if (errorKey)
-            return error(translatable(errorKey))
-        return error(compound(translatable("error-invalid-response"), literal(` [${code}]`)))
-    }
+    if (res.data.status === "error")
+        return error(getErrorText(res.data.error.code))
 
     return ok(res.data)
 }

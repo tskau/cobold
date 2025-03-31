@@ -65,12 +65,12 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
 
     if (res.result.status === "tunnel") {
         const data = await retrieveTunneledMedia(res.result.url, res.result.api.proxy)
-        if (data.status === "error")
-            return error(translatable(data.error.code))
+        if (!data.success)
+            return error(data.error)
 
         return ok({
             type: "single",
-            file: data.buffer,
+            file: data.result,
             fileName: res.result.filename,
         })
     }

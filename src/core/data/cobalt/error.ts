@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { compound, literal, translatable } from "@/core/utils/text"
 
 export const genericErrorSchema = z.object({
     status: z.literal("error"),
@@ -25,3 +26,10 @@ export const cobaltErrors = new Map([
     ["content.post.private", "error-media-unavailable"],
     ["content.post.age", "error-media-unavailable"],
 ].map(([k, v]) => [`error.api.${k}`, v]))
+
+export function getErrorText(cobaltErrorKey: string) {
+    const errorKey = cobaltErrors.get(cobaltErrorKey)
+    if (errorKey)
+        return translatable(errorKey)
+    return compound(translatable("error-invalid-response"), literal(` [${cobaltErrorKey}]`))
+}
