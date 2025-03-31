@@ -26,7 +26,7 @@ const mediaRedirectSchema = z.object({
 
 const mediaPickerSchema = z.object({
     status: z.literal("picker"),
-    audio: z.string().url(),
+    audio: z.string().url().optional(),
     picker: z.array(z.object({
         type: z.union([z.literal("photo"), z.literal("video"), z.literal("gif")]),
         url: z.string().url(),

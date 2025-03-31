@@ -50,7 +50,7 @@ async function downloadResolvedMedia(link: ResolvedMedia, api: ApiServer): Promi
 type ResolvedMedia = { url: string, filename?: string }
 function resolveMedia(link: DownloadLink, audio?: boolean): ResolvedMedia[] {
     if (link.status === "picker") {
-        if (audio) {
+        if (audio && link.audio) {
             const source = new URL(link.audio)
             return [{ url: link.audio, filename: source.pathname.split("/").at(-1) }]
         }
