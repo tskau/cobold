@@ -158,7 +158,11 @@ async function onOutputSelected(
     await editMessage({ text: t("uploading-title") })
     if (res.result.length !== 1) {
         await editMessage({ text: t("note-picker") })
-        await sendGroup({ medias: res.result })
+        const chunkSize = 10
+        for (let i = 0; i < res.result.length; i += chunkSize) {
+            const chunk = res.result.slice(i, i + chunkSize)
+            await sendGroup({ medias: chunk })
+        }
     } else {
         await editMessage({ media: res.result[0] })
         await editMessage({ text: (leaveSourceLink && request?.url) || "" })
