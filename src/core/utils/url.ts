@@ -31,3 +31,20 @@ export const urlWithAuthSchema = z
         url.password = ""
         return { url: url.href, auth }
     })
+
+const mediaUrlSchema = z.string().url()
+export function tryParseUrl(url: string) {
+    const originalParsed = mediaUrlSchema.safeParse(url)
+    if (originalParsed.success)
+        return originalParsed.data
+
+    const domain = url.split("/")[0]
+    if (!domain.includes(".") || domain.includes(" ") || domain.includes(":"))
+        return null
+
+    const withHttpsParsed = mediaUrlSchema.safeParse(`https://${url}`)
+    if (withHttpsParsed.success)
+        return withHttpsParsed.data
+
+    return null
+}

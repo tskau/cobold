@@ -156,11 +156,11 @@ async function onOutputSelected(
     }
 
     await editMessage({ text: t("uploading-title") })
-    if (Array.isArray(res.result)) {
+    if (res.result.length !== 1) {
         await editMessage({ text: t("note-picker") })
         await sendGroup({ medias: res.result })
     } else {
-        await editMessage({ media: res.result })
+        await editMessage({ media: res.result[0] })
         await editMessage({ text: (leaveSourceLink && request?.url) || "" })
     }
 

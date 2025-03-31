@@ -88,7 +88,7 @@ async function fileToInputMedia(file: ArrayBuffer, fileName?: string): Promise<I
     }
 }
 
-export async function handleMediaDownload(outputType: string, request: MediaRequest | undefined, peer: Peer): Promise<Result<InputMediaLike | InputMediaLike[], Text>> {
+export async function handleMediaDownload(outputType: string, request: MediaRequest | undefined, peer: Peer): Promise<Result<InputMediaLike[], Text>> {
     if (!request)
         return error(translatable("error-request-not-found"))
     const settings = await getPeerSettings(peer)
@@ -100,11 +100,6 @@ export async function handleMediaDownload(outputType: string, request: MediaRequ
     if (!res.success)
         return res
 
-    if (res.result.type === "multiple") {
-        const attachments = await Promise.all(res.result.files.map(f => fileToInputMedia(f)))
-        return ok(attachments)
-    }
-
-    const media = await fileToInputMedia(res.result.file, res.result.fileName)
-    return ok(media)
+    const attachments = await Promise.all(res.result.map(f => fileToInputMedia(f.file, f.filename)))
+    return ok(attachments)
 }
