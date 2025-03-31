@@ -78,7 +78,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
     if (res.result.status === "picker") {
         if (outputType === "audio") {
             const source = new URL(res.result.audio)
-            const buffer = await retrieveExternalMedia(source.href)
+            const buffer = await retrieveExternalMedia(source.href, res.result.api.proxy)
             return ok({
                 type: "single",
                 fileName: source.pathname.split("/").at(-1),
@@ -86,7 +86,7 @@ export async function finishRequest(outputType: string, request: MediaRequest, a
             })
         }
         if (res.result.picker.length !== 1) {
-            const files = await Promise.all(res.result.picker.map(i => retrieveExternalMedia(i.url)))
+            const files = await Promise.all(res.result.picker.map(i => retrieveExternalMedia(i.url, res.result.api.proxy)))
             return ok({
                 type: "multiple",
                 files,
