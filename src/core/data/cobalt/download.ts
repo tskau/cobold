@@ -43,13 +43,6 @@ const mediaResponseSchema = z.discriminatedUnion("status", [
 export type CobaltMediaResponse = z.infer<typeof mediaResponseSchema>
 export type SuccessfulCobaltMediaResponse = Exclude<CobaltMediaResponse, GenericCobaltError>
 
-const ffetch = baseFetch.extend({
-    headers: [
-        ["Accept", "application/json"],
-        ["Content-Type", "application/json"],
-    ],
-})
-
 export async function startDownload({ url, lang, apiBaseUrl, downloadMode = "auto", auth, youtubeHls, proxy }: {
     url: string,
     lang?: string,
@@ -59,7 +52,7 @@ export async function startDownload({ url, lang, apiBaseUrl, downloadMode = "aut
     youtubeHls?: boolean,
     proxy?: string,
 }): Promise<Result<SuccessfulCobaltMediaResponse, Text>> {
-    const res = await ffetch("/", {
+    const res = await baseFetch("/", {
         method: "POST",
         headers: stack<[string, string]>(
             !!auth && ["Authorization", auth],
