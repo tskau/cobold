@@ -31,6 +31,7 @@ type AnalysisResult = {
     width?: number,
     height?: number,
     type: "video" | "audio" | "photo" | "document",
+    isAnimated?: boolean,
 }
 async function analyze(buffer: ArrayBuffer): Promise<AnalysisResult> {
     const mediainfo = await mediaInfoFactory()
@@ -67,6 +68,15 @@ async function analyze(buffer: ArrayBuffer): Promise<AnalysisResult> {
         const imageData = res.media.track.find((t): t is ImageTrack => t["@type"] === "Image")
         if (!imageData)
             return { type: "document" }
+        if (imageData.Format === "GIF") {
+            return {
+                type: "video",
+                duration: generalData.Duration,
+                width: imageData.Width,
+                height: imageData.Height,
+                isAnimated: true,
+            }
+        }
         return {
             type: "photo",
             width: imageData.Width,
