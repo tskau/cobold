@@ -1,5 +1,5 @@
-import type { SuccessfulCobaltMediaResponse } from "@/core/data/cobalt/download"
-import { startDownload } from "@/core/data/cobalt/download"
+import type { CobaltDownloadParams, SuccessfulCobaltMediaResponse } from "@/core/data/cobalt/download"
+import { getDownloadLink } from "@/core/data/cobalt/download"
 import type { ApiServer } from "@/core/data/cobalt/server"
 import { retrieveTunneledMedia } from "@/core/data/cobalt/tunnel"
 
@@ -9,13 +9,14 @@ import type { CompoundText, Text } from "@/core/utils/text"
 import { compound, literal, translatable } from "@/core/utils/text"
 import { safeUrlSchema } from "@/core/utils/url"
 
+export { type CobaltDownloadParams } from "@/core/data/cobalt/download"
 export { type ApiServer, apiServerSchema } from "@/core/data/cobalt/server"
 
-export async function download(url: string, outputType: string, apiPool: ApiServer[], lang?: string): Promise<Result<DownloadedMedia[], Text>> {
-    const link = await tryGetDownloadLink(url, outputType, apiPool, lang)
+export async function download(params: CobaltDownloadParams, apiPool: ApiServer[]): Promise<Result<DownloadedMedia[], Text>> {
+    const link = await tryGetDownloadLink(params, apiPool)
     if (!link.success)
         return link
-    const resolvedMedia = resolveMedia(link.result, outputType === "audio")
+    const resolvedMedia = resolveMedia(link.result, params.downloadMode === "audio")
     const downloadedMedia = await Promise.all(
         resolvedMedia.map(m => downloadResolvedMedia(m, link.result.api)),
     )
@@ -60,32 +61,22 @@ function resolveMedia(link: DownloadLink, audio?: boolean): ResolvedMedia[] {
 }
 
 type DownloadLink = SuccessfulCobaltMediaResponse & { api: ApiServer }
-async function tryGetDownloadLink(url: string, outputType: string, apiPool: ApiServer[], lang?: string, fails: Text[] = []): Promise<Result<DownloadLink, CompoundText>> {
+async function tryGetDownloadLink(params: CobaltDownloadParams, apiPool: ApiServer[], fails: Text[] = []): Promise<Result<DownloadLink, CompoundText>> {
     const currentApi = apiPool.at(0)
     if (!currentApi)
         return error(compound(...fails))
 
     const next = (reason: Text) =>
         tryGetDownloadLink(
-            url,
-            outputType,
+            params,
             apiPool.slice(1),
-            lang,
             [...fails, compound(literal(`\n${currentApi.name}: `), reason)],
         )
 
     if (currentApi.unsafe && !(await safeUrlSchema.safeParseAsync(currentApi.url)).success)
         return next(translatable("error-invalid-custom-instance"))
 
-    const res = await startDownload({
-        url,
-        downloadMode: outputType,
-        lang,
-        apiBaseUrl: currentApi.url,
-        auth: currentApi.auth,
-        youtubeHls: currentApi.youtubeHls,
-        proxy: currentApi.proxy,
-    })
+    const res = await getDownloadLink(params, currentApi)
 
     if (!res.success)
         return next(res.error)

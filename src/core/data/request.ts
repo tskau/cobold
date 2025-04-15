@@ -3,7 +3,7 @@ import type { InferSelectModel } from "drizzle-orm"
 import { randomUUID } from "node:crypto"
 import { eq } from "drizzle-orm"
 
-import type { ApiServer, DownloadedMedia } from "@/core/data/cobalt"
+import type { ApiServer, CobaltDownloadParams, DownloadedMedia } from "@/core/data/cobalt"
 import { download } from "@/core/data/cobalt"
 
 import { db } from "@/core/data/db/database"
@@ -37,7 +37,7 @@ export async function createRequest(userInput: string, authorId: number): Promis
 export const getRequest = (requestId: string) => db.query.requests.findFirst({ where: eq(requests.id, requestId) })
 
 export const outputOptions = ["auto", "audio"]
-export async function finishRequest(outputType: string, request: MediaRequest, apiPool: ApiServer[], lang?: string): Promise<Result<DownloadedMedia[], Text>> {
+export async function finishRequest(request: MediaRequest, params: Omit<CobaltDownloadParams, "url">, apiPool: ApiServer[]): Promise<Result<DownloadedMedia[], Text>> {
     await db.delete(requests).where(eq(requests.id, request.id))
-    return download(request.url, outputType, apiPool, lang)
+    return download({ url: request.url, ...params }, apiPool)
 }

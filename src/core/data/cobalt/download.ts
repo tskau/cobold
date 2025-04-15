@@ -4,7 +4,7 @@ import { baseFetch } from "@/core/data/cobalt/common"
 import type { GenericCobaltError } from "@/core/data/cobalt/error"
 import { genericErrorSchema, getErrorText } from "@/core/data/cobalt/error"
 
-import { merge, stack } from "@/core/utils/compose"
+import type { ApiServer } from "@/core/data/cobalt/server"
 
 import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
@@ -43,27 +43,32 @@ const mediaResponseSchema = z.discriminatedUnion("status", [
 export type CobaltMediaResponse = z.infer<typeof mediaResponseSchema>
 export type SuccessfulCobaltMediaResponse = Exclude<CobaltMediaResponse, GenericCobaltError>
 
-export async function startDownload({ url, lang, apiBaseUrl, downloadMode = "auto", auth, youtubeHls, proxy }: {
+export type CobaltDownloadParams = {
     url: string,
-    lang?: string,
+    videoQuality?: string,
+    audioFormat?: string,
+    audioBitrate?: string,
+    filenameStyle?: string,
     downloadMode?: string,
-    apiBaseUrl: string,
-    auth?: string,
     youtubeHls?: boolean,
-    proxy?: string,
-}): Promise<Result<SuccessfulCobaltMediaResponse, Text>> {
-    const res = await baseFetch("/", {
-        method: "POST",
-        headers: stack<[string, string]>(
-            !!auth && ["Authorization", auth],
-            !!lang && ["Accept-Language", lang],
-        ),
-        json: merge(
-            { url, downloadMode, filenameStyle: "basic" },
-            youtubeHls && { youtubeHLS: true },
-        ),
-        baseUrl: apiBaseUrl,
-        proxy: proxy || undefined,
+    youtubeVideoCodec?: string,
+    youtubeDubLang?: string,
+    alwaysProxy?: boolean,
+    disableMetadata?: boolean,
+    tiktokFullAudio?: boolean,
+    tiktokH265?: boolean,
+    twitterGif?: boolean,
+}
+
+export async function getDownloadLink(
+    params: CobaltDownloadParams,
+    api: ApiServer,
+): Promise<Result<SuccessfulCobaltMediaResponse, Text>> {
+    const res = await baseFetch.post("/", {
+        headers: api.auth ? [["Authorization", api.auth]] : undefined,
+        json: params,
+        baseUrl: api.url,
+        proxy: api.proxy || undefined,
     })
         .safelyParsedJson(mediaResponseSchema)
         .catch((e) => {

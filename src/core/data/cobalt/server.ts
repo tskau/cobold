@@ -5,7 +5,6 @@ export const apiServerSchema = z.object({
     name: z.string().optional(),
     url: z.string().url(),
     auth: z.string().optional(),
-    youtubeHls: z.boolean().optional(),
     unsafe: z.boolean().optional(),
     proxy: z.string().url().optional(),
 }).or(
@@ -13,7 +12,6 @@ export const apiServerSchema = z.object({
         name: undefined,
         url: data.url,
         auth: data.auth,
-        youtubeHls: undefined,
         unsafe: undefined,
         proxy: undefined,
     })),

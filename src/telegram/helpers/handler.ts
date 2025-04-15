@@ -4,7 +4,7 @@ import type { GeneralTrack, ImageTrack, VideoTrack } from "mediainfo.js"
 import { CallbackDataBuilder } from "@mtcute/dispatcher"
 import mediaInfoFactory from "mediainfo.js"
 
-import type { ApiServer } from "@/core/data/cobalt"
+import type { ApiServer, CobaltDownloadParams } from "@/core/data/cobalt"
 import type { MediaRequest } from "@/core/data/request"
 import { finishRequest, outputOptions } from "@/core/data/request"
 import type { Result } from "@/core/utils/result"
@@ -13,7 +13,6 @@ import type { Text } from "@/core/utils/text"
 import { translatable } from "@/core/utils/text"
 import { urlWithAuthSchema } from "@/core/utils/url"
 import { env } from "@/telegram/helpers/env"
-import { getPeerLocale } from "@/telegram/helpers/i18n"
 import { getPeerSettings } from "@/telegram/helpers/settings"
 
 export const OutputButton = new CallbackDataBuilder("dl", "output", "request")
@@ -102,11 +101,14 @@ export async function handleMediaDownload(outputType: string, request: MediaRequ
     if (!request)
         return error(translatable("error-request-not-found"))
     const settings = await getPeerSettings(peer)
-    const locale = settings.languageOverride ?? getPeerLocale(peer)
     const endpoints: ApiServer[] = settings.instanceOverride
         ? [{ name: "custom", ...urlWithAuthSchema.parse(settings.instanceOverride), unsafe: true, proxy: env.CUSTOM_INSTANCE_PROXY_URL }]
         : env.API_ENDPOINTS
-    const res = await finishRequest(outputType, request, endpoints, locale)
+    const params: Omit<CobaltDownloadParams, "url"> = {
+        downloadMode: outputType,
+        filenameStyle: "basic",
+    }
+    const res = await finishRequest(request, params, endpoints)
     if (!res.success)
         return res
 
