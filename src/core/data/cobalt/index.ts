@@ -1,6 +1,7 @@
 import type { CobaltDownloadParams, SuccessfulCobaltMediaResponse } from "@/core/data/cobalt/download"
 import { getDownloadLink } from "@/core/data/cobalt/download"
 import type { ApiServer } from "@/core/data/cobalt/server"
+import type { DownloadedMediaContent } from "@/core/data/cobalt/tunnel"
 import { retrieveTunneledMedia } from "@/core/data/cobalt/tunnel"
 
 import type { Result } from "@/core/utils/result"
@@ -35,7 +36,7 @@ export async function download(params: CobaltDownloadParams, apiPool: ApiServer[
     return ok(successfulDownloads)
 }
 
-export type DownloadedMedia = { file: ArrayBuffer, filename?: string }
+export type DownloadedMedia = { file: DownloadedMediaContent, filename?: string }
 async function downloadResolvedMedia(link: ResolvedMedia, api: ApiServer): Promise<Result<DownloadedMedia, Text>> {
     if (api.unsafe && !(await safeUrlSchema.safeParseAsync(link.url)).success)
         return error(literal("unsafe url"))

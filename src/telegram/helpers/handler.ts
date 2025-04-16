@@ -5,6 +5,7 @@ import { CallbackDataBuilder } from "@mtcute/dispatcher"
 import mediaInfoFactory from "mediainfo.js"
 
 import type { ApiServer, CobaltDownloadParams } from "@/core/data/cobalt"
+import type { DownloadedMediaContent } from "@/core/data/cobalt/tunnel"
 import type { MediaRequest } from "@/core/data/request"
 import { finishRequest, outputOptions } from "@/core/data/request"
 import type { Result } from "@/core/utils/result"
@@ -32,11 +33,11 @@ type AnalysisResult = {
     type: "video" | "audio" | "photo" | "document",
     isAnimated?: boolean,
 }
-async function analyze(buffer: ArrayBuffer): Promise<AnalysisResult> {
+async function analyze(buffer: DownloadedMediaContent): Promise<AnalysisResult> {
     const mediainfo = await mediaInfoFactory()
     const res = await mediainfo.analyzeData(
         buffer.byteLength,
-        (size, offset) => new Uint8Array(buffer.slice(offset, offset + size)),
+        (size, offset) => buffer.slice(offset, offset + size),
     )
     if (!res.media)
         return { type: "document" }
@@ -86,14 +87,14 @@ async function analyze(buffer: ArrayBuffer): Promise<AnalysisResult> {
     return { type: "document" }
 }
 
-async function fileToInputMedia(file: ArrayBuffer, fileName?: string): Promise<InputMediaLike> {
+async function fileToInputMedia(file: DownloadedMediaContent, fileName?: string): Promise<InputMediaLike> {
     const analyzedData = await analyze(file)
     // FIXME: hack around mtcute limitation, a better solution should be implemented
     const fixedFilename = fileName?.endsWith(".jpeg") ? `${fileName.slice(0, -5)}.jpg` : fileName
     return {
         ...analyzedData,
         fileName: fixedFilename,
-        file: new Uint8Array(file),
+        file,
     }
 }
 

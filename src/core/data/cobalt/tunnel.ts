@@ -5,7 +5,8 @@ import { error, ok } from "@/core/utils/result"
 import type { Text } from "@/core/utils/text"
 import { translatable } from "@/core/utils/text"
 
-export async function retrieveTunneledMedia(url: string, proxy?: string): Promise<Result<ArrayBuffer, Text>> {
+export type DownloadedMediaContent = Uint8Array<ArrayBufferLike>
+export async function retrieveTunneledMedia(url: string, proxy?: string): Promise<Result<DownloadedMediaContent, Text>> {
     const data = await baseFetch(url, { proxy })
         .catch(() => null)
     if (!data)
@@ -19,7 +20,7 @@ export async function retrieveTunneledMedia(url: string, proxy?: string): Promis
         return error(getErrorText(body.data.error.code))
     }
 
-    const buffer = await data.arrayBuffer()
+    const buffer = await data.bytes()
     if (!buffer.byteLength)
         return error(translatable("error-invalid-response"))
 
