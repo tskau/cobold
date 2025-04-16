@@ -4,7 +4,7 @@
   "private": true,
   "main": "build/index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --include locales/* --include .env src/index.ts",
     "build": "tsup",
     "start": "node .",
     "lint": "eslint src/** eslint.config.mjs",
