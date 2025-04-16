@@ -35,7 +35,7 @@ export function translate(locale: string, key: string, params?: TranslationParam
     const fallbackBundle = bundles.find(bundle => bundle.locales.includes(fallbackLocale))
     const bundle
         = bundles.find(bundle => bundle.locales.includes(bestLocale))
-        ?? fallbackBundle
+            ?? fallbackBundle
 
     if (!bundle)
         throw new Error(`Could not find bundle for negotiated (${bestLocale}) or fallback (${fallbackLocale}) locale`)

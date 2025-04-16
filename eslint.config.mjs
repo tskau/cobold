@@ -29,7 +29,7 @@ export default antfu({
             newlinesBetween: "ignore",
             order: "asc",
             type: "natural",
-            internalPattern: ["@/**"],
+            internalPattern: ["^@/"],
         }],
         "style/member-delimiter-style": ["error", {
             multiline: {
