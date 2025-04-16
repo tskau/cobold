@@ -49,3 +49,8 @@ setting-audio-quality = битрейт аудио
 
 stats-personal = я помог тебе с загрузкой { $count } раз! (˶ᵔ ᵕ ᵔ˶)
 stats-global = я помог с загрузкой { $count } раз! (˶ᵔ ᵕ ᵔ˶)
+
+info =
+    выполняется { $name }@{ $version }
+    сурсы: { $repository }
+    репорт багов: { $bugs }

@@ -3,6 +3,7 @@ import { TelegramClient } from "@mtcute/node"
 
 import { downloadDp } from "@/telegram/bot/download"
 import { createDispatcherErrorHandler } from "@/telegram/bot/errors"
+import { infoDp } from "@/telegram/bot/info"
 import { settingsDp } from "@/telegram/bot/settings"
 import { startDp } from "@/telegram/bot/start"
 import type { BotState } from "@/telegram/bot/state"
@@ -23,6 +24,7 @@ dp.onError(createDispatcherErrorHandler(bot))
 dp.extend(settingsDp)
 dp.extend(startDp)
 dp.extend(statsDp)
+dp.extend(infoDp)
 dp.extend(downloadDp)
 
 export async function startBot() {

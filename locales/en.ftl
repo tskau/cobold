@@ -63,3 +63,8 @@ setting-audio-quality = audio bitrate
 
 stats-personal = i helped you with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
 stats-global = i helped with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
+
+info =
+    running { $name }@{ $version }
+    sources: { $repository }
+    report bugs: { $bugs }

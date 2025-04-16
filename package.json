@@ -1,6 +1,8 @@
 {
   "name": "cobold",
   "version": "3.1.0",
+  "repository": "https://github.com/tskau/cobold",
+  "bugs": "https://github.com/tskau/cobold/issues",
   "private": true,
   "main": "build/index.js",
   "scripts": {
