@@ -41,5 +41,11 @@ setting-instance = кастомный инстанс
 setting-instance-unset = выключен
 setting-instance-custom = настроить
 
+setting-video-format = формат видео
+setting-video-quality = качество видео
+setting-audio-format = формат аудио
+setting-audio-format-best = наилучший
+setting-audio-quality = битрейт аудио
+
 stats-personal = я помог тебе с загрузкой { $count } раз! (˶ᵔ ᵕ ᵔ˶)
 stats-global = я помог с загрузкой { $count } раз! (˶ᵔ ᵕ ᵔ˶)

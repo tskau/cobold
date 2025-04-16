@@ -107,6 +107,11 @@ export async function handleMediaDownload(outputType: string, request: MediaRequ
     const params: Omit<CobaltDownloadParams, "url"> = {
         downloadMode: outputType,
         filenameStyle: "basic",
+        youtubeVideoCodec: settings.videoFormat === "h265" ? "h264" : settings.videoFormat,
+        tiktokH265: settings.videoFormat === "h265",
+        videoQuality: settings.videoQuality,
+        audioFormat: settings.audioFormat,
+        audioBitrate: settings.audioQuality,
     }
     const res = await finishRequest(request, params, endpoints)
     if (!res.success)

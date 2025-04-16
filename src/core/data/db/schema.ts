@@ -17,4 +17,8 @@ export const settings = sqliteTable("settings", {
     preferredAttribution: int("attribution").notNull().default(0),
     languageOverride: text("language"),
     instanceOverride: text("instance"),
+    videoFormat: text("video_format").notNull().default("h264"),
+    videoQuality: text("video_quality").notNull().default("1080"),
+    audioFormat: text("audio_format").notNull().default("mp3"),
+    audioQuality: text("audio_quality").notNull().default("128"),
 })

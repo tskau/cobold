@@ -46,5 +46,20 @@ setting-instance = custom instance
 setting-instance-unset = disabled
 setting-instance-custom = override
 
+setting-video-format = video format
+setting-video-format-h264 = mp4 (h264)
+setting-video-format-h265 = mp4 (h265)
+setting-video-format-av1 = webm (av1)
+setting-video-format-vp9 = webm (vp9)
+setting-video-quality = video quality
+
+setting-audio-format = audio format
+setting-audio-format-best = best possible
+setting-audio-format-mp3 = mp3
+setting-audio-format-ogg = ogg
+setting-audio-format-wav = wav
+setting-audio-format-opus = opus
+setting-audio-quality = audio bitrate
+
 stats-personal = i helped you with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
 stats-global = i helped with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)

@@ -14,6 +14,10 @@ export const defaultSettings: Settings = {
     preferredAttribution: 0,
     languageOverride: null,
     instanceOverride: null,
+    videoFormat: "h264",
+    videoQuality: "1080",
+    audioFormat: "mp3",
+    audioQuality: "128",
 }
 
 export const settingOptions: {
@@ -23,6 +27,10 @@ export const settingOptions: {
     preferredAttribution: [0, 1],
     languageOverride: [null, ...locales],
     instanceOverride: [null, customValue],
+    videoFormat: ["h264", "h265", "av1", "vp9"],
+    videoQuality: ["144", "240", "360", "480", "720", "1080", "1440", "2160", "max"],
+    audioFormat: ["best", "mp3", "ogg", "wav", "opus"],
+    audioQuality: ["8", "64", "96", "128", "256", "320"],
 }
 
 export const settingI18n: {
@@ -32,6 +40,10 @@ export const settingI18n: {
     preferredAttribution: { key: "attribution", mode: "translatable" },
     languageOverride: { key: "lang", mode: "translatable" },
     instanceOverride: { key: "instance", mode: "literal" },
+    videoFormat: { key: "video-format", mode: "translatable" },
+    videoQuality: { key: "video-quality", mode: "literal" },
+    audioFormat: { key: "audio-format", mode: "translatable" },
+    audioQuality: { key: "audio-quality", mode: "literal" },
 }
 
 export async function getSettings(id: number): Promise<Settings> {
