@@ -22,6 +22,11 @@ export const downloadDp = Dispatcher.child()
 downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
     const { e, t } = await evaluatorsFor(msg.sender)
 
+    if (msg.text === "meow") {
+        await msg.replyText("meow :з")
+        return
+    }
+
     const urlEntity = msg.entities.find(e => e.is("text_link") || e.is("url"))
     const extractedUrl = urlEntity && (urlEntity.is("text_link") ? urlEntity.params.url : urlEntity.text)
     const req = await createRequest(extractedUrl || msg.text, msg.sender.id)
