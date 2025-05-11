@@ -7,6 +7,7 @@ import { BotInline, BotKeyboard, InputMedia } from "@mtcute/node"
 import type { MediaRequest } from "@/core/data/request"
 import { createRequest, getRequest } from "@/core/data/request"
 import { incrementDownloadCount } from "@/core/data/stats"
+import { log } from "@/telegram/helpers/debug"
 import { env } from "@/telegram/helpers/env"
 import {
     getOutputSelectionMessage,
@@ -20,6 +21,7 @@ import { evaluatorsFor } from "@/telegram/helpers/text"
 export const downloadDp = Dispatcher.child()
 
 downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
+    log(`received message ${msg.id} from ${msg.sender.id}`)
     const { e, t } = await evaluatorsFor(msg.sender)
 
     if (msg.text === "meow") {

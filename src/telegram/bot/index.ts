@@ -8,6 +8,7 @@ import { settingsDp } from "@/telegram/bot/settings"
 import { startDp } from "@/telegram/bot/start"
 import type { BotState } from "@/telegram/bot/state"
 import { statsDp } from "@/telegram/bot/stats"
+import { log } from "@/telegram/helpers/debug"
 import { env } from "@/telegram/helpers/env"
 
 const bot = new TelegramClient({
@@ -28,7 +29,9 @@ dp.extend(infoDp)
 dp.extend(downloadDp)
 
 export async function startBot() {
+    log("starting bot")
     bot.run({ botToken: env.BOT_TOKEN }, async () => {
+        log("bot started")
         if (env.ERROR_CHAT_ID)
             await bot.sendText(env.ERROR_CHAT_ID, "started bot :з")
     })
