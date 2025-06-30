@@ -52,12 +52,14 @@ export type CobaltDownloadParams = {
     downloadMode?: string,
     youtubeHls?: boolean,
     youtubeVideoCodec?: string,
-    youtubeDubLang?: string,
+    youtubeVideoContainer?: string,
+    youtubeBetterAudio?: boolean,
+    subtitleLang?: string,
     alwaysProxy?: boolean,
     disableMetadata?: boolean,
     tiktokFullAudio?: boolean,
-    tiktokH265?: boolean,
-    twitterGif?: boolean,
+    allowH265?: boolean,
+    convertGif?: boolean,
 }
 
 export async function getDownloadLink(
