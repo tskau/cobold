@@ -98,13 +98,24 @@ async function fileToInputMedia(file: DownloadedMediaContent, fileName?: string)
     }
 }
 
+function getApiEndpoints(override: string | null): Result<ApiServer[], Text> {
+    if (!override)
+        return ok(env.API_ENDPOINTS)
+    const parsedOverride = urlWithAuthSchema.safeParse(override)
+    if (!parsedOverride.success)
+        return error(translatable("error-invalid-custom-instance"))
+    return ok(
+        [{ name: "custom", ...parsedOverride.data, unsafe: true, proxy: env.CUSTOM_INSTANCE_PROXY_URL }],
+    )
+}
+
 export async function handleMediaDownload(outputType: string, request: MediaRequest | undefined, peer: Peer): Promise<Result<InputMediaLike[], Text>> {
     if (!request)
         return error(translatable("error-request-not-found"))
     const settings = await getPeerSettings(peer)
-    const endpoints: ApiServer[] = settings.instanceOverride
-        ? [{ name: "custom", ...urlWithAuthSchema.parse(settings.instanceOverride), unsafe: true, proxy: env.CUSTOM_INSTANCE_PROXY_URL }]
-        : env.API_ENDPOINTS
+    const endpoints = getApiEndpoints(settings.instanceOverride)
+    if (!endpoints.success)
+        return endpoints
     const params: Omit<CobaltDownloadParams, "url"> = {
         downloadMode: outputType,
         filenameStyle: "basic",
@@ -114,7 +125,7 @@ export async function handleMediaDownload(outputType: string, request: MediaRequ
         audioFormat: settings.audioFormat,
         audioBitrate: settings.audioQuality,
     }
-    const res = await finishRequest(request, params, endpoints)
+    const res = await finishRequest(request, params, endpoints.result)
     if (!res.success)
         return res
 
