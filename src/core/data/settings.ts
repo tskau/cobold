@@ -18,6 +18,7 @@ export const defaultSettings: Settings = {
     videoQuality: "1080",
     audioFormat: "mp3",
     audioQuality: "128",
+    sendAsFile: 0,
 }
 
 export const settingOptions: {
@@ -31,6 +32,7 @@ export const settingOptions: {
     videoQuality: ["144", "240", "360", "480", "720", "1080", "1440", "2160", "max"],
     audioFormat: ["best", "mp3", "ogg", "wav", "opus"],
     audioQuality: ["8", "64", "96", "128", "256", "320"],
+    sendAsFile: [0, 1],
 }
 
 export const settingI18n: {
@@ -44,6 +46,7 @@ export const settingI18n: {
     videoQuality: { key: "video-quality", mode: "literal" },
     audioFormat: { key: "audio-format", mode: "translatable" },
     audioQuality: { key: "audio-quality", mode: "literal" },
+    sendAsFile: { key: "send-as-file", mode: "translatable" },
 }
 
 export async function getSettings(id: number): Promise<Settings> {

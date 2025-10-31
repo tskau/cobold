@@ -34,6 +34,10 @@ setting-attribution = attach source link
 setting-attribution-0 = nah
 setting-attribution-1 = sure
 
+setting-send-as-file = send as file
+setting-send-as-file-0 = nah
+setting-send-as-file-1 = sure
+
 setting-lang = language
 setting-lang-ar = العربية
 setting-lang-en = english

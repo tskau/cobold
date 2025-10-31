@@ -1,0 +1,1 @@
+ALTER TABLE settings ADD `send_as_file` integer DEFAULT 0 NOT NULL;

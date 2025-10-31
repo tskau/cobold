@@ -34,6 +34,10 @@ setting-attribution = оставлять ссылку на источник
 setting-attribution-0 = не
 setting-attribution-1 = давай
 
+setting-send-as-file = отправить как файл
+setting-send-as-file-0 = не
+setting-send-as-file-1 = давай
+
 setting-lang = язык
 setting-lang-unset = как в тг
 

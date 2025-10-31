@@ -26,6 +26,10 @@ setting-attribution = залишати посилання на джерело
 setting-attribution-0 = ні
 setting-attribution-1 = давай
 
+setting-send-as-file = надіслати як файл
+setting-send-as-file-0 = ні
+setting-send-as-file-1 = давай
+
 setting-lang = мова
 setting-lang-unset = як в тг
 
