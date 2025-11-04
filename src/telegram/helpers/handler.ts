@@ -33,13 +33,13 @@ type AnalysisResult = {
     type: "video" | "audio" | "photo" | "document",
     isAnimated?: boolean,
 }
-async function analyze(buffer: DownloadedMediaContent, sendAsFile?: boolean): Promise<AnalysisResult> {
+async function analyze(buffer: DownloadedMediaContent): Promise<AnalysisResult> {
     const mediainfo = await mediaInfoFactory()
     const res = await mediainfo.analyzeData(
         buffer.byteLength,
         (size, offset) => buffer.slice(offset, offset + size),
     )
-    if (!res.media || sendAsFile)
+    if (!res.media)
         return { type: "document" }
     const generalData = res.media.track.find((t): t is GeneralTrack => t["@type"] === "General")
     if (!generalData)
@@ -88,7 +88,7 @@ async function analyze(buffer: DownloadedMediaContent, sendAsFile?: boolean): Pr
 }
 
 async function fileToInputMedia(file: DownloadedMediaContent, fileName?: string, sendAsFile?: boolean): Promise<InputMediaLike> {
-    const analyzedData = await analyze(file, sendAsFile)
+    const analyzedData = sendAsFile ? { type: "document" } : await analyze(file)
     // FIXME: hack around mtcute limitation, a better solution should be implemented
     const fixedFilename = fileName?.endsWith(".jpeg") ? `${fileName.slice(0, -5)}.jpg` : fileName
     return {
