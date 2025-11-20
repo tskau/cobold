@@ -87,8 +87,8 @@ async function analyze(buffer: DownloadedMediaContent): Promise<AnalysisResult> 
     return { type: "document" }
 }
 
-async function fileToInputMedia(file: DownloadedMediaContent, fileName?: string): Promise<InputMediaLike> {
-    const analyzedData = await analyze(file)
+async function fileToInputMedia(file: DownloadedMediaContent, fileName?: string, sendAsFile?: boolean): Promise<InputMediaLike> {
+    const analyzedData = sendAsFile ? { type: "document" } : await analyze(file)
     // FIXME: hack around mtcute limitation, a better solution should be implemented
     const fixedFilename = fileName?.endsWith(".jpeg") ? `${fileName.slice(0, -5)}.jpg` : fileName
     return {
@@ -129,6 +129,6 @@ export async function handleMediaDownload(outputType: string, request: MediaRequ
     if (!res.success)
         return res
 
-    const attachments = await Promise.all(res.result.map(f => fileToInputMedia(f.file, f.filename)))
+    const attachments = await Promise.all(res.result.map(f => fileToInputMedia(f.file, f.filename, settings.sendAsFile === 1)))
     return ok(attachments)
 }

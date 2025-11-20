@@ -26,6 +26,10 @@ setting-attribution = إرفاق رابط المصدر
 setting-attribution-0 = معطل
 setting-attribution-1 = مفعل
 
+setting-send-as-file = أرسل كملف
+setting-send-as-file-0 = معطل
+setting-send-as-file-1 = مفعل
+
 setting-lang = اللغة
 setting-lang-unset = مطابق لتيليجرام
 

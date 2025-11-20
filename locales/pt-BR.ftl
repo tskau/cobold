@@ -26,6 +26,10 @@ setting-attribution = anexar link de origem.
 setting-attribution-0 = não
 setting-attribution-1 = claro
 
+setting-send-as-file = enviar como arquivo.
+setting-send-as-file-0 = não
+setting-send-as-file-1 = claro
+
 setting-lang = idioma
 setting-lang-unset = mesmo que o telegram.
 

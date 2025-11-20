@@ -21,4 +21,5 @@ export const settings = sqliteTable("settings", {
     videoQuality: text("video_quality").notNull().default("1080"),
     audioFormat: text("audio_format").notNull().default("mp3"),
     audioQuality: text("audio_quality").notNull().default("128"),
+    sendAsFile: int("send_as_file").notNull().default(0),
 })
