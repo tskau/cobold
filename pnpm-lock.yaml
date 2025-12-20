@@ -15,8 +15,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       '@fuman/fetch':
-        specifier: ^0.1.0
-        version: 0.1.0(zod@3.24.2)
+        specifier: ^0.4.0
+        version: 0.4.0
       '@mtcute/dispatcher':
         specifier: ^0.27.4
         version: 0.27.4
@@ -697,24 +697,12 @@ packages:
     resolution: {integrity: sha512-StAM0vgsD1QK+nFikaKs9Rxe3JGNipiXrpmemNGwM4gWERBXPe9gjzsBoKjgBgq1Vyiy+xy/C652QIWY+MPyYw==}
     engines: {node: '>=14.0.0', npm: '>=7.0.0'}
 
-  '@fuman/fetch@0.1.0':
-    resolution: {integrity: sha512-q3CWQJ939Kcmrp/9/dUOCRqQi2og4uweSy7QrzeIxKRsz3jYSca1q2mwTQtTnA+9AAq2WNMlcZtgOA9qVJkXJw==}
+  '@fuman/fetch@0.4.0':
+    resolution: {integrity: sha512-n3IdObayQ1nwzemBm7shGuO3Oj1aVksgOyxzOcQ8nTaASTyKFVyQgCrV8VukfuvZEaFX6G4JrIgvY1dSt4RtkA==}
     peerDependencies:
-      '@badrap/valita': '>=0.4.0'
-      tough-cookie: ^5.0.0 || ^4.0.0
-      valibot: ^0.42.0
-      yup: ^1.0.0
-      zod: ^3.0.0
+      tough-cookie: ^6.0.0 || ^5.0.0 || ^4.0.0
     peerDependenciesMeta:
-      '@badrap/valita':
-        optional: true
       tough-cookie:
-        optional: true
-      valibot:
-        optional: true
-      yup:
-        optional: true
-      zod:
         optional: true
 
   '@fuman/io@0.0.17':
@@ -730,9 +718,6 @@ packages:
     peerDependenciesMeta:
       ws:
         optional: true
-
-  '@fuman/utils@0.0.14':
-    resolution: {integrity: sha512-HmQo6DXoYBtkN12rZsMSZRTUynByioOHpMZjfrePwUwXuKBYm9F1Rm4R7tGLTNJTG1zMXBJw1Xwy/cRqwzrujw==}
 
   '@fuman/utils@0.0.15':
     resolution: {integrity: sha512-3H3WzkfG7iLKCa/yNV4s80lYD4yr5hgiNzU13ysLY2BcDqFjM08XGYuLd5wFVp4V8+DA/fe8gIDW96To/JwDyA==}
@@ -1048,6 +1033,9 @@ packages:
     resolution: {integrity: sha512-hYT5d3YNdSh3mbCU1gwQyPgQd3T2ne0A3KG8KSBdav5TiBg6eInVmV+TeR5uHufiIgSFg0XsOWGW5/RhNcSvPg==}
     cpu: [x64]
     os: [win32]
+
+  '@standard-schema/spec@1.1.0':
+    resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
   '@stylistic/eslint-plugin@4.2.0':
     resolution: {integrity: sha512-8hXezgz7jexGHdo5WN6JBEIPHCSFyyU4vgbxevu4YLVS5vl+sxqAAGyXSzfNDyR6xMNSH5H1x67nsXcYMOHtZA==}
@@ -3475,11 +3463,10 @@ snapshots:
 
   '@fluent/langneg@0.7.0': {}
 
-  '@fuman/fetch@0.1.0(zod@3.24.2)':
+  '@fuman/fetch@0.4.0':
     dependencies:
-      '@fuman/utils': 0.0.14
-    optionalDependencies:
-      zod: 3.24.2
+      '@fuman/utils': 0.0.17
+      '@standard-schema/spec': 1.1.0
 
   '@fuman/io@0.0.17':
     dependencies:
@@ -3495,8 +3482,6 @@ snapshots:
       '@fuman/io': 0.0.17
       '@fuman/net': 0.0.17
       '@fuman/utils': 0.0.17
-
-  '@fuman/utils@0.0.14': {}
 
   '@fuman/utils@0.0.15': {}
 
@@ -3751,6 +3736,8 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.54.0':
     optional: true
+
+  '@standard-schema/spec@1.1.0': {}
 
   '@stylistic/eslint-plugin@4.2.0(eslint@9.24.0)(typescript@5.8.3)':
     dependencies:

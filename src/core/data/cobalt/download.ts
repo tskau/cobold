@@ -80,11 +80,11 @@ export async function getDownloadLink(
 
     if (!res)
         return error(translatable("error-unresponsive"))
-    if (!res.success)
+    if (res.issues)
         return error(translatable("error-invalid-response"))
 
-    if (res.data.status === "error")
-        return error(getErrorText(res.data.error.code))
+    if (res.value.status === "error")
+        return error(getErrorText(res.value.error.code))
 
-    return ok(res.data)
+    return ok(res.value)
 }
