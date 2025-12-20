@@ -28,8 +28,9 @@ dp.extend(infoDp)
 dp.extend(downloadDp)
 
 export async function startBot() {
-    bot.run({ botToken: env.BOT_TOKEN }, async () => {
-        if (env.ERROR_CHAT_ID)
-            await bot.sendText(env.ERROR_CHAT_ID, "started bot :з")
-    })
+    bot.start({ botToken: env.BOT_TOKEN })
+        .then(async () => {
+            if (env.ERROR_CHAT_ID)
+                await bot.sendText(env.ERROR_CHAT_ID, "started bot :з")
+        })
 }
