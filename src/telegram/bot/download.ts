@@ -2,12 +2,11 @@ import type { InputMediaLike, Peer } from "@mtcute/node"
 
 import { randomUUID } from "node:crypto"
 import { Dispatcher, filters } from "@mtcute/dispatcher"
-import { BotInline, BotKeyboard, InputMedia } from "@mtcute/node"
+import { BotInline, BotKeyboard } from "@mtcute/node"
 
 import type { MediaRequest } from "@/core/data/request"
 import { createRequest, getRequest } from "@/core/data/request"
 import { incrementDownloadCount } from "@/core/data/stats"
-import { env } from "@/telegram/helpers/env"
 import {
     getOutputSelectionMessage,
     handleMediaDownload,
@@ -37,8 +36,7 @@ downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
     }
 
     const selectMsg = getOutputSelectionMessage(req.result.id)
-    const reply = await msg.replyMedia(InputMedia.photo(selectMsg.image), {
-        caption: e(selectMsg.caption),
+    const reply = await msg.replyText(e(selectMsg.caption), {
         replyMarkup: BotKeyboard.inline([
             selectMsg.options.map(o => BotKeyboard.callback(
                 e(o.name),
@@ -87,9 +85,10 @@ downloadDp.onInlineQuery(async (ctx) => {
 
     const selectMsg = getOutputSelectionMessage(req.result.id)
     await ctx.answer([
-        BotInline.photo(req.result.id, env.SELECT_TYPE_PHOTO_URL, {
+        BotInline.article(req.result.id, {
+            title: e(selectMsg.caption),
             message: {
-                type: "media",
+                type: "text",
                 replyMarkup: BotKeyboard.inline([
                     selectMsg.options.map(o => BotKeyboard.callback(
                         e(o.name),

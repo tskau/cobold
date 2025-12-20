@@ -26,7 +26,6 @@ export const env = createEnv({
                 }
             })
             .pipe(z.array(apiServerSchema)),
-        SELECT_TYPE_PHOTO_URL: z.string().url().default("https://i.otomir23.me/buckets/cobold/download.png"),
         ERROR_CHAT_ID: z.coerce.number().int().optional(),
         CUSTOM_INSTANCE_PROXY_URL: z.string().url().optional(),
     },

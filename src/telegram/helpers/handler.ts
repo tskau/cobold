@@ -18,7 +18,6 @@ import { getPeerSettings } from "@/telegram/helpers/settings"
 
 export const OutputButton = new CallbackDataBuilder("dl", "output", "request")
 export const getOutputSelectionMessage = (requestId: string) => ({
-    image: env.SELECT_TYPE_PHOTO_URL,
     caption: translatable("type-select-title"),
     options: outputOptions.map(option => ({
         key: OutputButton.build({ request: requestId, output: option }),
