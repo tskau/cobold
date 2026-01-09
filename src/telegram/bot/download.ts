@@ -53,9 +53,9 @@ downloadDp.onNewMessage(async (msg) => {
         })
 
         const settings = await getPeerSettings(msg.chat)
-        if (settings.preferredOutput) {
+        if (settings.preferredOutput || msg.chat.type !== "user") {
             const res = await onOutputSelected(
-                settings.preferredOutput,
+                settings.preferredOutput || "auto",
                 req.result,
                 args => msg.client.editMessage({ ...args, message: reply }),
                 { e, t },
