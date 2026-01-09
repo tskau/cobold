@@ -20,6 +20,8 @@ import { evaluatorsFor } from "@/telegram/helpers/text"
 
 export const downloadDp = Dispatcher.child()
 
+const errorDeleteDelay = 30 * 1000
+
 downloadDp.onNewMessage(async (msg) => {
     const { e, t } = await evaluatorsFor(msg.chat)
 
@@ -52,7 +54,7 @@ downloadDp.onNewMessage(async (msg) => {
 
         const settings = await getPeerSettings(msg.chat)
         if (settings.preferredOutput) {
-            await onOutputSelected(
+            const res = await onOutputSelected(
                 settings.preferredOutput,
                 req.result,
                 args => msg.client.editMessage({ ...args, message: reply }),
@@ -61,6 +63,8 @@ downloadDp.onNewMessage(async (msg) => {
                 ({ medias }) => msg.replyMediaGroup(medias),
                 msg.sender,
             )
+            if (!res && msg.chat.type !== "user")
+                setTimeout(() => msg.client.deleteMessages([reply]), errorDeleteDelay)
         }
     }
 })
@@ -129,7 +133,7 @@ downloadDp.onAnyCallbackQuery(OutputButton.filter(), async (upd) => {
         })
     }
 
-    await onOutputSelected(
+    const res = await onOutputSelected(
         outputType,
         request,
         args => upd.editMessage(args),
@@ -138,6 +142,8 @@ downloadDp.onAnyCallbackQuery(OutputButton.filter(), async (upd) => {
         ({ medias }) => upd.client.sendMediaGroup(peer.id, medias),
         upd.user,
     )
+    if (!res && rawUpd._name === "callback_query" && rawUpd.chat.type !== "user")
+        setTimeout(() => upd.client.deleteMessagesById(rawUpd.chat.id, [rawUpd.messageId]), errorDeleteDelay)
 })
 
 downloadDp.onChosenInlineResult(async (upd) => {
@@ -172,8 +178,8 @@ async function onOutputSelected(
     const res = await handleMediaDownload(outputType, request, settings)
     if (!res.success) {
         const errorMessage = t("error", { message: e(res.error) })
-        await editMessage({ text: leaveSourceLink ? `${errorMessage}\n\n${request?.url}` : errorMessage })
-        return
+        await editMessage({ text: settings.preferredAttribution ? `${errorMessage}\n\n${request?.url}` : errorMessage })
+        return false
     }
 
     await editMessage({ text: t("uploading-title") })
@@ -190,4 +196,6 @@ async function onOutputSelected(
 
     incrementDownloadCount(sender.id)
         .catch(() => { /* noop */ })
+
+    return true
 }
