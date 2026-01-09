@@ -1,11 +1,13 @@
+import type { BusinessCallbackQueryContext, CallbackQueryContext, InlineCallbackQueryContext } from "@mtcute/dispatcher"
 import type { InputMediaLike, Peer } from "@mtcute/node"
 
 import { randomUUID } from "node:crypto"
-import { Dispatcher, filters } from "@mtcute/dispatcher"
+import { Dispatcher } from "@mtcute/dispatcher"
 import { BotInline, BotKeyboard } from "@mtcute/node"
 
 import type { MediaRequest } from "@/core/data/request"
 import { createRequest, getRequest } from "@/core/data/request"
+import type { Settings } from "@/core/data/settings"
 import { incrementDownloadCount } from "@/core/data/stats"
 import {
     getOutputSelectionMessage,
@@ -18,8 +20,8 @@ import { evaluatorsFor } from "@/telegram/helpers/text"
 
 export const downloadDp = Dispatcher.child()
 
-downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
-    const { e, t } = await evaluatorsFor(msg.sender)
+downloadDp.onNewMessage(async (msg) => {
+    const { e, t } = await evaluatorsFor(msg.chat)
 
     if (msg.text === "meow") {
         await msg.replyText("meow :з")
@@ -31,7 +33,8 @@ downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
     const req = await createRequest(extractedUrl || msg.text, msg.sender.id)
 
     if (!req.success) {
-        await msg.replyText(t("error", { message: e(req.error) }))
+        if (msg.chat.type === "user")
+            await msg.replyText(t("error", { message: e(req.error) }))
         return
     }
 
@@ -45,16 +48,16 @@ downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
         ]),
     })
 
-    const settings = await getPeerSettings(msg.sender)
+    const settings = await getPeerSettings(msg.chat)
     if (settings.preferredOutput) {
         await onOutputSelected(
             settings.preferredOutput,
             req.result,
             args => msg.client.editMessage({ ...args, message: reply }),
             { e, t },
-            msg.sender,
-            !!settings.preferredAttribution,
+            settings,
             ({ medias }) => msg.replyMediaGroup(medias),
+            msg.sender,
         )
     }
 })
@@ -107,8 +110,13 @@ downloadDp.onInlineQuery(async (ctx) => {
 })
 
 downloadDp.onAnyCallbackQuery(OutputButton.filter(), async (upd) => {
-    const settings = await getPeerSettings(upd.user)
-    const { t, e } = await evaluatorsFor(upd.user)
+    // When passing a filter to onAnyCallbackQuery it applies a modification to the update object, which makes it lose its enum-like properties.
+    // To access the original update object, we need to cast it to the original type.
+    const rawUpd = upd as unknown as (CallbackQueryContext | InlineCallbackQueryContext | BusinessCallbackQueryContext)
+
+    const peer = rawUpd._name === "callback_query" ? rawUpd.chat : upd.user
+    const settings = await getPeerSettings(peer)
+    const { t, e } = await evaluatorsFor(peer)
     const { output: outputType, request: requestId } = upd.match
 
     const request = await getRequest(requestId)
@@ -123,9 +131,9 @@ downloadDp.onAnyCallbackQuery(OutputButton.filter(), async (upd) => {
         request,
         args => upd.editMessage(args),
         { t, e },
+        settings,
+        ({ medias }) => upd.client.sendMediaGroup(peer.id, medias),
         upd.user,
-        !!settings.preferredAttribution,
-        ({ medias }) => upd.client.sendMediaGroup(upd.user.id, medias),
     )
 })
 
@@ -141,9 +149,9 @@ downloadDp.onChosenInlineResult(async (upd) => {
             request,
             args => upd.editMessage({ ...args, messageId }),
             await evaluatorsFor(upd.user),
-            upd.user,
-            !!settings.preferredAttribution,
+            settings,
             ({ medias }) => upd.client.sendMediaGroup(upd.user.id, medias),
+            upd.user,
         )
     }
 })
@@ -153,12 +161,12 @@ async function onOutputSelected(
     request: MediaRequest | undefined,
     editMessage: (edit: { text?: string, media?: InputMediaLike }) => Promise<unknown>,
     { t, e }: Evaluators,
-    peer: Peer,
-    leaveSourceLink: boolean,
+    settings: Settings,
     sendGroup: (send: { medias: InputMediaLike[] }) => Promise<unknown>,
+    sender: Peer,
 ) {
     await editMessage({ text: t("downloading-title") })
-    const res = await handleMediaDownload(outputType, request, peer)
+    const res = await handleMediaDownload(outputType, request, settings)
     if (!res.success) {
         const errorMessage = t("error", { message: e(res.error) })
         await editMessage({ text: leaveSourceLink ? `${errorMessage}\n\n${request?.url}` : errorMessage })
@@ -174,10 +182,9 @@ async function onOutputSelected(
             await sendGroup({ medias: chunk })
         }
     } else {
-        await editMessage({ media: res.result[0] })
-        await editMessage({ text: (leaveSourceLink && request?.url) || "" })
+        await editMessage({ media: res.result[0], text: (!!settings.preferredAttribution && request?.url) || "" })
     }
 
-    incrementDownloadCount(peer.id)
+    incrementDownloadCount(sender.id)
         .catch(() => { /* noop */ })
 }

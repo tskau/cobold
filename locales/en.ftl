@@ -7,6 +7,7 @@ error = { error-title }: { $message } { $error-emoticon }
 error-not-url = i couldn't find url in your message
 error-request-not-found = looks like i forgot your link, try sending it again
 error-not-button-owner = looks like this button is not yours (¬_¬")
+error-admin-button = only admins can touch this button!!
 error-too-large = sorry, but this file is too big - telegram doesn't allow me to upload it
 error-invalid-response = server response is invalid, maybe it's down or encountered an internal error
 error-unresponsive = couldn't connect to this server, maybe it's down...
