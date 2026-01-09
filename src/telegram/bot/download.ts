@@ -28,37 +28,40 @@ downloadDp.onNewMessage(async (msg) => {
         return
     }
 
-    const urlEntity = msg.entities.find(e => e.is("text_link") || e.is("url"))
-    const extractedUrl = urlEntity && (urlEntity.is("text_link") ? urlEntity.params.url : urlEntity.text)
-    const req = await createRequest(extractedUrl || msg.text, msg.sender.id)
+    const urlEntities = msg.entities.filter(e => e.is("text_link") || e.is("url"))
+    const extractedUrls = urlEntities.map(e => (e.is("text_link") ? e.params.url : e.text))
+    const urls = extractedUrls.length ? extractedUrls : [msg.text]
+    for (const url of urls) {
+        const req = await createRequest(url, msg.sender.id)
 
-    if (!req.success) {
-        if (msg.chat.type === "user")
-            await msg.replyText(t("error", { message: e(req.error) }))
-        return
-    }
+        if (!req.success) {
+            if (msg.chat.type === "user")
+                await msg.replyText(t("error", { message: e(req.error) }))
+            return
+        }
 
-    const selectMsg = getOutputSelectionMessage(req.result.id)
-    const reply = await msg.replyText(e(selectMsg.caption), {
-        replyMarkup: BotKeyboard.inline([
-            selectMsg.options.map(o => BotKeyboard.callback(
-                e(o.name),
-                o.key,
-            )),
-        ]),
-    })
+        const selectMsg = getOutputSelectionMessage(req.result.id)
+        const reply = await msg.replyText(e(selectMsg.caption), {
+            replyMarkup: BotKeyboard.inline([
+                selectMsg.options.map(o => BotKeyboard.callback(
+                    e(o.name),
+                    o.key,
+                )),
+            ]),
+        })
 
-    const settings = await getPeerSettings(msg.chat)
-    if (settings.preferredOutput) {
-        await onOutputSelected(
-            settings.preferredOutput,
-            req.result,
-            args => msg.client.editMessage({ ...args, message: reply }),
-            { e, t },
-            settings,
-            ({ medias }) => msg.replyMediaGroup(medias),
-            msg.sender,
-        )
+        const settings = await getPeerSettings(msg.chat)
+        if (settings.preferredOutput) {
+            await onOutputSelected(
+                settings.preferredOutput,
+                req.result,
+                args => msg.client.editMessage({ ...args, message: reply }),
+                { e, t },
+                settings,
+                ({ medias }) => msg.replyMediaGroup(medias),
+                msg.sender,
+            )
+        }
     }
 })
 
