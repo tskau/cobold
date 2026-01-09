@@ -15,7 +15,7 @@ error-invalid-url = looks like i dont recognise the link you sent... maybe the s
 error-media-unavailable = i found your media, but couldn't download it. maybe its private, age restricted or region locked.
 error-unknown = oops, an internal error happened. i reported it to my developer, so they'll fix it!
 
-note-picker = your link contained multiple media files, so i sent them to you via pms
+note-picker = your link contained multiple media files, so i sent them to you seperately or via pms
 
 download-title = download from provided url
 type-select-title = select download type (｡ · ᎑ ·｡)
