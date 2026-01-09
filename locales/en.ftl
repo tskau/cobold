@@ -1,6 +1,10 @@
 start =
     hii! just send me a link and i'll download it. (ᵔᵕᵔ)◜
     details: /info
+join =
+    hii! (ᵔᵕᵔ)◜
+    i will download all links i'll find in this chat.
+    all error messages will be deleted within 30 seconds to not annoy you.
 
 error-title = error
 error = { error-title }: { $message } { $error-emoticon }
