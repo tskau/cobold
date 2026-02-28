@@ -1,3 +1,5 @@
+import { isDeepStrictEqual } from "node:util"
+
 import type { CobaltDownloadParams, SuccessfulCobaltMediaResponse } from "@/core/data/cobalt/download"
 import { getDownloadLink } from "@/core/data/cobalt/download"
 import type { ApiServer } from "@/core/data/cobalt/server"
@@ -6,7 +8,7 @@ import { retrieveTunneledMedia } from "@/core/data/cobalt/tunnel"
 
 import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
-import type { CompoundText, Text } from "@/core/utils/text"
+import type { Text } from "@/core/utils/text"
 import { compound, literal, translatable } from "@/core/utils/text"
 import { safeUrlSchema } from "@/core/utils/url"
 
@@ -14,26 +16,7 @@ export { type CobaltDownloadParams } from "@/core/data/cobalt/download"
 export { type ApiServer, apiServerSchema } from "@/core/data/cobalt/server"
 
 export async function download(params: CobaltDownloadParams, apiPool: ApiServer[]): Promise<Result<DownloadedMedia[], Text>> {
-    const link = await tryGetDownloadLink(params, apiPool)
-    if (!link.success)
-        return link
-    const resolvedMedia = resolveMedia(link.result, params.downloadMode === "audio")
-    const downloadedMedia = await Promise.all(
-        resolvedMedia.map(m => downloadResolvedMedia(m, link.result.api)),
-    )
-
-    const successfulDownloads = downloadedMedia
-        .filter(m => m.success)
-        .map(m => m.result)
-    const failedDownloads = downloadedMedia
-        .filter(m => !m.success)
-        .map(m => m.error)
-    if (successfulDownloads.length === 0) {
-        if (failedDownloads.length === 1)
-            return error(compound(literal(`${link.result.api.name}: `), failedDownloads[0]))
-        return error(compound(...failedDownloads.map(m => compound(literal(`\n${link.result.api.name}: `), m))))
-    }
-    return ok(successfulDownloads)
+    return await tryDownload(params, apiPool)
 }
 
 export type DownloadedMedia = { file: DownloadedMediaContent, filename?: string }
@@ -50,7 +33,7 @@ async function downloadResolvedMedia(link: ResolvedMedia, api: ApiServer): Promi
 }
 
 type ResolvedMedia = { url: string, filename?: string }
-function resolveMedia(link: DownloadLink, audio?: boolean): ResolvedMedia[] {
+function resolveMedia(link: SuccessfulCobaltMediaResponse, audio?: boolean): ResolvedMedia[] {
     if (link.status === "picker") {
         if (audio && link.audio) {
             const source = new URL(link.audio)
@@ -61,17 +44,35 @@ function resolveMedia(link: DownloadLink, audio?: boolean): ResolvedMedia[] {
     return [{ url: link.url, filename: link.filename }]
 }
 
-type DownloadLink = SuccessfulCobaltMediaResponse & { api: ApiServer }
-async function tryGetDownloadLink(params: CobaltDownloadParams, apiPool: ApiServer[], fails: Text[] = []): Promise<Result<DownloadLink, CompoundText>> {
+type DownloadFailure = { reason: Text, api: ApiServer }
+function formatDownloadFailures(fails: DownloadFailure[]): Text {
+    const mergedFails = fails.reduce((acc, fail) => {
+        const existing = acc.find(f => isDeepStrictEqual(f.reason, fail.reason))
+        if (existing) {
+            existing.apis.push(fail.api)
+        } else {
+            acc.push({ reason: fail.reason, apis: [fail.api] })
+        }
+        return acc
+    }, [] as { reason: Text, apis: ApiServer[] }[])
+    return compound(...mergedFails.map(f => compound(
+        literal("\n"),
+        ...f.apis.map((api, i) => literal((i === 0 ? "" : ", ") + api.name)),
+        literal(": "),
+        f.reason,
+    )))
+}
+
+async function tryDownload(params: CobaltDownloadParams, apiPool: ApiServer[], fails: DownloadFailure[] = []): Promise<Result<DownloadedMedia[], Text>> {
     const currentApi = apiPool.at(0)
     if (!currentApi)
-        return error(compound(...fails))
+        return error(formatDownloadFailures(fails))
 
     const next = (reason: Text) =>
-        tryGetDownloadLink(
+        tryDownload(
             params,
             apiPool.slice(1),
-            [...fails, compound(literal(`\n${currentApi.name}: `), reason)],
+            [...fails, { reason, api: currentApi }],
         )
 
     if (currentApi.unsafe && !(await safeUrlSchema.safeParseAsync(currentApi.url)).success)
@@ -82,5 +83,21 @@ async function tryGetDownloadLink(params: CobaltDownloadParams, apiPool: ApiServ
     if (!res.success)
         return next(res.error)
 
-    return { success: res.success, result: { ...res.result, api: currentApi } }
+    const resolvedMedia = resolveMedia(res.result, params.downloadMode === "audio")
+    const downloadedMedia = await Promise.all(
+        resolvedMedia.map(m => downloadResolvedMedia(m, currentApi)),
+    )
+
+    const successfulDownloads = downloadedMedia
+        .filter(m => m.success)
+        .map(m => m.result)
+    const failedDownloads = downloadedMedia
+        .filter(m => !m.success)
+        .map(m => m.error)
+    if (successfulDownloads.length === 0) {
+        if (failedDownloads.length === 1)
+            return next(failedDownloads[0])
+        return next(compound(...failedDownloads))
+    }
+    return ok(successfulDownloads)
 }
