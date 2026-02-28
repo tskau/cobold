@@ -155,7 +155,8 @@ async function onOutputSelected(
     await editMessage({ text: t("downloading-title") })
     const res = await handleMediaDownload(outputType, request, peer)
     if (!res.success) {
-        await editMessage({ text: t("error", { message: e(res.error) }) })
+        const errorMessage = t("error", { message: e(res.error) })
+        await editMessage({ text: leaveSourceLink ? `${errorMessage}\n\n${request?.url}` : errorMessage })
         return
     }
 
