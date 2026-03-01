@@ -191,7 +191,9 @@ async function onOutputSelected(
             await sendGroup({ medias: chunk })
         }
     } else {
-        await editMessage({ media: res.result[0], text: (!!settings.preferredAttribution && request?.url) || "" })
+        // FIXME: Merge two edit calls
+        await editMessage({ media: res.result[0] })
+        await editMessage({ text: (!!settings.preferredAttribution && request?.url) || "" })
     }
 
     incrementDownloadCount(sender.id)
