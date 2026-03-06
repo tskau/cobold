@@ -38,11 +38,12 @@ export function tryParseUrl(url: string) {
     if (originalParsed.success)
         return originalParsed.data
 
-    const domain = url.split("/")[0]
-    if (!domain.includes(".") || domain.includes(" ") || domain.includes(":"))
+    const protocollessUrl = url.startsWith("//") ? url.slice(2) : url
+    const domain = protocollessUrl.split("/")[0]
+    if (!domain.includes(".") || domain.includes(" ") || domain.endsWith(".") || domain.startsWith("."))
         return null
 
-    const withHttpsParsed = mediaUrlSchema.safeParse(`https://${url}`)
+    const withHttpsParsed = mediaUrlSchema.safeParse(`https://${protocollessUrl}`)
     if (withHttpsParsed.success)
         return withHttpsParsed.data
 
