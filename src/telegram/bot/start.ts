@@ -9,5 +9,7 @@ startDp.onNewMessage(filters.start, async (msg) => {
 
 startDp.onChatMemberUpdate(filters.and(filters.chatMemberSelf, filters.chatMember("added")), async (upd) => {
     const t = await translatorFor(upd.chat)
+    if (upd.chat.chatType === "channel")
+        return
     await upd.client.sendText(upd.chat, t("join"))
 })

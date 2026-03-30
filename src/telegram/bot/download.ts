@@ -23,21 +23,52 @@ export const downloadDp = Dispatcher.child()
 const errorDeleteDelay = 30 * 1000
 
 downloadDp.onNewMessage(async (msg) => {
-    const { e, t } = await evaluatorsFor(msg.chat)
-
     if (msg.text === "meow") {
         await msg.replyText("meow :з")
         return
     }
 
+    const isGroupChat = msg.chat.type === "chat"
+    const isChannel = isGroupChat && msg.chat.chatType === "channel"
+
+    const settings = await getPeerSettings(msg.chat)
+    const { e, t } = await evaluatorsFor(msg.chat)
+
     const urlEntities = msg.entities.filter(e => e.is("text_link") || e.is("url"))
     const extractedUrls = urlEntities.map(e => (e.is("text_link") ? e.params.url : e.text))
-    const urls = extractedUrls.length ? extractedUrls : [msg.text]
+    const urls = isGroupChat ? extractedUrls : (extractedUrls.length ? extractedUrls : [msg.text])
+
+    if (isChannel) {
+        const [url] = urls
+        if (!url || msg.media)
+            return
+
+        const req = await createRequest(url, msg.sender.id)
+        if (!req.success)
+            return
+
+        const originalText = msg.text
+        const res = await onOutputSelected(
+            settings.preferredOutput || "auto",
+            req.result,
+            args => msg.client.editMessage({ ...args, message: msg }),
+            { e, t },
+            settings,
+            ({ medias }) => msg.replyMediaGroup(medias),
+            msg.sender,
+        )
+
+        if (!res)
+            msg.client.editMessage({ text: originalText, message: msg })
+
+        return
+    }
+
     for (const url of urls) {
         const req = await createRequest(url, msg.sender.id)
 
         if (!req.success) {
-            if (msg.chat.type === "user")
+            if (!isGroupChat)
                 await msg.replyText(t("error", { message: e(req.error) }))
             return
         }
@@ -52,8 +83,7 @@ downloadDp.onNewMessage(async (msg) => {
             ]),
         })
 
-        const settings = await getPeerSettings(msg.chat)
-        if (settings.preferredOutput || msg.chat.type !== "user") {
+        if (settings.preferredOutput || isGroupChat) {
             const res = await onOutputSelected(
                 settings.preferredOutput || "auto",
                 req.result,
@@ -63,7 +93,7 @@ downloadDp.onNewMessage(async (msg) => {
                 ({ medias }) => msg.replyMediaGroup(medias),
                 msg.sender,
             )
-            if (!res && msg.chat.type !== "user")
+            if (!res && isGroupChat)
                 setTimeout(() => msg.client.deleteMessages([reply]), errorDeleteDelay)
         }
     }
@@ -199,5 +229,5 @@ async function onOutputSelected(
     incrementDownloadCount(sender.id)
         .catch(() => { /* noop */ })
 
-    return true
+    return res.result.length === 1
 }
