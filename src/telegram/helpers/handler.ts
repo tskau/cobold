@@ -34,56 +34,60 @@ type AnalysisResult = {
 }
 async function analyze(buffer: DownloadedMediaContent): Promise<AnalysisResult> {
     const mediainfo = await mediaInfoFactory()
-    const res = await mediainfo.analyzeData(
-        buffer.byteLength,
-        (size, offset) => buffer.slice(offset, offset + size),
-    )
-    if (!res.media)
-        return { type: "document" }
-    const generalData = res.media.track.find((t): t is GeneralTrack => t["@type"] === "General")
-    if (!generalData)
-        return { type: "document" }
-
-    if (generalData.VideoCount) {
-        const videoData = res.media.track.find((t): t is VideoTrack => t["@type"] === "Video")!
-        if (!videoData)
+    try {
+        const res = await mediainfo.analyzeData(
+            buffer.byteLength,
+            (size, offset) => buffer.slice(offset, offset + size),
+        )
+        if (!res.media)
             return { type: "document" }
-        return {
-            type: "video",
-            duration: generalData.Duration,
-            width: videoData.Width,
-            height: videoData.Height,
-        }
-    }
-
-    if (generalData.AudioCount) {
-        return {
-            type: "audio",
-            duration: generalData.Duration,
-        }
-    }
-
-    if (generalData.ImageCount) {
-        const imageData = res.media.track.find((t): t is ImageTrack => t["@type"] === "Image")
-        if (!imageData)
+        const generalData = res.media.track.find((t): t is GeneralTrack => t["@type"] === "General")
+        if (!generalData)
             return { type: "document" }
-        if (imageData.Format === "GIF") {
+
+        if (generalData.VideoCount) {
+            const videoData = res.media.track.find((t): t is VideoTrack => t["@type"] === "Video")!
+            if (!videoData)
+                return { type: "document" }
             return {
                 type: "video",
                 duration: generalData.Duration,
-                width: imageData.Width,
-                height: imageData.Height,
-                isAnimated: true,
+                width: videoData.Width,
+                height: videoData.Height,
             }
         }
-        return {
-            type: "photo",
-            width: imageData.Width,
-            height: imageData.Height,
-        }
-    }
 
-    return { type: "document" }
+        if (generalData.AudioCount) {
+            return {
+                type: "audio",
+                duration: generalData.Duration,
+            }
+        }
+
+        if (generalData.ImageCount) {
+            const imageData = res.media.track.find((t): t is ImageTrack => t["@type"] === "Image")
+            if (!imageData)
+                return { type: "document" }
+            if (imageData.Format === "GIF") {
+                return {
+                    type: "video",
+                    duration: generalData.Duration,
+                    width: imageData.Width,
+                    height: imageData.Height,
+                    isAnimated: true,
+                }
+            }
+            return {
+                type: "photo",
+                width: imageData.Width,
+                height: imageData.Height,
+            }
+        }
+
+        return { type: "document" }
+    } finally {
+        mediainfo.close()
+    }
 }
 
 async function fileToInputMedia(file: DownloadedMediaContent, fileName?: string, sendAsFile?: boolean): Promise<InputMediaLike> {
