@@ -22,4 +22,5 @@ export const settings = sqliteTable("settings", {
     audioFormat: text("audio_format").notNull().default("mp3"),
     audioQuality: text("audio_quality").notNull().default("128"),
     sendAsFile: int("send_as_file").notNull().default(0),
+    allowTextLinks: int("allow_text_links").notNull().default(1),
 })

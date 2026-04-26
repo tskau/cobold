@@ -1,0 +1,1 @@
+ALTER TABLE `settings` ADD `allow_text_links` integer DEFAULT 1 NOT NULL;

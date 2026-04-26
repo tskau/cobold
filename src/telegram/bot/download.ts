@@ -26,7 +26,8 @@ downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
         return
     }
 
-    const urlEntity = msg.entities.find(e => e.is("text_link") || e.is("url"))
+    const settings = await getPeerSettings(msg.sender)
+    const urlEntity = msg.entities.find(e => e.is("url") || (settings.allowTextLinks === 1 && e.is("text_link")))
     const extractedUrl = urlEntity && (urlEntity.is("text_link") ? urlEntity.params.url : urlEntity.text)
     const req = await createRequest(extractedUrl || msg.text, msg.sender.id)
 
@@ -45,7 +46,6 @@ downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
         ]),
     })
 
-    const settings = await getPeerSettings(msg.sender)
     if (settings.preferredOutput) {
         await onOutputSelected(
             settings.preferredOutput,

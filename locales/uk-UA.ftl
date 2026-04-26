@@ -30,6 +30,10 @@ setting-send-as-file = надіслати як файл
 setting-send-as-file-0 = ні
 setting-send-as-file-1 = давай
 
+setting-allow-text-links = завантажувати з гіперпосилань
+setting-allow-text-links-0 = тільки прямі посилання
+setting-allow-text-links-1 = давай
+
 setting-lang = мова
 setting-lang-unset = як в тг
 

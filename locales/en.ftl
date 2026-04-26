@@ -38,6 +38,10 @@ setting-send-as-file = send as file
 setting-send-as-file-0 = nah
 setting-send-as-file-1 = sure
 
+setting-allow-text-links = download from hyperlinks
+setting-allow-text-links-0 = direct links only
+setting-allow-text-links-1 = sure
+
 setting-lang = language
 setting-lang-ar = العربية
 setting-lang-en = english

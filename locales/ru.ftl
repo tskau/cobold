@@ -38,6 +38,10 @@ setting-send-as-file = отправить как файл
 setting-send-as-file-0 = не
 setting-send-as-file-1 = давай
 
+setting-allow-text-links = скачивать из гиперссылок
+setting-allow-text-links-0 = только прямые ссылки
+setting-allow-text-links-1 = давай
+
 setting-lang = язык
 setting-lang-unset = как в тг
 

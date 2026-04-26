@@ -19,6 +19,7 @@ export const defaultSettings: Settings = {
     audioFormat: "mp3",
     audioQuality: "128",
     sendAsFile: 0,
+    allowTextLinks: 1,
 }
 
 export const settingOptions: {
@@ -33,6 +34,7 @@ export const settingOptions: {
     audioFormat: ["best", "mp3", "ogg", "wav", "opus"],
     audioQuality: ["8", "64", "96", "128", "256", "320"],
     sendAsFile: [0, 1],
+    allowTextLinks: [0, 1],
 }
 
 export const settingI18n: {
@@ -47,6 +49,7 @@ export const settingI18n: {
     audioFormat: { key: "audio-format", mode: "translatable" },
     audioQuality: { key: "audio-quality", mode: "literal" },
     sendAsFile: { key: "send-as-file", mode: "translatable" },
+    allowTextLinks: { key: "allow-text-links", mode: "translatable" },
 }
 
 export async function getSettings(id: number): Promise<Settings> {

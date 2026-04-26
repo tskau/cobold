@@ -30,6 +30,10 @@ setting-send-as-file = أرسل كملف
 setting-send-as-file-0 = معطل
 setting-send-as-file-1 = مفعل
 
+setting-allow-text-links = التنزيل من الروابط التشعبية
+setting-allow-text-links-0 = الروابط المباشرة فقط
+setting-allow-text-links-1 = مفعل
+
 setting-lang = اللغة
 setting-lang-unset = مطابق لتيليجرام
 

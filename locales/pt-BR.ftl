@@ -30,6 +30,10 @@ setting-send-as-file = enviar como arquivo.
 setting-send-as-file-0 = não
 setting-send-as-file-1 = claro
 
+setting-allow-text-links = baixar de hyperlinks
+setting-allow-text-links-0 = apenas links diretos
+setting-allow-text-links-1 = claro
+
 setting-lang = idioma
 setting-lang-unset = mesmo que o telegram.
 
