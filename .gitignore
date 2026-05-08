@@ -29,7 +29,7 @@ yarn-error.log*
 
 # IDEs
 .idea
-.fleet
+.zed
 .vscode
 
 # Runtime Persistence
