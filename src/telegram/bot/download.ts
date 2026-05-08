@@ -14,6 +14,7 @@ import {
     handleMediaDownload,
     OutputButton,
 } from "@/telegram/helpers/handler"
+import { deferredReply, replyText } from "@/telegram/helpers/sent"
 import { getPeerSettings } from "@/telegram/helpers/settings"
 import type { Evaluators } from "@/telegram/helpers/text"
 import { evaluatorsFor } from "@/telegram/helpers/text"
@@ -74,7 +75,7 @@ downloadDp.onNewMessage(async (msg) => {
         }
 
         const selectMsg = getOutputSelectionMessage(req.result.id)
-        const reply = await msg.replyText(e(selectMsg.caption), {
+        const reply = await (isGroupChat ? deferredReply : replyText)(msg, e(selectMsg.caption), {
             replyMarkup: BotKeyboard.inline([
                 selectMsg.options.map(o => BotKeyboard.callback(
                     e(o.name),
@@ -87,14 +88,14 @@ downloadDp.onNewMessage(async (msg) => {
             const res = await onOutputSelected(
                 settings.preferredOutput || "auto",
                 req.result,
-                args => msg.client.editMessage({ ...args, message: reply }),
+                args => reply.edit(args),
                 { e, t },
                 settings,
                 ({ medias }) => msg.replyMediaGroup(medias),
                 msg.sender,
             )
-            if (!res && isGroupChat)
-                setTimeout(() => msg.client.deleteMessages([reply]), errorDeleteDelay)
+            if (res && isGroupChat)
+                await reply.flush()
         }
     }
 })
