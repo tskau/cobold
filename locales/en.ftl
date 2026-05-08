@@ -1,12 +1,17 @@
 start =
     hii! just send me a link and i'll download it. (ᵔᵕᵔ)◜
     details: /info
+join =
+    hii! (ᵔᵕᵔ)◜
+    i will download all links i'll find in this chat.
+    details: /info
 
 error-title = error
 error = { error-title }: { $message } { $error-emoticon }
 error-not-url = i couldn't find url in your message
 error-request-not-found = looks like i forgot your link, try sending it again
 error-not-button-owner = looks like this button is not yours (¬_¬")
+error-admin-button = only admins can touch this button!!
 error-too-large = sorry, but this file is too big - telegram doesn't allow me to upload it
 error-invalid-response = server response is invalid, maybe it's down or encountered an internal error
 error-unresponsive = couldn't connect to this server, maybe it's down...
@@ -14,7 +19,7 @@ error-invalid-url = looks like i dont recognise the link you sent... maybe the s
 error-media-unavailable = i found your media, but couldn't download it. maybe its private, age restricted or region locked.
 error-unknown = oops, an internal error happened. i reported it to my developer, so they'll fix it!
 
-note-picker = your link contained multiple media files, so i sent them to you via pms
+note-picker = your link contained multiple media files, so i sent them to you seperately or via pms
 
 download-title = download from provided url
 type-select-title = select download type (｡ · ᎑ ·｡)
@@ -73,7 +78,7 @@ stats-global = i helped with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
 info-open = about me
 info =
     i can download videos, photos and music from any service supported by cobalt!
-    you can use me right here in pms or in any chat via inline mode.
+    you can use me right here in pms & in any chat via inline mode or add me to your favorite chat or channel.
 
     running { $name }@{ $version }
     sources: { $repository }
