@@ -31,6 +31,11 @@ jobs:
         run: |
           echo "commit_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           echo "branch=$(git rev-parse --abbrev-ref HEAD | sed 's/\//-/g')" >> $GITHUB_OUTPUT
+      - name: Set package.json version to Docker tag
+        run: |
+          TAG="${{ steps.release-meta.outputs.branch }}-${{ steps.release-meta.outputs.commit_short }}"
+          jq --arg tag "$TAG" '.version = $tag' package.json > package.json.tmp
+          mv package.json.tmp package.json
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
