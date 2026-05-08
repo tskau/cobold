@@ -4,7 +4,7 @@ start =
 join =
     hii! (ᵔᵕᵔ)◜
     i will download all links i'll find in this chat.
-    all error messages will be deleted within 30 seconds to not annoy you.
+    details: /info
 
 error-title = error
 error = { error-title }: { $message } { $error-emoticon }
@@ -78,7 +78,7 @@ stats-global = i helped with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
 info-open = about me
 info =
     i can download videos, photos and music from any service supported by cobalt!
-    you can use me right here in pms or in any chat via inline mode.
+    you can use me right here in pms & in any chat via inline mode or add me to your favorite chat or channel.
 
     running { $name }@{ $version }
     sources: { $repository }
