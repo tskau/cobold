@@ -62,13 +62,18 @@ downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
 downloadDp.onInlineQuery(async (ctx) => {
     const { t, e } = await evaluatorsFor(ctx.user)
 
+    const infoSwitchPm = {
+        text: t("info-open"),
+        parameter: "info",
+    }
+
     const settingsSwitchPm = {
         text: t("settings-open"),
         parameter: "settings",
     }
 
     if (!ctx.query.trim()) {
-        await ctx.answer([], { switchPm: settingsSwitchPm })
+        await ctx.answer([], { cacheTime: 0, switchPm: infoSwitchPm })
         return
     }
 

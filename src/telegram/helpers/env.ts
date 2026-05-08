@@ -28,6 +28,7 @@ export const env = createEnv({
             .pipe(z.array(apiServerSchema)),
         ERROR_CHAT_ID: z.coerce.number().int().optional(),
         CUSTOM_INSTANCE_PROXY_URL: z.string().url().optional(),
+        ADDITIONAL_INFO: z.string().optional().default(""),
     },
     emptyStringAsUndefined: true,
     runtimeEnv: process.env,

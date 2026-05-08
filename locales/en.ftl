@@ -1,4 +1,6 @@
-start = hii! just send me a link and i'll download it. (ᵔᵕᵔ)◜
+start =
+    hii! just send me a link and i'll download it. (ᵔᵕᵔ)◜
+    details: /info
 
 error-title = error
 error = { error-title }: { $message } { $error-emoticon }
@@ -68,7 +70,13 @@ setting-audio-quality = audio bitrate
 stats-personal = i helped you with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
 stats-global = i helped with downloading { $count } times! (˶ᵔ ᵕ ᵔ˶)
 
+info-open = about me
 info =
+    i can download videos, photos and music from any service supported by cobalt!
+    you can use me right here in pms or in any chat via inline mode.
+
     running { $name }@{ $version }
     sources: { $repository }
     report bugs: { $bugs }
+    news & updates: { $homepage }
+    supported services: https://github.com/imputnet/cobalt/tree/main/api#supported-services

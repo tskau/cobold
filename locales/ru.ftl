@@ -1,4 +1,6 @@
-start = привет! просто отправь мне ссылку и я её скачаю. (ᵔᵕᵔ)◜
+start =
+    привет! просто отправь мне ссылку и я её скачаю. (ᵔᵕᵔ)◜
+    подробнее: /info
 
 error-title = ошибка
 error = { error-title }: { $message } { $error-emoticon }
@@ -54,7 +56,13 @@ setting-audio-quality = битрейт аудио
 stats-personal = я помог тебе с загрузкой { $count } раз! (˶ᵔ ᵕ ᵔ˶)
 stats-global = я помог с загрузкой { $count } раз! (˶ᵔ ᵕ ᵔ˶)
 
+info-open = обо мне
 info =
+    я умею скачивать видео, фото и музыку из любих сервисов, которые доступны в cobalt!
+    меня можно использовать прямо тут в лс или в любом чате через инлайн.
+
     выполняется { $name }@{ $version }
     сурсы: { $repository }
     репорт багов: { $bugs }
+    новости и апдейты: { $homepage }
+    поддерживаемые сервисы: https://github.com/imputnet/cobalt/tree/main/api#supported-services

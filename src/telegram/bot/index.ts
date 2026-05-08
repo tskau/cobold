@@ -22,9 +22,9 @@ const dp = Dispatcher.for<BotState>(bot, {
 
 dp.onError(createDispatcherErrorHandler(bot))
 dp.extend(settingsDp)
+dp.extend(infoDp)
 dp.extend(startDp)
 dp.extend(statsDp)
-dp.extend(infoDp)
 dp.extend(downloadDp)
 
 export async function startBot() {
