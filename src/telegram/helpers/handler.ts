@@ -1,4 +1,4 @@
-import type { InputMediaLike, Peer } from "@mtcute/node"
+import type { InputMediaLike } from "@mtcute/node"
 import type { GeneralTrack, ImageTrack, VideoTrack } from "mediainfo.js"
 
 import { CallbackDataBuilder } from "@mtcute/dispatcher"
@@ -8,13 +8,13 @@ import type { ApiServer, CobaltDownloadParams } from "@/core/data/cobalt"
 import type { DownloadedMediaContent } from "@/core/data/cobalt/tunnel"
 import type { MediaRequest } from "@/core/data/request"
 import { finishRequest, outputOptions } from "@/core/data/request"
+import type { Settings } from "@/core/data/settings"
 import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
 import type { Text } from "@/core/utils/text"
 import { translatable } from "@/core/utils/text"
 import { urlWithAuthSchema } from "@/core/utils/url"
 import { env } from "@/telegram/helpers/env"
-import { getPeerSettings } from "@/telegram/helpers/settings"
 
 export const OutputButton = new CallbackDataBuilder("dl", "output", "request")
 export const getOutputSelectionMessage = (requestId: string) => ({
@@ -112,10 +112,9 @@ function getApiEndpoints(override: string | null): Result<ApiServer[], Text> {
     )
 }
 
-export async function handleMediaDownload(outputType: string, request: MediaRequest | undefined, peer: Peer): Promise<Result<InputMediaLike[], Text>> {
+export async function handleMediaDownload(outputType: string, request: MediaRequest | undefined, settings: Settings): Promise<Result<InputMediaLike[], Text>> {
     if (!request)
         return error(translatable("error-request-not-found"))
-    const settings = await getPeerSettings(peer)
     const endpoints = getApiEndpoints(settings.instanceOverride)
     if (!endpoints.success)
         return endpoints

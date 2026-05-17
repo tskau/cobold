@@ -1,3 +1,4 @@
+import type { Peer, TelegramClient, User } from "@mtcute/node"
 import { Dispatcher, filters, PropagationAction } from "@mtcute/dispatcher"
 import { BotKeyboard } from "@mtcute/node"
 
@@ -34,6 +35,13 @@ function settingsMessage(e: TextEvaluator, settings: Settings) {
     }
 }
 
+async function isAdmin(client: Pick<TelegramClient, "getChatMember">, chat: Peer, user: User) {
+    if (chat.type !== "chat")
+        return true
+    const member = await client.getChatMember({ chatId: chat, userId: user })
+    return member?.status === "admin" || member?.status === "creator"
+}
+
 function settingEditMessage(e: TextEvaluator, settings: Settings, setting: keyof Settings) {
     const menu = getSettingMenu(settings, setting)
     return {
@@ -49,16 +57,21 @@ function settingEditMessage(e: TextEvaluator, settings: Settings, setting: keyof
 settingsDp.onNewMessage(
     filters.or(filters.command("settings"), filters.deeplink(["settings"])),
     async (msg) => {
-        const { e } = await evaluatorsFor(msg.sender)
-        const settings = await getPeerSettings(msg.sender)
+        const { e } = await evaluatorsFor(msg.chat)
+        const settings = await getPeerSettings(msg.chat)
         const { text, ...props } = settingsMessage(e, settings)
         await msg.replyText(text, props)
     },
 )
 
-settingsDp.onAnyCallbackQuery(SettingButton.filter(), async (upd) => {
-    const { e } = await evaluatorsFor(upd.user)
-    const settings = await getPeerSettings(upd.user)
+settingsDp.onCallbackQuery(SettingButton.filter(), async (upd) => {
+    const { e, t } = await evaluatorsFor(upd.chat)
+    if (!await isAdmin(upd.client, upd.chat, upd.user)) {
+        return await upd.answer({
+            text: t("error-admin-button"),
+        })
+    }
+    const settings = await getPeerSettings(upd.chat)
     if (upd.match.setting === "back") {
         await upd.editMessage(settingsMessage(e, settings))
         return
@@ -69,36 +82,46 @@ settingsDp.onAnyCallbackQuery(SettingButton.filter(), async (upd) => {
     await upd.editMessage(settingEditMessage(e, settings, upd.match.setting))
 })
 
-settingsDp.onAnyCallbackQuery(SettingUpdateButton.filter(), async (upd, state) => {
+settingsDp.onCallbackQuery(SettingUpdateButton.filter(), async (upd, state) => {
     if (!isValidSettingKey(upd.match.setting))
         return // Invalid key
+    if (!await isAdmin(upd.client, upd.chat, upd.user)) {
+        const { t } = await evaluatorsFor(upd.chat)
+        return await upd.answer({
+            text: t("error-admin-button"),
+        })
+    }
 
-    const settings = await getPeerSettings(upd.user)
+    const settings = await getPeerSettings(upd.chat)
     const valueIndex = +upd.match.value
     const value = getSettingValues(upd.match.setting)[valueIndex]
     if (value === customValue) {
-        const { e, t } = await evaluatorsFor(upd.user)
+        const { e, t } = await evaluatorsFor(upd.chat)
         const { text: _, ...props } = settingEditMessage(e, settings, upd.match.setting)
         await upd.editMessage({ text: t("setting-custom"), ...props })
         await state.enter(settingInputScene, { with: { setting: upd.match.setting } })
         return
     }
-    const newSettings = await updateSetting(upd.match.setting, value, upd.user.id)
+    const newSettings = await updateSetting(upd.match.setting, value, upd.chat.id)
 
     // We're getting evaluator AFTER the possible locale update
-    const { e } = await evaluatorsFor(upd.user)
+    const { e } = await evaluatorsFor(upd.chat)
     await upd.editMessage(settingEditMessage(e, newSettings ?? settings, upd.match.setting))
 })
 
 settingInputScene.onNewMessage(async (upd, state) => {
+    if (upd.sender.type !== "user" || !await isAdmin(upd.client, upd.chat, upd.sender)) {
+        return
+    }
+
     const stateData = await state.get()
     if (!stateData) {
         await state.exit()
         return
     }
 
-    const { t } = await evaluatorsFor(upd.sender)
-    await updateSetting(stateData.setting, upd.text, upd.sender.id)
+    const { t } = await evaluatorsFor(upd.chat)
+    await updateSetting(stateData.setting, upd.text, upd.chat.id)
     await upd.replyText(t("setting-saved"))
 
     await state.exit()
