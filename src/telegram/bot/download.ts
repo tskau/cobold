@@ -11,6 +11,7 @@ import { BotInline, BotKeyboard } from "@mtcute/node"
 
 import { createRequest, getRequest } from "@/core/data/request"
 import { incrementDownloadCount } from "@/core/data/stats"
+import { tryParseUrl } from "@/core/utils/url"
 import {
     getOutputSelectionMessage,
     handleMediaDownload,
@@ -119,7 +120,10 @@ downloadDp.onInlineQuery(async (ctx) => {
         return
     }
 
-    const req = await createRequest(ctx.query.trim(), ctx.user.id)
+    const fullRequest = ctx.query.trim()
+    const url = tryParseUrl(fullRequest) ?? fullRequest.split(" ").map(tryParseUrl).find((u): u is string => !!u)
+
+    const req = await createRequest(url ?? "", ctx.user.id)
     if (!req.success) {
         await ctx.answer([
             BotInline.article(randomUUID(), {
