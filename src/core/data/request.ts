@@ -1,16 +1,16 @@
 import type { InferSelectModel } from "drizzle-orm"
 
+import type { ApiServer, CobaltDownloadParams, DownloadedMedia } from "@/core/data/cobalt"
+import type { Result } from "@/core/utils/result"
+import type { Text } from "@/core/utils/text"
+
 import { randomUUID } from "node:crypto"
 import { eq } from "drizzle-orm"
 
-import type { ApiServer, CobaltDownloadParams, DownloadedMedia } from "@/core/data/cobalt"
 import { download } from "@/core/data/cobalt"
-
 import { db } from "@/core/data/db/database"
 import { requests } from "@/core/data/db/schema"
-import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
-import type { Text } from "@/core/utils/text"
 import { translatable } from "@/core/utils/text"
 import { tryParseUrl } from "@/core/utils/url"
 

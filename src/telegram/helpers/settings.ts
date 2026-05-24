@@ -1,7 +1,7 @@
 import type { Peer } from "@mtcute/node"
-import { CallbackDataBuilder } from "@mtcute/dispatcher"
-
 import type { Settings } from "@/core/data/settings"
+
+import { CallbackDataBuilder } from "@mtcute/dispatcher"
 import { customValue, defaultSettings, getSettings, getSettingValues, settingI18n } from "@/core/data/settings"
 import { compound, literal, translatable } from "@/core/utils/text"
 

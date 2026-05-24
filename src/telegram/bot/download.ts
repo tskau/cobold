@@ -1,13 +1,15 @@
 import type { BusinessCallbackQueryContext, CallbackQueryContext, InlineCallbackQueryContext } from "@mtcute/dispatcher"
 import type { InputMediaLike, Peer } from "@mtcute/node"
 
+import type { MediaRequest } from "@/core/data/request"
+import type { Settings } from "@/core/data/settings"
+import type { Evaluators } from "@/telegram/helpers/text"
+
 import { randomUUID } from "node:crypto"
 import { Dispatcher } from "@mtcute/dispatcher"
 import { BotInline, BotKeyboard } from "@mtcute/node"
 
-import type { MediaRequest } from "@/core/data/request"
 import { createRequest, getRequest } from "@/core/data/request"
-import type { Settings } from "@/core/data/settings"
 import { incrementDownloadCount } from "@/core/data/stats"
 import {
     getOutputSelectionMessage,
@@ -16,7 +18,6 @@ import {
 } from "@/telegram/helpers/handler"
 import { deferredReply, replyText } from "@/telegram/helpers/sent"
 import { getPeerSettings } from "@/telegram/helpers/settings"
-import type { Evaluators } from "@/telegram/helpers/text"
 import { evaluatorsFor } from "@/telegram/helpers/text"
 
 export const downloadDp = Dispatcher.child()

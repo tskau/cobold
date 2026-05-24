@@ -1,15 +1,13 @@
+import type { GenericCobaltError } from "@/core/data/cobalt/error"
+import type { ApiServer } from "@/core/data/cobalt/server"
+import type { Result } from "@/core/utils/result"
+import type { Text } from "@/core/utils/text"
+
 import { z } from "zod"
 
 import { baseFetch } from "@/core/data/cobalt/common"
-import type { GenericCobaltError } from "@/core/data/cobalt/error"
 import { genericErrorSchema, getErrorText } from "@/core/data/cobalt/error"
-
-import type { ApiServer } from "@/core/data/cobalt/server"
-
-import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
-
-import type { Text } from "@/core/utils/text"
 import { translatable } from "@/core/utils/text"
 
 const mediaStreamSchema = z.object({

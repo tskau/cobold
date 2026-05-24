@@ -1,8 +1,9 @@
+import type { Result } from "@/core/utils/result"
+import type { Text } from "@/core/utils/text"
+
 import { baseFetch } from "@/core/data/cobalt/common"
 import { genericErrorSchema, getErrorText } from "@/core/data/cobalt/error"
-import type { Result } from "@/core/utils/result"
 import { error, ok } from "@/core/utils/result"
-import type { Text } from "@/core/utils/text"
 import { translatable } from "@/core/utils/text"
 
 export type DownloadedMediaContent = Uint8Array<ArrayBufferLike>

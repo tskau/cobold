@@ -1,3 +1,5 @@
+import type { BotState } from "@/telegram/bot/state"
+
 import { Dispatcher, MemoryStateStorage } from "@mtcute/dispatcher"
 import { TelegramClient } from "@mtcute/node"
 
@@ -6,7 +8,6 @@ import { createDispatcherErrorHandler } from "@/telegram/bot/errors"
 import { infoDp } from "@/telegram/bot/info"
 import { settingsDp } from "@/telegram/bot/settings"
 import { startDp } from "@/telegram/bot/start"
-import type { BotState } from "@/telegram/bot/state"
 import { statsDp } from "@/telegram/bot/stats"
 import { env } from "@/telegram/helpers/env"
 

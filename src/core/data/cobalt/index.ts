@@ -1,14 +1,14 @@
-import { isDeepStrictEqual } from "node:util"
-
 import type { CobaltDownloadParams, SuccessfulCobaltMediaResponse } from "@/core/data/cobalt/download"
-import { getDownloadLink } from "@/core/data/cobalt/download"
 import type { ApiServer } from "@/core/data/cobalt/server"
 import type { DownloadedMediaContent } from "@/core/data/cobalt/tunnel"
-import { retrieveTunneledMedia } from "@/core/data/cobalt/tunnel"
-
 import type { Result } from "@/core/utils/result"
-import { error, ok } from "@/core/utils/result"
 import type { Text } from "@/core/utils/text"
+
+import { isDeepStrictEqual } from "node:util"
+
+import { getDownloadLink } from "@/core/data/cobalt/download"
+import { retrieveTunneledMedia } from "@/core/data/cobalt/tunnel"
+import { error, ok } from "@/core/utils/result"
 import { compound, literal, translatable } from "@/core/utils/text"
 import { safeUrlSchema } from "@/core/utils/url"
 

@@ -15,21 +15,19 @@ export default antfu({
     rules: {
         "perfectionist/sort-imports": ["error", {
             groups: [
-                "type",
-                ["parent-type", "sibling-type", "index-type"],
-
+                "type-external",
+                "type-internal",
                 "builtin",
                 "external",
-                ["internal", "internal-type"],
+                "internal",
                 ["parent", "sibling", "index"],
                 "side-effect",
-                "object",
                 "unknown",
             ],
             newlinesBetween: "ignore",
             order: "asc",
             type: "natural",
-            internalPattern: ["^@/"],
+            internalPattern: ["^@/.*"],
         }],
         "style/member-delimiter-style": ["error", {
             multiline: {

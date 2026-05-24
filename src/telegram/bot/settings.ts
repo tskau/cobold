@@ -1,11 +1,13 @@
 import type { Peer, TelegramClient, User } from "@mtcute/node"
+
+import type { Settings } from "@/core/data/settings"
+import type { BotState } from "@/telegram/bot/state"
+import type { TextEvaluator } from "@/telegram/helpers/text"
+
 import { Dispatcher, filters, PropagationAction } from "@mtcute/dispatcher"
 import { BotKeyboard } from "@mtcute/node"
 
-import type { Settings } from "@/core/data/settings"
 import { customValue, getSettingValues, updateSetting } from "@/core/data/settings"
-
-import type { BotState } from "@/telegram/bot/state"
 import {
     getPeerSettings,
     getSettingMenu,
@@ -14,7 +16,6 @@ import {
     SettingButton,
     SettingUpdateButton,
 } from "@/telegram/helpers/settings"
-import type { TextEvaluator } from "@/telegram/helpers/text"
 import { evaluatorsFor } from "@/telegram/helpers/text"
 
 type SettingInputState = { setting: keyof Settings }
