@@ -25,7 +25,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.12.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.0.0",
@@ -45,7 +45,6 @@
     "@mtcute/node": "^0.27.4",
     "@t3-oss/env-core": "^0.12.0",
     "better-sqlite3": "^11.9.1",
-    "dotenv": "^16.5.0",
     "drizzle-orm": "^0.42.0",
     "ipaddr.js": "^2.2.0",
     "mediainfo.js": "^0.3.5",

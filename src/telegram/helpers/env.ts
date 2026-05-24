@@ -1,12 +1,11 @@
-import process from "node:process"
+import { loadEnvFile, env as runtimeEnv } from "node:process"
 
 import { createEnv } from "@t3-oss/env-core"
-import { config } from "dotenv"
 import { z } from "zod"
 
 import { apiServerSchema } from "@/core/data/cobalt"
 
-config()
+loadEnvFile()
 
 export const env = createEnv({
     server: {
@@ -31,5 +30,5 @@ export const env = createEnv({
         ADDITIONAL_INFO: z.string().optional().default(""),
     },
     emptyStringAsUndefined: true,
-    runtimeEnv: process.env,
+    runtimeEnv,
 })
