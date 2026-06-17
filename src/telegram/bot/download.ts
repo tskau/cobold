@@ -113,9 +113,10 @@ downloadDp.onBotGuestChatQuery(async (ctx) => {
 
     const urlEntities = msg.entities.filter(e => e.is("text_link") || e.is("url"))
     const extractedUrls = urlEntities.map(e => (e.is("text_link") ? e.params.url : e.text))
-    const url = extractedUrls.length ? extractedUrls[0] : msg.text
+    if (!extractedUrls.length)
+        return
 
-    const req = await createRequest(url, msg.sender.id)
+    const req = await createRequest(extractedUrls[0], peer.id)
     if (!req.success) {
         await ctx.answer({
             type: "text",
