@@ -5,7 +5,13 @@ import { z } from "zod"
 
 import { apiServerSchema } from "@/core/data/cobalt"
 
-loadEnvFile()
+try {
+    loadEnvFile()
+} catch (e) {
+    if (!(e instanceof Error) || !("code" in e) || e.code !== "ENOENT") {
+        throw e
+    }
+}
 
 export const env = createEnv({
     server: {
