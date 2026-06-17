@@ -102,6 +102,54 @@ downloadDp.onNewMessage(async (msg) => {
     }
 })
 
+downloadDp.onBotGuestChatQuery(async (ctx) => {
+    const msg = ctx.replyToMessage
+    if (!msg)
+        return
+    const settings = await getPeerSettings(ctx.message.sender)
+    const { e, t } = await evaluatorsFor(ctx.message.sender)
+
+    const urlEntities = msg.entities.filter(e => e.is("text_link") || e.is("url"))
+    const extractedUrls = urlEntities.map(e => (e.is("text_link") ? e.params.url : e.text))
+    const urls = extractedUrls.length ? extractedUrls : [msg.text]
+
+    const req = await createRequest(urls[0], msg.sender.id)
+    if (!req.success) {
+        await ctx.answer({
+            type: "text",
+            text: t("error", { message: e(req.error) }),
+        })
+        return
+    }
+
+    const selectMsg = getOutputSelectionMessage(req.result.id)
+
+    const reply = await ctx.answer({
+        type: "text",
+        text: e(selectMsg.caption),
+        replyMarkup: BotKeyboard.inline([
+            selectMsg.options.map(o => BotKeyboard.callback(
+                e(o.name),
+                o.key,
+            )),
+        ]),
+    })
+
+    if (settings.preferredOutput) {
+        await onOutputSelected(
+            settings.preferredOutput || "auto",
+            req.result,
+            args => ctx.client.editInlineMessage({
+                ...args,
+                messageId: reply,
+            }),
+            { e, t },
+            settings,
+            msg.sender,
+        )
+    }
+})
+
 downloadDp.onInlineQuery(async (ctx) => {
     const { t, e } = await evaluatorsFor(ctx.user)
 
