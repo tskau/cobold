@@ -106,14 +106,16 @@ downloadDp.onBotGuestChatQuery(async (ctx) => {
     const msg = ctx.replyToMessage
     if (!msg)
         return
-    const settings = await getPeerSettings(ctx.message.sender)
-    const { e, t } = await evaluatorsFor(ctx.message.sender)
+    const peer = ctx.message.sender
+
+    const settings = await getPeerSettings(peer)
+    const { e, t } = await evaluatorsFor(peer)
 
     const urlEntities = msg.entities.filter(e => e.is("text_link") || e.is("url"))
     const extractedUrls = urlEntities.map(e => (e.is("text_link") ? e.params.url : e.text))
-    const urls = extractedUrls.length ? extractedUrls : [msg.text]
+    const url = extractedUrls.length ? extractedUrls[0] : msg.text
 
-    const req = await createRequest(urls[0], msg.sender.id)
+    const req = await createRequest(url, msg.sender.id)
     if (!req.success) {
         await ctx.answer({
             type: "text",
@@ -145,7 +147,8 @@ downloadDp.onBotGuestChatQuery(async (ctx) => {
             }),
             { e, t },
             settings,
-            msg.sender,
+            ({ medias }) => ctx.client.sendMediaGroup(peer.id, medias),
+            peer,
         )
     }
 })
