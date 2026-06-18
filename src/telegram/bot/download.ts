@@ -104,7 +104,7 @@ downloadDp.onNewMessage(async (msg) => {
 
 downloadDp.onBotGuestChatQuery(async (ctx) => {
     const msg = ctx.replyToMessage
-    if (!msg)
+    if (!msg || ctx.client.isSelfPeer(msg.sender.inputPeer))
         return
     const peer = ctx.message.sender
 
