@@ -18,6 +18,7 @@ import {
     OutputButton,
 } from "@/telegram/helpers/handler"
 import { deferredReply, replyText } from "@/telegram/helpers/sent"
+import { getBotId } from "@/telegram/helpers/self"
 import { getPeerSettings } from "@/telegram/helpers/settings"
 import { evaluatorsFor } from "@/telegram/helpers/text"
 
@@ -106,6 +107,10 @@ downloadDp.onBotGuestChatQuery(async (ctx) => {
     const msg = ctx.replyToMessage
     if (!msg)
         return
+
+    if (msg.sender.id === getBotId())
+        return
+
     const peer = ctx.message.sender
 
     const settings = await getPeerSettings(peer)

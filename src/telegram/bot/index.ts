@@ -10,6 +10,7 @@ import { settingsDp } from "@/telegram/bot/settings"
 import { startDp } from "@/telegram/bot/start"
 import { statsDp } from "@/telegram/bot/stats"
 import { env } from "@/telegram/helpers/env"
+import { setBotId } from "@/telegram/helpers/self"
 
 const bot = new TelegramClient({
     apiId: env.API_ID,
@@ -30,7 +31,8 @@ dp.extend(downloadDp)
 
 export async function startBot() {
     bot.start({ botToken: env.BOT_TOKEN })
-        .then(async () => {
+        .then(async (self) => {
+            setBotId(self.id)
             if (env.ERROR_CHAT_ID)
                 await bot.sendText(env.ERROR_CHAT_ID, "started bot :з")
         })
