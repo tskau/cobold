@@ -26,7 +26,7 @@ export const downloadDp = Dispatcher.child()
 const errorDeleteDelay = 30 * 1000
 
 downloadDp.onNewMessage(async (msg) => {
-    if (msg.text === "meow") {
+    if (/^(?:\s?m+(?:i+a+(?:u+|o*w+)|r{2,}|r+(?:e?o+w+|p+)|e+a*o*w+))+(?:\s*:[3з])*$/.test(msg.text.toLowerCase().trim())) {
         await msg.replyText("meow :з")
         return
     }
