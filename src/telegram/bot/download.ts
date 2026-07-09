@@ -17,10 +17,10 @@ import {
     handleMediaDownload,
     OutputButton,
 } from "@/telegram/helpers/handler"
+import { mrowCheck } from "@/telegram/helpers/meow"
 import { deferredReply, replyText } from "@/telegram/helpers/sent"
 import { getPeerSettings } from "@/telegram/helpers/settings"
 import { evaluatorsFor } from "@/telegram/helpers/text"
-import { mrowCheck } from "../helpers/meow"
 
 export const downloadDp = Dispatcher.child()
 
