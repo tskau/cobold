@@ -17,6 +17,7 @@ import {
     handleMediaDownload,
     OutputButton,
 } from "@/telegram/helpers/handler"
+import { mrowCheck } from "@/telegram/helpers/meow"
 import { deferredReply, replyText } from "@/telegram/helpers/sent"
 import { getPeerSettings } from "@/telegram/helpers/settings"
 import { evaluatorsFor } from "@/telegram/helpers/text"
@@ -26,8 +27,9 @@ export const downloadDp = Dispatcher.child()
 const errorDeleteDelay = 30 * 1000
 
 downloadDp.onNewMessage(async (msg) => {
-    if (/^(?:\s?m+(?:i+a+(?:u+|o*w+)|r{2,}|r+(?:e?o+w+|p+)|e+a*o*w+))+(?:\s*:[3з])*$/.test(msg.text.toLowerCase().trim())) {
-        await msg.replyText("meow :з")
+    const meowReply = mrowCheck(msg.text)
+    if (meowReply) {
+        await msg.replyText(meowReply)
         return
     }
 
