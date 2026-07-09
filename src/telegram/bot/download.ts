@@ -27,23 +27,10 @@ export const downloadDp = Dispatcher.child()
 const errorDeleteDelay = 30 * 1000
 
 downloadDp.onNewMessage(async (msg) => {
-    switch (mrowCheck(msg.text)) {
-        case "meow": {
-            await msg.replyText("meow :з")
-            return
-        }
-        case "nya": {
-            await msg.replyText("pat-pat :з")
-            return
-        }
-        case "purr": {
-            await msg.replyText("meaaaauuuu (miau)")
-            return
-        }
-        case "awawawa": {
-            await msg.replyText("awawawawawawawwwawawawawawawawawaw")
-            return
-        }
+    const meowReply = mrowCheck(msg.text)
+    if (meowReply) {
+        await msg.replyText(meowReply)
+        return
     }
 
     const isGroupChat = msg.chat.type === "chat"
