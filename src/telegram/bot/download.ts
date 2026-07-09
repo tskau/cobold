@@ -20,15 +20,30 @@ import {
 import { deferredReply, replyText } from "@/telegram/helpers/sent"
 import { getPeerSettings } from "@/telegram/helpers/settings"
 import { evaluatorsFor } from "@/telegram/helpers/text"
+import { mrowCheck } from "../helpers/meow"
 
 export const downloadDp = Dispatcher.child()
 
 const errorDeleteDelay = 30 * 1000
 
 downloadDp.onNewMessage(async (msg) => {
-    if (/^(?:\s?m+(?:i+a+(?:u+|o*w+)|r{2,}|r+(?:e?o+w+|p+)|e+a*o*w+))+(?:\s*:[3з])*$/.test(msg.text.toLowerCase().trim())) {
-        await msg.replyText("meow :з")
-        return
+    switch (mrowCheck(msg.text)) {
+        case "meow": {
+            await msg.replyText("meow :з")
+            return
+        }
+        case "nya": {
+            await msg.replyText("pat-pat :з")
+            return
+        }
+        case "purr": {
+            await msg.replyText("meaaaauuuu (miau)")
+            return
+        }
+        case "awawawa": {
+            await msg.replyText("awawawawawawawwwawawawawawawawawaw")
+            return
+        }
     }
 
     const isGroupChat = msg.chat.type === "chat"
